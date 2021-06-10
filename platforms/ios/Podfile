@@ -3,8 +3,8 @@ source 'https://cdn.cocoapods.org'
 source 'https://cdn.cocoapods.org/'
 platform :ios, '11.0'
 use_frameworks!
-target 'C:\Proyectos\Web App\tivity\platforms\ios\MyApp' do
-	project 'C:\Proyectos\Web App\tivity\platforms\ios\MyApp.xcodeproj'
+target 'C:\Proyectos\Web App\tivity\platforms\ios\Tivity' do
+	project 'C:\Proyectos\Web App\tivity\platforms\ios\Tivity.xcodeproj'
 	pod 'Firebase/Analytics', '>= 6.21.0'
 	pod 'Firebase/Messaging', '>= 6.21.0'
 	pod 'GoogleSignIn', '~> 5.0.2'
