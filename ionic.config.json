@@ -1,0 +1,8 @@
+{
+  "name": "tivity",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "b39b909d"
+}
