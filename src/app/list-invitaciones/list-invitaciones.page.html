@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Invitaciones</ion-title>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="margin-top: 50px;">
+
+  <div *ngIf="buscando" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/buscando.fw.png" alt="">
+    <p>Cargando comandas, aguarde unos segundos por favor</p>
+  </div>
+
+  <div *ngIf="!buscando && items.length == 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/invitaciones.fw.png" alt="">
+    <p>Aún no tienes invitaciones.</p>
+  </div>
+
+  <ion-list lines="none">     
+    <ion-item  class="item-card" *ngFor="let item of items">
+      <ion-avatar slot="start">
+        <img src="{{item.foto}}" *ngIf="item.foto">
+        <ion-icon name="people-circle-outline" *ngIf="!item.foto"></ion-icon>
+      </ion-avatar>      
+      <ion-label text-wrap> 
+        <ion-text>
+          El usuario <b>{{item.adminEmail}}</b> quiere invitarte al comercio <b>{{item.comercioNombre}}</b> como <b>{{item.rol}}</b>
+        </ion-text>
+        <ion-toolbar>
+          <ion-button slot="start" color="danger" size="large" (click)="eliminarInvitacion(item)"  expand="block">Rechazar</ion-button>   
+        <ion-button slot="end" color="success" size="large" (click)="aceptarInvitacion(item)"  expand="block">Aceptar</ion-button>              
+        </ion-toolbar>
+        
+      </ion-label>         
+    </ion-item>    
+  </ion-list>
+  
+    
+</ion-content>

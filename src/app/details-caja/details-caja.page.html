@@ -1,0 +1,153 @@
+<ion-header>  
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Cajas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  
+
+  <ion-item>  
+    <div slot="start">
+      <ion-icon name="file-tray-full-outline"></ion-icon>
+    </div>      
+    <ion-label>
+      <b>{{caja.nombre}}</b> 
+      <p>Efectivo: {{caja.totalEfectivo | currency}} <br> Débito: {{caja.totalDebito | currency}} <br> Crédito: {{caja.totalCredito | currency}}</p>        
+    </ion-label>   
+  </ion-item> 
+  
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button *ngIf="caja.estado =='abierta'" class="button-rounded" (click)="irEgreso()"  expand="block">Egreso</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button *ngIf="caja.estado =='abierta'" class="button-rounded" (click)="irIngreso()"  expand="block">Ingreso</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button *ngIf="caja.estado =='abierta'" class="button-rounded" color="danger" (click)="irCierre()"  expand="block">Cierre</ion-button>
+          <ion-button *ngIf="caja.estado =='cerrada'" class="button-rounded" color="primary" (click)="irApertura()"  expand="block">Abrir</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>    
+  </ion-toolbar>
+
+  <ion-item class="form-select" *ngIf="comercio.config.movimientosCajas"> 
+    <ion-label position="floating">Desde</ion-label>
+    <ion-select multiple="false" (ionChange)="onChangeAtras($event)">
+      <ion-select-option  [value]="1" selected>Ayer</ion-select-option>
+      <ion-select-option  [value]="2">2 días atras</ion-select-option>
+      <ion-select-option  [value]="7">Una semana atrás</ion-select-option>
+    </ion-select>       
+  </ion-item>  
+
+  <ion-list lines="none"> 
+    <div *ngFor="let item of items" >
+    <ion-item-sliding 
+    [ngClass]="{  
+      'item-card': true, 
+      'pago-card': item.pago, 
+      'cierre-card': item.cierre,
+      'egreso-card': item.egreso
+    }"
+    >
+    <ion-item>
+      
+      <div style="color:#50b223" *ngIf="item.tipo == enumTipoMovimientoCaja.pago">
+        <ion-icon name="caret-up-circle-outline"></ion-icon>
+      </div> 
+
+      <div style="color:#50b223" *ngIf="item.tipo == enumTipoMovimientoCaja.ingreso">
+        <ion-icon name="caret-up-circle-outline"></ion-icon>
+      </div> 
+    
+      <div style="color:#b22323" *ngIf="item.tipo == enumTipoMovimientoCaja.egreso">
+        <ion-icon name="caret-down-circle-outline"></ion-icon>
+      </div>  
+      
+      <div style="color:#b223b2" *ngIf="item.tipo == enumTipoMovimientoCaja.cierre">
+        <ion-icon name="caret-down-circle-outline"></ion-icon>
+      </div>
+
+      <div style="color:#2350b2" *ngIf="item.tipo == enumTipoMovimientoCaja.apertura">
+        <ion-icon name="caret-down-circle-outline"></ion-icon>
+      </div>
+
+      <ion-label *ngIf="item.tipo == enumTipoMovimientoCaja.pago" class="ion-text-wrap">
+        <h2>Pago: <b>{{item.monto | currency}}</b> en {{item.metodoPago}}</h2>     
+        <p>
+          {{item.motivo}}
+        </p>     
+        <p style="font-size: 12px;" >
+          {{item.vendedorNombre}} - {{item.createdAt.toDate() | date:'dd/MM/yyyy (EEE) - hh:mm aaa'}}
+        </p>           
+      </ion-label>    
+
+      <ion-label *ngIf="item.tipo == enumTipoMovimientoCaja.ingreso" class="ion-text-wrap">
+        <h2>Ingreso: <b>{{item.monto | currency}}</b> en {{item.metodoPago}}</h2>     
+        <p>
+          {{item.motivo}}
+        </p>     
+        <p style="font-size: 12px;" >
+          {{item.vendedorNombre}} - {{item.createdAt.toDate() | date:'dd/MM/yyyy (EEE) - hh:mm aaa'}}
+        </p>           
+      </ion-label> 
+
+      <ion-label *ngIf="item.tipo == enumTipoMovimientoCaja.egreso" class="ion-text-wrap">
+        <h2>Egreso: <b>{{item.monto | currency}}</b> en efectivo</h2>         
+        <p>
+          {{item.motivo}}
+        </p> 
+        <p style="font-size: 12px;" >
+          {{item.vendedorNombre}} - {{item.createdAt.toDate() | date:'dd/MM/yyyy (EEE) - hh:mm aaa'}}
+        </p>           
+      </ion-label>  
+
+      <ion-label *ngIf="item.tipo == enumTipoMovimientoCaja.cierre" class="ion-text-wrap">
+        <h2>Cierre: <b>{{item.monto | currency}}</b> 
+          <span *ngIf="item.metodoPago == 'efectivo'"> en efectivo</span>
+          <span *ngIf="item.metodoPago == 'debito'"> en débito</span>
+          <span *ngIf="item.metodoPago == 'credito'"> en crédito</span>
+        </h2>         
+        <p>
+          Cierer de Caja
+        </p> 
+        <p style="font-size: 12px;">
+          {{item.vendedorNombre}} - {{item.createdAt.toDate() | date:'dd/MM/yyyy (EEE) - hh:mm aaa'}}
+        </p>           
+      </ion-label>   
+
+
+      <ion-label *ngIf="item.tipo == enumTipoMovimientoCaja.apertura" class="ion-text-wrap">
+        <h2>Apertura: <b>{{item.monto | currency}}</b> 
+          <span *ngIf="item.metodoPago == 'efectivo'"> en efectivo</span>
+          <span *ngIf="item.metodoPago == 'debito'"> en débito</span>
+          <span *ngIf="item.metodoPago == 'credito'"> en crédito</span>
+        </h2>         
+        <p>
+          Apertura de Caja
+        </p> 
+        <p style="font-size: 12px;">
+          {{item.vendedorNombre}} - {{item.createdAt.toDate() | date:'dd/MM/yyyy (EEE) - hh:mm aaa'}}
+        </p>           
+      </ion-label>  
+
+
+    </ion-item>
+    <ion-item-options side="end">
+      <ion-item-option color="danger" (click)="eliminar(item)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+    </ion-item-options>
+
+  </ion-item-sliding>
+</div>  
+  
+</ion-list>
+ 
+  
+</ion-content>

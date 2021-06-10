@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Integración Woocommerce</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="form-card">
+   
+    <ion-item>
+      <ion-label position="floating" color="primary">Usuario</ion-label>
+      <ion-input type="text" [(ngModel)]="woocommerceConnection.user" (ionChange)="cambiado()"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" color="primary">Contraseña</ion-label>
+      <ion-input type="text" [(ngModel)]="woocommerceConnection.password" (ionChange)="cambiado()"></ion-input>
+    </ion-item>
+  </div>
+
+  <div class="form-card">
+
+    
+    
+    <ion-item>
+      <ion-label position="floating" color="primary">URL del sitio web</ion-label>
+      <ion-input type="text" [(ngModel)]="woocommerceConnection.url" (ionChange)="cambiado()"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" color="primary">Consumer Key</ion-label>
+      <ion-input type="text" [(ngModel)]="woocommerceConnection.consumerKey" (ionChange)="cambiado()"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" color="primary">Consumer Secret</ion-label>
+      <ion-input type="text" [(ngModel)]="woocommerceConnection.consumerSecret" (ionChange)="cambiado()"></ion-input>
+    </ion-item>
+
+    <!--ion-button class="button-rounded" slot="end"  color="success" (click)="guardar()">Guardar</ion-button-->
+
+    <ion-button *ngIf="!woocommerceConnection.isOk" class="button-rounded" color="primary" (click)="test()">Conectar</ion-button>
+    <ion-button *ngIf="woocommerceConnection.isOk" class="button-rounded" color="success" (click)="test()">Conexion OK</ion-button>
+    <!--ion-grid>
+      <ion-row>
+        <ion-col>
+        
+        </ion-col>
+        
+      </ion-row>
+      <ion-row>
+          <ion-button class="button-rounded" color="success" (click)="sincronizar()" [disabled]="progresoReceived != 0" ><ion-icon name="sync-outline"></ion-icon> Sincronizar</ion-button>
+      </ion-row>
+    </ion-grid-->
+    
+</div>  
+<ion-progress-bar *ngIf="progresoSend != 0"  [value]="progresoReceived" [buffer]="progresoSend"></ion-progress-bar>
+    <p *ngIf="progresoSend != 0">sincronizado: {{progresoReceived * 100}}%</p>
+  
+  
+</ion-content>
+<ion-footer>
+  <ion-toolbar>   
+    <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Volver</ion-button>
+    <ion-button  class="button-rounded" slot="end" color="primary" (click)="guardar()">Guardar</ion-button>
+  </ion-toolbar> 
+</ion-footer>

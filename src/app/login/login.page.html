@@ -1,0 +1,57 @@
+<ion-content >
+  <ion-grid class="login-background" style="padding: 0px;">
+    <ion-row style="height: 100%;">
+      <ion-col size-md="0" size-sm="0" size-xs="0">
+        <div class="login-imagen-container" [hidden]="devWidth < 576">
+          <img src="../../assets/img/login.fw.png" alt="">
+        </div>
+        
+      </ion-col >
+      <ion-col size-md="4" style="text-align:center;">
+        
+        <div class="login-section"> 
+          <img  width="80px" src="../../assets/img/icon.fw.png" alt="">
+        
+          <form  #form="ngForm" (ngSubmit)="login()" class="login-card">
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input name="email" type="email" [(ngModel)]="email" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input name="password" [(ngModel)]="password" ngModel required
+                    [type]="passwordTypeInput1" #passwordEye clear-on-edit="true"></ion-input>
+              <button  item-end  type="button" class="btn_eye_icon" (click)="togglePasswordMode()">
+                <ion-icon [name]="iconpassword1"></ion-icon>
+              </button>
+            </ion-item>           
+          
+            <p>
+              <a routerLink="/recuperar-contrasena">Olvidaste tu contraseña?</a>
+            </p>
+          
+            <ion-button class="button-rounded" size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
+
+            <p>o conectate con</p>
+                            
+            <ion-button class="button-rounded" size="large"  expand="block" (click)="googleLogin()">Google</ion-button>                   
+          
+            
+            <p> No tienes cuenta? <a routerLink="/registro">Registrate</a> </p>     
+              
+
+          </form>            
+        </div>  
+       
+      </ion-col>
+      <ion-col size-md="1" size-xs="0">
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  
+
+
+</ion-content>
+

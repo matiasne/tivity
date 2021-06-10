@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button  (click)="atras()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Impresora</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-button class="button-rounded" color="primary" (click)="probar()">Imprimir Prueba</ion-button> 
+  
+  <div class="form-card">        
+    <ion-item>
+      <ion-label>Conectar ESCPOS Bluetooth</ion-label>
+      <ion-toggle [(ngModel)]="impresora.escposBluetooth" (ionChange)="guardar()" [ngModelOptions]="{standalone: true}"></ion-toggle>
+    </ion-item> 
+            
+    <ion-item *ngIf="impresora.escposBluetooth">
+      <ion-label position="floating" >Mac *</ion-label>
+      <ion-input name="mac" type="text" (ionChange)="guardar()" [(ngModel)]="impresora.mac" required></ion-input>
+    </ion-item>  
+    
+  </div>
+
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="10">
+        <p>
+          <b>Imprimir Comandas Automáticamente</b><br>
+          Automáticamente se imprimirá una comanda cada vez que se genere un pedido.
+        </p>
+      </ion-col>
+      <ion-col size="2">
+        <ion-toggle [(ngModel)]="impresora.comandas" (ionChange)="guardar()" [ngModelOptions]="{standalone: true}"></ion-toggle>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="10">
+        <p>
+          <b>Imprimir Ticket Automáticamente </b><br>
+          Automáticamente se imprimirá un ticket al cobrar un pedido
+        </p>
+      </ion-col>
+      <ion-col size="2">
+        <ion-toggle [(ngModel)]="impresora.pedidosFinalizar" (ionChange)="guardar()" [ngModelOptions]="{standalone: true}"></ion-toggle>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  
+
+
+  <!--p>Para las siguientes configuraciones tener en cuenta que es necesario abrir la aplicación en un navegardor modo Kiosk</p>
+
+  <ion-item>
+    <ion-label>Subscripción Panel Comandas</ion-label>
+    <ion-toggle [(ngModel)]="impresora.subsComanda"  [ngModelOptions]="{standalone: true}"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Subscripción Panel Pedidos</ion-label>
+    <ion-toggle [(ngModel)]="impresora.subsPedido"  [ngModelOptions]="{standalone: true}"></ion-toggle>
+  </ion-item-->
+  
+  
+</ion-content>

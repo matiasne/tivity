@@ -1,0 +1,158 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Catálogo</ion-title> 
+    
+    <div slot="end">
+      <ion-button id="notification-button" fill="clear" color="primary" >
+        <ion-icon *ngIf="pedidosSolicitadosLength == 0" name="document-text-outline"></ion-icon>      
+        <ion-icon *ngIf="pedidosSolicitadosLength != 0" name="document-text"></ion-icon>          
+      </ion-button>
+      <ion-badge id="notifications-badge" color="danger">{{pedidosSolicitadosLength}}</ion-badge>  
+    </div>
+    
+    
+    <ion-button *ngIf="connectionStatus == 'offline'" fill="clear" color="danger" slot="end">
+      <ion-icon name="cloud-offline"></ion-icon>
+    </ion-button>  
+    <ion-button *ngIf="connectionStatus == 'online'" fill="clear" color="success" slot="end">
+      <ion-icon name="cloud-done-outline"></ion-icon>
+    </ion-button>    
+    
+    <ion-button *ngIf="countNotificaciones == 0" fill="clear" color="primary" slot="end">
+      <ion-icon name="notifications-outline"></ion-icon>
+    </ion-button>  
+    <ion-button *ngIf="countNotificaciones != 0" fill="clear" color="primary" slot="end">
+      <ion-icon name="notifications"></ion-icon>
+    </ion-button> 
+
+    
+
+  </ion-toolbar>
+</ion-header> 
+  
+<ion-content class="ion-padding">  
+ 
+    <ion-searchbar animated *ngIf="showSearchBar && itemsAllProductos.length > 0" class="FadeOut FadeIn" #ionsearchbar
+      placeholder="Buscar por nombre o categoría"
+      animated="true"
+      showCancelButton="never" 
+      color="light" 
+      autocomplete="on"
+      enterkeyhint="send"
+      inputmode="text"
+      type="text"
+      debounce="50"
+      value="{{palabraFiltro}}"
+      (ionChange)="buscar($event)">
+    </ion-searchbar> 
+    
+    <ion-grid *ngIf="itemsAllProductos.length > 0">       
+        <ion-row>          
+          <ion-col *ngIf="palabraFiltro == ''" size="6" size-xs="6" size-sm="6" size-md="4" size-lg="3">
+            <ion-item (click)="agregarDescuento()" class="item-card remove_inner_bottom">                  
+              <ion-label>                
+                <h2>
+                  Descuento 
+                </h2>
+              </ion-label>  
+            </ion-item>
+          </ion-col>
+
+          <ion-col *ngIf="palabraFiltro == ''" size="6" size-xs="6" size-sm="6" size-md="4" size-lg="3">
+            <ion-item (click)="agregarRecargo()" class="item-card remove_inner_bottom">               
+              <ion-label>                
+                <h2>
+                  Recargo
+                </h2>
+              </ion-label>  
+            </ion-item>
+          </ion-col>          
+
+          <ion-col size="12" size-xs="12" size-sm="6" size-md="4" size-lg="3" *ngFor="let producto of itemsRenderProductos">           
+
+            <ion-item-sliding class="item-card fivePhasesFadeIn" (ionDrag)="onDrag($event,producto)"> 
+              <app-card-producto   
+                [item]="producto"
+                [multiplicador]="1" 
+                [showOpcionesSeleccionadas]="false"
+                [showEstadoComanda]="false"
+                (select)="agregarProducto(producto)"
+              ></app-card-producto>    
+            
+              <ion-item-options side="end">
+                <ion-item-option  (click)="editarProducto(producto)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
+              </ion-item-options>
+        
+              <ion-item-options side="start" (ionSwipe)="onDrop2(producto)" (click)="agregarACarrito(producto)">
+                <ion-item-option color="success"><ion-icon name="add" ></ion-icon>Agregar A Carrito</ion-item-option>
+              </ion-item-options>
+
+            </ion-item-sliding>
+          </ion-col>
+
+          
+  
+        </ion-row>
+    </ion-grid>
+ 
+
+  
+  <!-- fab placed to the bottom end -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
+
+    
+    <ion-fab-button *ngIf="palabraFiltro == ''"  color="success" (click)="focusBuscar()">
+      <ion-icon name="search"></ion-icon>
+    </ion-fab-button><br>
+
+    <span *ngIf="palabraFiltro == '' && isMobile">
+      <ion-fab-button   color="success" (click)="lectorDeCodigo()">
+        <ion-icon name="barcode"></ion-icon>
+      </ion-fab-button><br>
+    </span>
+    
+    <span  *ngIf="palabraFiltro == '' && isMobile">
+      <ion-fab-button  color="success" (click)="reconocimientoPorVoz()">
+        <ion-icon name="mic-outline"></ion-icon>
+      </ion-fab-button><br>
+    </span>    
+
+    <ion-fab-button *ngIf="palabraFiltro == '' || itemsProductos.length == 0" (click)="nuevoProducto()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div *ngIf="buscandoProductos" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/buscando.fw.png" alt="">
+    <p>Cargando productos, <br> aguarde unos segundos por favor</p>
+  </div>
+
+  <div *ngIf="!buscandoProductos && itemsAllProductos.length == 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/producto.png" alt="">
+    <p >Aún no tienes productos agregados a tu comercio!</p>
+  </div>
+
+  <div *ngIf="buscandoProductos && itemsProductos.length != 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/producto.png" alt="">
+    <p >No existe un producto con ese nombre! Agrega uno nuevo.</p>
+  </div>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más productos...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
+
+<ion-footer class="ion-no-border ion-padding" *ngIf="carrito.on" style="padding: 0px;"> 
+  <ion-toolbar>
+    <ion-button class="margin0 button-rounded" style="height: 60px;" color="success" (click)="siguiente()">
+      <ion-icon name="cart-outline"></ion-icon>{{carrito.productos.length}} = {{carritoService.getTotal() | currency}} <ion-icon name="arrow-forward"></ion-icon>
+    </ion-button>
+  </ion-toolbar> 
+</ion-footer>

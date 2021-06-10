@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Stock</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h5>Stock Actual: {{producto.stock}} {{producto.unidad}}</h5> 
+  Agregar:
+  <ion-item>    
+    <ion-input type="number" [(ngModel)]="nuevoStock"></ion-input> {{producto.unidad}}
+  </ion-item>
+  <p>Stock Total: {{producto.stock + nuevoStock}} {{producto.unidad}}</p>
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar> 
+    <ion-button  class="button-rounded" slot="end" (click)="guardar()">Guardar</ion-button>  
+    <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
+  </ion-toolbar>
+</ion-footer>

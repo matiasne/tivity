@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle Subscripción</ion-title>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-card-subscription [item]="subscripcion"></app-card-subscription>
+  <ion-item *ngFor="let pagare of pagares">
+    <ion-label>
+      {{pagare.createdAt | date:'dd/MM/yyyy'}} {{pagare.monto | currency}} 
+    </ion-label>
+    
+
+      <ion-button  slot="end" *ngIf="pagare.estado == 'debe'" size="large"  (click)="cobrar(pagare)"  expand="block">Cobrar</ion-button>
+
+  </ion-item>
+</ion-content>

@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <!--ion-title>Catálogo</ion-title-->   
+    <ion-searchbar animated *ngIf="itemsAllProductos.length > 0" class="FadeOut FadeIn"
+      placeholder="Buscar por nombre o categoría"
+      animated="true"
+      showCancelButton="never" 
+      color="light" 
+      autocomplete="on"
+      enterkeyhint="send"
+      inputmode="text"
+      type="text"
+      debounce="50"
+      value="{{palabraFiltro}}"
+      (ionChange)="buscar($event)">
+    </ion-searchbar>        
+  </ion-toolbar>
+</ion-header> 
+  
+<ion-content class="ion-padding">  
+ 
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    
+            <ion-item (click)="agregarDescuento()" class="item-card">
+                  
+              <ion-label>                
+                <h2>
+                  Descuento 
+                </h2>
+              </ion-label>  
+            </ion-item>
+        
+            <ion-item (click)="agregarRecargo()" class="item-card">
+               
+              <ion-label>                
+                <h2>
+                  Recargo
+                </h2>
+              </ion-label>  
+            </ion-item> 
+
+          <span *ngFor="let producto of itemsRenderProductos">           
+
+           
+              <app-card-producto   
+                [item]="producto"
+                [multiplicador]="1" 
+                [showOpcionesSeleccionadas]="false"
+                [showEstadoComanda]="false"
+                (select)="seleccionarProducto(producto)"
+              ></app-card-producto>    
+            
+          </span>
+
+         
+
+  
+  
+
+  <div *ngIf="buscandoProductos" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/buscando.fw.png" alt="">
+    <p>Cargando productos, <br> aguarde unos segundos por favor</p>
+  </div>
+
+  <div *ngIf="!buscandoProductos && itemsAllProductos.length == 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/producto.png" alt="">
+    <p >Aún no tienes productos ni servicios agregados a tu comercio!</p>
+  </div>
+  
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más trabajos...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

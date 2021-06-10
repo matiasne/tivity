@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button  (click)="cancelar()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle Carrito</ion-title>    
+    <ion-button fill="clear" (click)="preguntarVaciar()" color="danger" slot="end">
+      <ion-icon name="trash"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">   
+   
+    <div  class="form-card" *ngIf="carrito.productos.length > 0">
+      <ion-text color="primary">
+        <h4>Productos</h4>
+      </ion-text> 
+   
+      
+    <ion-list>                   
+      <span *ngFor="let producto of carrito.productos; let i = index">
+        <ion-item-sliding>
+          <app-card-producto
+            [item]="producto"
+            [showStock]="false"
+            [showEnCarrito] = "false"
+            [multiplicador]="1"
+          ></app-card-producto>  
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="eliminarProducto(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          </ion-item-options>
+    
+        </ion-item-sliding>
+      </span>
+
+      <ion-text color="primary" *ngIf="carrito.descuentos.length > 0">
+        <h4>Descuentos</h4>
+      </ion-text> 
+
+      <span *ngFor="let item of carrito.descuentos; let i = index">
+        <ion-item-sliding>
+          <ion-item>
+            <ion-label>                
+              <h2>
+                <b><span *ngIf="item.tipo== enumTipo.porcentaje">%</span> <span *ngIf="item.tipo== enumTipo.monto">$</span> {{item.monto}}</b>  {{item.motivo}}             
+              </h2>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="eliminarDescuento(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          </ion-item-options>
+    
+        </ion-item-sliding>
+      </span>
+
+      <ion-text color="primary" *ngIf="carrito.recargos.length > 0">
+        <h4>Recargos</h4>
+      </ion-text> 
+
+      <span *ngFor="let item of carrito.recargos; let i = index">
+        <ion-item-sliding >
+          <ion-item>
+            <ion-label>                
+              <h2>
+                <b><span *ngIf="item.tipo== enumTipo.porcentaje">%</span> <span *ngIf="item.tipo== enumTipo.monto">$</span> {{item.monto}}</b>  {{item.motivo}}             
+              </h2>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="eliminarRecargo(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          </ion-item-options>
+    
+        </ion-item-sliding>
+      </span>
+      
+    
+    </ion-list>
+    </div>
+
+   
+ 
+    <div class="form-card">
+      <h5>Comentario: </h5>      
+      <ion-textarea [(ngModel)]="carritoService.comentario"></ion-textarea>   
+    </div>
+
+    
+
+    <ion-button *ngIf="!carrito.mesaId && comercio.config.mesas" (click)="seleccionarMesa()" class="button-rounded" color="light" ><ion-icon name="add"></ion-icon><ion-icon name="grid-outline"></ion-icon>  Mesa</ion-button>
+    <ion-item-sliding class="item-card" *ngIf="carrito.mesaId && comercio.config.mesas">  
+      <ion-item>
+        <ion-avatar slot="start" (click)="seleccionarMesa()">
+          <ion-icon name="grid-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label (click)="seleccionarMesa()">
+          <h2>{{carrito.mesaNombre}}</h2>
+        </ion-label>      
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="eliminarMesa()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+
+    <ion-button class="button-rounded" color="light"  *ngIf="!carrito.clienteId" (click)="seleccionarCliente()"><ion-icon name="add"></ion-icon><ion-icon name="person-outline"></ion-icon>  Cliente</ion-button>
+    <ion-item-sliding class="item-card" *ngIf="carrito.clienteId && comercio.config.clientes">
+      <app-card-usuario
+        [cliente]="carrito.cliente"
+        (select)="seleccionarCliente()">
+      </app-card-usuario>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="eliminarCliente()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-button *ngIf="!carrito.direccion.street_name" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
+    <ion-item-sliding class="item-card" *ngIf="carrito.direccion.street_name">  
+      <ion-item>
+        <ion-avatar slot="start" (click)="seleccionarUbicacion()">
+          <ion-icon name="location-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label (click)="seleccionarUbicacion()">
+          <h2>{{carrito.direccion.street_name}} {{carrito.direccion.street_number}},{{carrito.direccion.locality}},{{carrito.direccion.state}}. <br>
+            <span *ngIf="carrito.direccion.piso"> Piso: {{carrito.direccion.piso}}</span>
+            <span *ngIf="carrito.direccion.puerta"> Puerta: {{carrito.direccion.puerta}}</span>
+            {{carrito.direccion.distanciaDelComercio}} Km.
+          </h2>
+        </ion-label>      
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
+   
+      <ion-fab-button (click)="imprimir()">
+        <ion-icon name="print-outline"></ion-icon>
+      </ion-fab-button>
+      <br>
+      
+    </ion-fab>   
+
+</ion-content> 
+
+<ion-footer class="ion-no-border ion-padding"> 
+  <ion-toolbar>   
+    <!--ion-button class="button-rounded" slot="start"  color="danger" (click)="cancelar()">Cancelar</ion-button-->
+    <ion-button class="button-rounded"  color="success" (click)="continuar()">Cargar Pedido</ion-button>
+  </ion-toolbar>
+</ion-footer> 

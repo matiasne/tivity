@@ -1,0 +1,230 @@
+<ion-header>
+  <ion-toolbar> 
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{titulo}} <p class="header-subtitulo">{{producto.nombre}}</p></ion-title>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  class="ion-padding">
+
+  
+  <form [formGroup]="datosForm">
+    <div class="form-card">        
+      <ion-item [class.invalid]="submitted && !datosForm.controls.nombre.valid">
+        <ion-label position="floating">Nombre *</ion-label>
+        <ion-input name="nombre" type="text" formControlName="nombre" required></ion-input>
+      </ion-item>
+      <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+          <div *ngIf="f.nombre.errors.required"><h5>Ingresa un nombre</h5></div>
+      </div>  
+    </div> 
+  
+    <div class="form-card">
+      <ion-text color="primary">
+        <h4>Descripcion</h4>    
+      </ion-text> 
+          
+      <ion-item>
+        <ion-textarea formControlName="descripcion"></ion-textarea>
+      </ion-item>
+    </div>
+
+    <ion-slides pager="true" [options]="slideOpts">
+      <ion-slide *ngFor="let imagen of producto.imagenes;let i=index" (click)="verImagen(i,imagen)">
+        <ion-card>
+          <img src="{{imagen.url}}"/>
+          <!--ion-card-content>
+            <ion-button color="danger" (click)="eliminarFoto(i)">Eliminar</ion-button>
+          </ion-card-content-->
+        </ion-card>    
+      </ion-slide>  
+      <ion-slide *ngFor="let imagen of imagenesNuevas;let i=index" (click)="verImagenNueva(i,imagen)">
+        <ion-card>
+          <img src="{{imagen.url}}"/>
+          <!--ion-card-content>
+            <ion-button color="danger" (click)="eliminarFotoNueva(i)">Eliminar</ion-button>
+          </ion-card-content-->
+        </ion-card>            
+      </ion-slide>  
+      <ion-slide>
+        <div class="btn-select-img">
+            <app-seleccionar-imagen 
+              [aspectRatio] = "1/1" 
+              [showImageCroped] = "false"
+              (onSelectValue)=addFoto($event)>
+            </app-seleccionar-imagen>
+        </div>  
+      </ion-slide>
+      
+    </ion-slides>              
+            
+      
+          
+  
+    <div class="form-card" *ngIf="comercio.config.stock">
+      <p>Stock actual: {{producto.stock}}</p>
+      <ion-button size="large" color="light"  expand="block" (click)="agregarStock()">Agregar Stock</ion-button>
+    </div>  
+    
+    
+    
+    <div class="form-card">
+      
+      
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-item [class.invalid]="submitted && !datosForm.controls.precio.valid">
+              <ion-label color="primary" position="floating">Precio *</ion-label>
+              <ion-input name="precio" type="number" formControlName="precio" required></ion-input>              
+            </ion-item>
+            <div *ngIf="submitted && f.precio.errors" class="invalid-feedback">
+              <div *ngIf="f.precio.errors.required"><h5>Ingresa un precio</h5></div>
+            </div>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label color="primary" position="floating">Precio promocion</ion-label>
+              <ion-input name="promocion" type="number" formControlName="promocion"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+        
+      <ion-grid>
+        <ion-row>
+          
+          <ion-col>
+            <ion-item>
+              <ion-label color="primary" position="floating">Precio por cantidad</ion-label>
+              <ion-input name="valorPor" type="text" formControlName="valorPor"></ion-input>
+            </ion-item> 
+          </ion-col>
+          <ion-col>
+            <ion-item [class.invalid]="submitted && !datosForm.controls.unidad.valid">
+              <ion-label color="primary" position="floating">Unidad de medida</ion-label>
+              <ion-select formControlName="unidad">
+                <ion-select-option [value]="'unidades'" selected>Unidad</ion-select-option>
+                <ion-select-option [value]="'gr.'">Gramos</ion-select-option>
+                <ion-select-option [value]="'Kg.'" >Kilogramos</ion-select-option>
+                <ion-select-option [value]="'cm.'" >Centímetros</ion-select-option>
+                <ion-select-option [value]="'metros'" >Metros</ion-select-option>
+                <ion-select-option [value]="'ml.'" >Mililitros</ion-select-option>
+                <ion-select-option [value]="'litros'" >Litros</ion-select-option>
+              </ion-select>
+            </ion-item> 
+            <div *ngIf="submitted && f.unidad.errors" class="invalid-feedback">
+              <div *ngIf="f.unidad.errors.required"><h5>Seleccione una unidad</h5></div>
+            </div> 
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!--ion-item>
+        <ion-label>Producto Destacado</ion-label>
+        <ion-toggle formControlName="destacado"></ion-toggle>
+      </ion-item>
+      
+      <ion-text color="primary">
+        <h4>Precio Promocion</h4>          
+      </ion-text-->        
+     
+    </div> 
+    
+    <div class="form-card">
+      <ion-item [class.invalid]="submitted && !datosForm.controls.categorias.valid">
+        <ion-label position="floating">Categorías</ion-label>
+        <ion-select multiple="true" formControlName="categorias" cancelText="Cancelar" okText="Listo">
+          <ion-select-option *ngFor="let categoria of categorias" [value]="categoria" selected>{{categoria.nombre}}</ion-select-option>
+        </ion-select>       
+      </ion-item> 
+      <!--ion-button size="large"   expand="block" (click)="openAddCategoria()">Agregar Nueva Categoria</ion-button-->  
+      <div *ngIf="submitted && f.categorias.errors" class="invalid-feedback">
+          <div *ngIf="f.categorias.errors.required"><h5>Seleccione una o más categorías</h5></div>
+      </div>  
+    </div>
+
+    <div class="form-card" *ngIf="comercio.config.comandas">  
+      <ion-item [class.invalid]="submitted && !datosForm.controls.cocinaId.valid">
+        <ion-label position="floating">Cocina</ion-label>
+        <ion-select formControlName="cocinaId" cancelText="Cancelar" okText="Listo">
+          <ion-select-option *ngFor="let cocina of cocinas" [value]="cocina.id" selected>{{cocina.nombre}}</ion-select-option>
+        </ion-select>        
+      </ion-item>  
+      <div *ngIf="submitted && f.cocinaId.errors" class="invalid-feedback">
+          <div *ngIf="f.cocinaId.errors.required"><h5>Seleccione una cocina</h5></div>
+      </div>  
+    </div>
+    
+    
+
+    <div class="form-card">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="8">
+            <ion-item>
+              <ion-label color="primary" position="floating">Código único</ion-label>
+              <ion-input name="barcode" type="text" formControlName="barcode"></ion-input>
+            </ion-item>            
+          </ion-col>
+          <ion-col size="4">
+            <ion-button class="button-rounded" color="primary" style="margin-top: -1px; height: 42px;"  (click)="lectorDeCodigo()">
+              <ion-icon name="barcode"></ion-icon>
+            </ion-button>
+          </ion-col> 
+        </ion-row>
+      </ion-grid>       
+    </div>
+
+  
+   
+    <div class="form-card">
+      <ion-list lines="none"> 
+        <ion-item-sliding  *ngFor="let grupo of gruposOpciones;let i=index" class="item-card">
+           <ion-item>     
+             <ion-label>
+               {{grupo.nombre}}           
+             </ion-label>           
+           </ion-item>    
+           <ion-item-options side="end"> 
+             <ion-item-option color="danger" (click)="eliminarGrupoOpciones(i)"><ion-icon name="trash-outline" ></ion-icon>Quitar</ion-item-option>
+           </ion-item-options>
+         </ion-item-sliding>       
+         <ion-button size="large" color="light"  expand="block" (click)="openAddGrupoOpciones()">Agregar Grupo de Opciones</ion-button>
+       </ion-list>
+    </div>
+   
+    <div class="form-card" *ngIf="comercio.config.woocommerce">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10">
+            <p>
+              <b>sincronizar con woocommerce</b>
+            </p>
+          </ion-col>
+          <ion-col size="2">
+            <ion-toggle [(ngModel)]="woocommerceSyncData.sincronizado" [ngModelOptions]="{standalone: true}"></ion-toggle>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <p></p>
+    </div>
+    
+    
+   
+   
+  </form>  
+
+  <ion-button *ngIf="updating" class="button-rounded"  color="danger" (click)="elimiar()">Eliminar Producto</ion-button>
+  
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar> 
+    <ion-button class="button-rounded" slot="end" color="success" (click)="guardar()">Guardar</ion-button>
+    
+    <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
+  </ion-toolbar>
+</ion-footer>

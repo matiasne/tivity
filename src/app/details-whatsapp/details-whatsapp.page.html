@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Link Whatsapp</ion-title>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+ <a href="{{value}}">{{value}}</a> 
+ <ngx-qrcode 
+            [elementType]="elementType" 
+            [value] = "value"
+            cssClass = "aclass"
+            errorCorrectionLevel = "L">
+      </ngx-qrcode>
+</ion-content>

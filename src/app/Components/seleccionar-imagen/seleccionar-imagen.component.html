@@ -1,0 +1,20 @@
+
+
+<input #fileInput  type="file" multiple="multiple" name="files[]" accept="image/*;" (change)="seleccionarImagenWeb($event)" style="display:none;" /> 
+<div *ngIf="croppedImage && showImageCroped"> 
+  <img  src="{{croppedImage}}" alt="" (click)="fileInput.click()" *ngIf="!IsMobile" >
+  <img  src="{{croppedImage}}" alt="" (click)="selectImage()" *ngIf="IsMobile">
+</div>
+
+<div *ngIf="!croppedImage || !showImageCroped">
+  <div *ngIf="!IsMobile" (click)="fileInput.click()">    
+      <img  src="../../../assets/img/add-image.fw.png" alt="" >
+    
+  </div>  
+  <div *ngIf="IsMobile" (click)="selectImage()">
+    
+      <img  src="../../../assets/img/add-image.fw.png" alt="" >
+  </div>
+</div>
+
+

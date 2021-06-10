@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Listado de Clientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="margin-top: 50px;" class="ion-padding"> 
+  
+  <ion-searchbar animated 
+    placeholder="Buscar nombre"
+    animated="true"
+    showCancelButton="never" 
+    color="light" 
+    autocomplete="on"
+    enterkeyhint="send"
+    inputmode="text"
+    type="text"
+    debounce="300"
+    value="{{palabraFiltro}}"
+    (ionChange)="onChange($event)">
+  </ion-searchbar>
+
+  <div *ngIf="buscando" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/buscando.fw.png" alt="">
+    <p>Cargando clientes, aguarde unos segundos por favor</p>
+  </div>
+
+  <div *ngIf="!buscando && itemsAll.length == 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/clientes.fw.png" alt="">
+    <p>Aún no tienes clientes</p>
+  </div>
+
+  <div *ngIf="!buscando && itemsAll.length != 0 && itemsRenderizar.length == 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/producto.png" alt="">
+    <p >No existe un cliente con ese nombre! Agrega uno nuevo.</p>
+  </div>
+
+  <ion-list lines="none">   
+    
+    <ion-item-sliding *ngFor="let item of itemsRenderizar" class="item-card" >    
+
+        <ion-item (click)="seleccionar(item)" >
+          <div slot="start">
+            <img src="{{item.foto}}" *ngIf="item.foto">
+            <ion-icon name="person-outline" *ngIf="!item.foto"></ion-icon>
+          </div>      
+          <ion-label text-wrap>
+            <h2><b>{{item.nombre}}</b> </h2>   
+            <p>{{item.email}}</p>         
+          </ion-label>  
+        </ion-item> 
+      
+        <ion-item-options side="end">
+          <ion-item-option (click)="editar(item)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
+        </ion-item-options>
+      
+      </ion-item-sliding>
+
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="Cargando más productos...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+  </ion-list>
+
+  
+  <!-- fab placed to the bottom end -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="nuevo()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más clientes...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+
+</ion-content>
+
