@@ -50,6 +50,7 @@
     "com.telerik.plugins.nativepagetransitions": "^0.7.0",
     "cordova-android": "8.1.0",
     "cordova-browser": "6.0.0",
+    "cordova-ios": "6.2.0",
     "cordova-plugin-androidx": "^2.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-bluetooth-serial": "^0.4.7",
@@ -147,7 +148,8 @@
       "call-number": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
