@@ -1,7 +1,18 @@
 export const environment = {
   production: true,
+  webClientId:"902663639749-mc65bdpt1bo5p0n7r78ba7mcd416pqo5.apps.googleusercontent.com", //para google login se encuentra en Authenctication->Sign in method->Google->Vongif SDK Web
   firebase: {
-    vapidKey: 'BOHbXSuRE-89N26L35dHM_Ut0aiVjZhZTI2kfyt0Kw_gTrEC4O_EvW_a5cI8z2OKw62d-Ov7RrfhWgJPYv50WyY',
-    claveServidor: 'AAAA9Kup-lk:APA91bFYlNlzma5wp5aLISYAPHu_aroBrL8EuKmxdnVcyDQLx3gezF11rCfLpkgEpAXcB5YZMpbsGRmAeD6hx0Y-YTtI9edxKRMbNMnVS4uEv7vnyZlQr1vpb512lMT58cOZe2-lw6oT'
+    vapidKey: 'BG0jjgBbyjTbwrgbNQMhh31VN3zqlxft2bVHkAMx8FAi1mYKtnLQfzM04xqkdy6XcWuw8OoxcXgMRvmWbgJWiAw',
+    claveServidor: 'AAAA0iryEsU:APA91bGteDMe8kwkkqlSkOkTJ0422tdWgdYAO8gx2cG6Ux269gHFraVby3eagMgsx9DRq_BWfGpMVIeri9EuCdI68DUVu66UBMoG9iYDcK9VPSfO53JIruIAPuBtQCPbywjaZ1nsy0tc'
+  },
+  firebaseConfig: {
+    apiKey: "AIzaSyC_PHbRhmEW6TGJ3jHIRJFC2aIYjA860CA",
+    authDomain: "tivity-socialup.firebaseapp.com",
+    projectId: "tivity-socialup",
+    storageBucket: "tivity-socialup.appspot.com",
+    messagingSenderId: "902663639749",
+    appId: "1:902663639749:web:fe1ba6a8f6664050b5d6ac",
+    measurementId: "G-X1Y7488PGP"
   }
+
 };

@@ -123,7 +123,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FullCalendarModule, 
     IonicModule.forRoot(),
     AppRoutingModule,  
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(), 
     AngularFireDatabaseModule,
     AngularFireStorageModule,

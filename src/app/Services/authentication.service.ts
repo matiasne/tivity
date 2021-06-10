@@ -12,13 +12,14 @@ import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firesto
 import { UsuariosService } from './usuarios.service';
 import { LoadingService } from './loading.service';
 import { EnumPlanes } from '../models/user';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private webClientId= "1050852063833-6h7nfk9a8ithssi498f5c2h6odj6ci1k.apps.googleusercontent.com";
+  
   
   private httpHeaders = new HttpHeaders({
     'Content-Type' : 'application/json',
@@ -344,7 +345,7 @@ export class AuthenticationService {
       let params;
       if (this.platform.is('android')) {
         params = {
-          'webClientId': this.webClientId,
+          'webClientId': environment.webClientId,
           'offline': true,
           'scopes': 'profile email'
         }

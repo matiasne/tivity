@@ -98,6 +98,7 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~3.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
+    "mx.ferreyra.callnumber": "0.0.2",
     "protractor": "~5.4.3",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
@@ -108,15 +109,20 @@
     "plugins": {
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "apps.googleusercontent.com381639582302-k0k3kbed5i99aa9465vbbl0mlmicur4f",
-        "WEB_APPLICATION_CLIENT_ID": "381639582302-k0k3kbed5i99aa9465vbbl0mlmicur4f.apps.googleusercontent.com"
+        "WEB_APPLICATION_CLIENT_ID": "381639582302-k0k3kbed5i99aa9465vbbl0mlmicur4f.apps.googleusercontent.com",
+        "PLAY_SERVICES_VERSION": "15.0.1"
       },
       "cordova-plugin-crop": {},
       "cordova-plugin-file": {},
       "cordova-plugin-telerik-imagepicker": {},
       "cordova-plugin-fcm-with-dependecy-updated": {},
-      "phonegap-plugin-barcodescanner": {},
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "mx.ferreyra.callnumber": {},
-      "cordova-plugin-email-composer": {},
+      "cordova-plugin-email-composer": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-speechrecognition": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
@@ -129,11 +135,16 @@
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-printer": {},
+      "cordova-plugin-printer": {
+        "ANDROID_SUPPORT_V4_VERSION": "28.+"
+      },
       "cordova-plugin-bluetooth-serial": {},
       "cordova-plugin-file-transfer": {},
       "com.telerik.plugins.nativepagetransitions": {},
-      "cordova-plugin-camera": {}
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "call-number": {}
     },
     "platforms": [
       "android"

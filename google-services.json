@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "1050852063833",
-    "firebase_url": "https://comercios-admin-socialup.firebaseio.com",
-    "project_id": "comercios-admin-socialup",
-    "storage_bucket": "comercios-admin-socialup.appspot.com"
+    "project_number": "902663639749",
+    "project_id": "tivity-socialup",
+    "storage_bucket": "tivity-socialup.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1050852063833:android:f3961179822434d05ccf48",
+        "mobilesdk_app_id": "1:902663639749:android:e3960013458c1e56b5d6ac",
         "android_client_info": {
-          "package_name": "ionic.socialup.comercioadmin"
+          "package_name": "io.socialup.tivity"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1050852063833-6h7nfk9a8ithssi498f5c2h6odj6ci1k.apps.googleusercontent.com",
+          "client_id": "902663639749-mc65bdpt1bo5p0n7r78ba7mcd416pqo5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBHplqek5lyWNLi1_0LwkkrKAWwrKa0qHw"
+          "current_key": "AIzaSyBLEf4luL06a3ZzLWX3_VzW9osXmZQ78pE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1050852063833-6h7nfk9a8ithssi498f5c2h6odj6ci1k.apps.googleusercontent.com",
+              "client_id": "902663639749-mc65bdpt1bo5p0n7r78ba7mcd416pqo5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
