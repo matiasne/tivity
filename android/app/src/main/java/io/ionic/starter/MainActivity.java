@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.socialup.tivity;
 
 import com.getcapacitor.BridgeActivity;
 
