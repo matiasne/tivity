@@ -75,7 +75,7 @@ export class HomePage implements OnInit {
   //  this.user.asignarValores(this.authService.getActualUser());
 
     this.buscandoComercios = true;
-    this.comercios = [];
+    this.comercios = []; 
     console.log("!entrando a home"); 
     
     let roles:any = await this.rolesService.getAllRolesbyEmailGET(this.authService.getActualUser().email).toPromise();
@@ -86,7 +86,7 @@ export class HomePage implements OnInit {
           if(roles[i].estado != "pendiente" && roles[i].estado != "rechazada"){
             let obs =this.comerciosService.get(roles[i].comercioId).subscribe(data=>{
               if(data){
-                this.buscandoComercios = false
+                
                 let comercio:any = data;
                 comercio.rol = roles[i];
                 console.log(comercio)
@@ -99,8 +99,9 @@ export class HomePage implements OnInit {
         }
       }
       console.log(this.comercios) 
-    }
-  
+      this.buscandoComercios = false
+  }
+    
  
   async getAfipStatus(){
     console.log('Este es el estado del servidor:');
