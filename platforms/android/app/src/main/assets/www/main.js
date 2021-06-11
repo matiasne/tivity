@@ -5412,9 +5412,6 @@ let AppComponent = class AppComponent {
         this.platform.ready().then(() => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             console.log("NgOnInit");
             this.statusBar.styleDefault();
-            setTimeout(() => {
-                this.splashScreen.hide();
-            }, 1000);
             /*this.notifiacionesDesktopService.requestPermission();
             this.notifiacionesDesktopService.init().then(data=>{
               console.log("OK")
@@ -5441,6 +5438,7 @@ let AppComponent = class AppComponent {
                         console.log("Salió del sistema");
                     }));
                     console.log("Logueado!" + uid);
+                    this.splashScreen.hide();
                     this.router.navigate(['home']);
                     this.notificacionesAppService.getSinLeer(uid).subscribe(snapshot => {
                         this.appActions[0].badge = snapshot.length;
@@ -5476,6 +5474,7 @@ let AppComponent = class AppComponent {
                     }
                 }
                 else {
+                    this.splashScreen.hide();
                     this.router.navigate(['login']);
                 }
             });

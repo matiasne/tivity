@@ -151,9 +151,7 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       
 
-      setTimeout(() => {           
-        this.splashScreen.hide();
-      }, 1000);
+     
 
       /*this.notifiacionesDesktopService.requestPermission();
       this.notifiacionesDesktopService.init().then(data=>{
@@ -176,7 +174,7 @@ export class AppComponent implements OnInit {
       this.authService.getActualUserIdObservable().subscribe(uid=>{       
 
         if(uid){   
-
+          
           this.platform.pause.subscribe(async () => {
             console.log("Salió del sistema"); 
           });
@@ -186,6 +184,7 @@ export class AppComponent implements OnInit {
           });
           
           console.log("Logueado!"+uid)
+          this.splashScreen.hide();
           this.router.navigate(['home']);     
 
           this.notificacionesAppService.getSinLeer(uid).subscribe(snapshot =>{
@@ -230,6 +229,7 @@ export class AppComponent implements OnInit {
           }          
         }  
         else{
+          this.splashScreen.hide();
           this.router.navigate(['login']);
         }    
       });      
