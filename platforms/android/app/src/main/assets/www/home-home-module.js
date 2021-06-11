@@ -182,7 +182,6 @@ let HomePage = class HomePage {
                     if (roles[i].estado != "pendiente" && roles[i].estado != "rechazada") {
                         let obs = this.comerciosService.get(roles[i].comercioId).subscribe(data => {
                             if (data) {
-                                this.buscandoComercios = false;
                                 let comercio = data;
                                 comercio.rol = roles[i];
                                 console.log(comercio);
@@ -194,6 +193,7 @@ let HomePage = class HomePage {
                 }
             }
             console.log(this.comercios);
+            this.buscandoComercios = false;
         });
     }
     getAfipStatus() {
