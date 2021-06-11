@@ -5282,20 +5282,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
-/* harmony import */ var _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic-native/splash-screen/ngx */ "./node_modules/@ionic-native/splash-screen/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _Services_authentication_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Services/authentication.service */ "./src/app/Services/authentication.service.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
-/* harmony import */ var _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic-native/fcm/ngx */ "./node_modules/@ionic-native/fcm/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _Services_comercios_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Services/comercios.service */ "./src/app/Services/comercios.service.ts");
-/* harmony import */ var _Services_notifificaciones_app_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Services/notifificaciones-app.service */ "./src/app/Services/notifificaciones-app.service.ts");
-/* harmony import */ var _models_comercio__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./models/comercio */ "./src/app/models/comercio.ts");
-/* harmony import */ var _Services_toast_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Services/toast.service */ "./src/app/Services/toast.service.ts");
-/* harmony import */ var _Services_presence_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Services/presence.service */ "./src/app/Services/presence.service.ts");
-/* harmony import */ var _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Services/usuarios.service */ "./src/app/Services/usuarios.service.ts");
-/* harmony import */ var _Services_impresora_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Services/impresora.service */ "./src/app/Services/impresora.service.ts");
-/* harmony import */ var _Services_roles_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Services/roles.service */ "./src/app/Services/roles.service.ts");
-
+/* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _Services_authentication_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Services/authentication.service */ "./src/app/Services/authentication.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
+/* harmony import */ var _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic-native/fcm/ngx */ "./node_modules/@ionic-native/fcm/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _Services_comercios_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Services/comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _Services_notifificaciones_app_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Services/notifificaciones-app.service */ "./src/app/Services/notifificaciones-app.service.ts");
+/* harmony import */ var _models_comercio__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./models/comercio */ "./src/app/models/comercio.ts");
+/* harmony import */ var _Services_toast_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Services/toast.service */ "./src/app/Services/toast.service.ts");
+/* harmony import */ var _Services_presence_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Services/presence.service */ "./src/app/Services/presence.service.ts");
+/* harmony import */ var _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Services/usuarios.service */ "./src/app/Services/usuarios.service.ts");
+/* harmony import */ var _Services_impresora_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Services/impresora.service */ "./src/app/Services/impresora.service.ts");
+/* harmony import */ var _Services_roles_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Services/roles.service */ "./src/app/Services/roles.service.ts");
 
 
 
@@ -5312,9 +5310,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let AppComponent = class AppComponent {
-    constructor(platform, splashScreen, statusBar, authService, router, fcm, toastController, comerciosService, notificacionesAppService, toastService, presenceService, usuariosService, usuarioService, impresoraService, rolesService) {
+    constructor(platform, statusBar, authService, router, fcm, toastController, comerciosService, notificacionesAppService, toastService, presenceService, usuariosService, usuarioService, impresoraService, rolesService) {
         this.platform = platform;
-        this.splashScreen = splashScreen;
         this.statusBar = statusBar;
         this.authService = authService;
         this.router = router;
@@ -5400,7 +5397,7 @@ let AppComponent = class AppComponent {
         this.onlineOffline = navigator.onLine;
         this.rolActual = "";
         this.connectionStatus = "offline";
-        this.comercioSeleccionado = new _models_comercio__WEBPACK_IMPORTED_MODULE_10__["Comercio"]();
+        this.comercioSeleccionado = new _models_comercio__WEBPACK_IMPORTED_MODULE_9__["Comercio"]();
         this.initializeApp();
         this.authService.observeRol().subscribe(data => {
             this.rolActual = data.rol;
@@ -5438,7 +5435,6 @@ let AppComponent = class AppComponent {
                         console.log("Salió del sistema");
                     }));
                     console.log("Logueado!" + uid);
-                    this.splashScreen.hide();
                     this.router.navigate(['home']);
                     this.notificacionesAppService.getSinLeer(uid).subscribe(snapshot => {
                         this.appActions[0].badge = snapshot.length;
@@ -5474,7 +5470,6 @@ let AppComponent = class AppComponent {
                     }
                 }
                 else {
-                    this.splashScreen.hide();
                     this.router.navigate(['login']);
                 }
             });
@@ -5494,7 +5489,7 @@ let AppComponent = class AppComponent {
             if (data)
                 this.comercioSeleccionado.asignarValores(data);
             else {
-                this.comercioSeleccionado = new _models_comercio__WEBPACK_IMPORTED_MODULE_10__["Comercio"]();
+                this.comercioSeleccionado = new _models_comercio__WEBPACK_IMPORTED_MODULE_9__["Comercio"]();
             }
         });
     }
@@ -5510,26 +5505,25 @@ let AppComponent = class AppComponent {
             email: "",
             state: ""
         };
-        this.comercioSeleccionado = new _models_comercio__WEBPACK_IMPORTED_MODULE_10__["Comercio"]();
+        this.comercioSeleccionado = new _models_comercio__WEBPACK_IMPORTED_MODULE_9__["Comercio"]();
         this.authService.logout();
     }
 };
 AppComponent.ctorParameters = () => [
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"] },
-    { type: _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_3__["SplashScreen"] },
-    { type: _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__["StatusBar"] },
-    { type: _Services_authentication_service__WEBPACK_IMPORTED_MODULE_5__["AuthenticationService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] },
-    { type: _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_7__["FCM"] },
+    { type: _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_3__["StatusBar"] },
+    { type: _Services_authentication_service__WEBPACK_IMPORTED_MODULE_4__["AuthenticationService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] },
+    { type: _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_6__["FCM"] },
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"] },
-    { type: _Services_comercios_service__WEBPACK_IMPORTED_MODULE_8__["ComerciosService"] },
-    { type: _Services_notifificaciones_app_service__WEBPACK_IMPORTED_MODULE_9__["NotifificacionesAppService"] },
-    { type: _Services_toast_service__WEBPACK_IMPORTED_MODULE_11__["ToastService"] },
-    { type: _Services_presence_service__WEBPACK_IMPORTED_MODULE_12__["PresenceService"] },
-    { type: _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_13__["UsuariosService"] },
-    { type: _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_13__["UsuariosService"] },
-    { type: _Services_impresora_service__WEBPACK_IMPORTED_MODULE_14__["ImpresoraService"] },
-    { type: _Services_roles_service__WEBPACK_IMPORTED_MODULE_15__["RolesService"] }
+    { type: _Services_comercios_service__WEBPACK_IMPORTED_MODULE_7__["ComerciosService"] },
+    { type: _Services_notifificaciones_app_service__WEBPACK_IMPORTED_MODULE_8__["NotifificacionesAppService"] },
+    { type: _Services_toast_service__WEBPACK_IMPORTED_MODULE_10__["ToastService"] },
+    { type: _Services_presence_service__WEBPACK_IMPORTED_MODULE_11__["PresenceService"] },
+    { type: _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_12__["UsuariosService"] },
+    { type: _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_12__["UsuariosService"] },
+    { type: _Services_impresora_service__WEBPACK_IMPORTED_MODULE_13__["ImpresoraService"] },
+    { type: _Services_roles_service__WEBPACK_IMPORTED_MODULE_14__["RolesService"] }
 ];
 AppComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5558,60 +5552,58 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/__ivy_ngcc__/fesm2015/platform-browser.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
-/* harmony import */ var _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic-native/splash-screen/ngx */ "./node_modules/@ionic-native/splash-screen/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _angular_fire_messaging__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/fire/messaging */ "./node_modules/@angular/fire/__ivy_ngcc__/messaging/es2015/index.js");
-/* harmony import */ var angularfire2__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! angularfire2 */ "./node_modules/angularfire2/index.js");
-/* harmony import */ var angularfire2__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(angularfire2__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var angularfire2_database__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! angularfire2/database */ "./node_modules/angularfire2/database/index.js");
-/* harmony import */ var angularfire2_database__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(angularfire2_database__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var angularfire2_auth__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! angularfire2/auth */ "./node_modules/angularfire2/auth/index.js");
-/* harmony import */ var angularfire2_auth__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(angularfire2_auth__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
-/* harmony import */ var _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @ionic-native/google-plus/ngx */ "./node_modules/@ionic-native/google-plus/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
-/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _ionic_native_camera_ngx__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ionic-native/camera/ngx */ "./node_modules/@ionic-native/camera/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_crop_ngx__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ionic-native/crop/ngx */ "./node_modules/@ionic-native/crop/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_file_ngx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic-native/file/ngx */ "./node_modules/@ionic-native/file/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_image_picker_ngx__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ionic-native/image-picker/ngx */ "./node_modules/@ionic-native/image-picker/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _form_plan_form_plan_page__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./form-plan/form-plan.page */ "./src/app/form-plan/form-plan.page.ts");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/__ivy_ngcc__/fesm2015/forms.js");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _form_categoria_form_categoria_page__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./form-categoria/form-categoria.page */ "./src/app/form-categoria/form-categoria.page.ts");
-/* harmony import */ var _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @ionic-native/fcm/ngx */ "./node_modules/@ionic-native/fcm/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _list_clientes_list_clientes_page__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./list-clientes/list-clientes.page */ "./src/app/list-clientes/list-clientes.page.ts");
-/* harmony import */ var _list_servicios_list_servicios_page__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./list-servicios/list-servicios.page */ "./src/app/list-servicios/list-servicios.page.ts");
-/* harmony import */ var _list_venta_list_venta_page__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./list-venta/list-venta.page */ "./src/app/list-venta/list-venta.page.ts");
-/* harmony import */ var _ionic_native_barcode_scanner_ngx__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @ionic-native/barcode-scanner/ngx */ "./node_modules/@ionic-native/barcode-scanner/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _form_caja_form_caja_page__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./form-caja/form-caja.page */ "./src/app/form-caja/form-caja.page.ts");
-/* harmony import */ var _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @ionic-native/call-number/ngx */ "./node_modules/@ionic-native/call-number/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @ionic-native/email-composer/ngx */ "./node_modules/@ionic-native/email-composer/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _form_horario_form_horario_page__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./form-horario/form-horario.page */ "./src/app/form-horario/form-horario.page.ts");
-/* harmony import */ var _ionic_native_speech_recognition_ngx__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @ionic-native/speech-recognition/ngx */ "./node_modules/@ionic-native/speech-recognition/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _list_comercios_owner_list_comercios_owner_page__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./list-comercios-owner/list-comercios-owner.page */ "./src/app/list-comercios-owner/list-comercios-owner.page.ts");
-/* harmony import */ var _form_producto_opcion_form_producto_opcion_page__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./form-producto-opcion/form-producto-opcion.page */ "./src/app/form-producto-opcion/form-producto-opcion.page.ts");
-/* harmony import */ var ngx_qrcode2__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ngx-qrcode2 */ "./node_modules/ngx-qrcode2/__ivy_ngcc__/fesm2015/ngx-qrcode2.js");
-/* harmony import */ var _form_invitacion_form_invitacion_page__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./form-invitacion/form-invitacion.page */ "./src/app/form-invitacion/form-invitacion.page.ts");
-/* harmony import */ var ngx_image_cropper__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ngx-image-cropper */ "./node_modules/ngx-image-cropper/__ivy_ngcc__/fesm2015/ngx-image-cropper.js");
-/* harmony import */ var _recortar_imagen_recortar_imagen_page__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./recortar-imagen/recortar-imagen.page */ "./src/app/recortar-imagen/recortar-imagen.page.ts");
-/* harmony import */ var _Components_components_module__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./Components/components.module */ "./src/app/Components/components.module.ts");
-/* harmony import */ var _form_producto_grupo_opciones_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./form-producto-grupo-opciones/form-producto-grupo-opciones.page */ "./src/app/form-producto-grupo-opciones/form-producto-grupo-opciones.page.ts");
-/* harmony import */ var _fullcalendar_angular__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! @fullcalendar/angular */ "./node_modules/@fullcalendar/angular/__ivy_ngcc__/fesm2015/fullcalendar-angular.js");
-/* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/main.js");
-/* harmony import */ var _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! @fullcalendar/timegrid */ "./node_modules/@fullcalendar/timegrid/main.js");
-/* harmony import */ var _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! @fullcalendar/interaction */ "./node_modules/@fullcalendar/interaction/main.js");
-/* harmony import */ var _ionic_native_network_ngx__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! @ionic-native/network/ngx */ "./node_modules/@ionic-native/network/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_printer_ngx__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! @ionic-native/printer/ngx */ "./node_modules/@ionic-native/printer/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./form-comercio/form-comercio.page */ "./src/app/form-comercio/form-comercio.page.ts");
-/* harmony import */ var _ionic_native_bluetooth_serial_ngx__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! @ionic-native/bluetooth-serial/ngx */ "./node_modules/@ionic-native/bluetooth-serial/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _Services_woocommerce_woocommerce_interceptor_service__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./Services/woocommerce/woocommerce-interceptor.service */ "./src/app/Services/woocommerce/woocommerce-interceptor.service.ts");
-/* harmony import */ var _ionic_native_file_transfer_ngx__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! @ionic-native/file-transfer/ngx */ "./node_modules/@ionic-native/file-transfer/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var angularfire2_storage__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! angularfire2/storage */ "./node_modules/angularfire2/storage/index.js");
-/* harmony import */ var angularfire2_storage__WEBPACK_IMPORTED_MODULE_52___default = /*#__PURE__*/__webpack_require__.n(angularfire2_storage__WEBPACK_IMPORTED_MODULE_52__);
-
+/* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _angular_fire_messaging__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/fire/messaging */ "./node_modules/@angular/fire/__ivy_ngcc__/messaging/es2015/index.js");
+/* harmony import */ var angularfire2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! angularfire2 */ "./node_modules/angularfire2/index.js");
+/* harmony import */ var angularfire2__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(angularfire2__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var angularfire2_database__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! angularfire2/database */ "./node_modules/angularfire2/database/index.js");
+/* harmony import */ var angularfire2_database__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(angularfire2_database__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var angularfire2_auth__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! angularfire2/auth */ "./node_modules/angularfire2/auth/index.js");
+/* harmony import */ var angularfire2_auth__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(angularfire2_auth__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
+/* harmony import */ var _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ionic-native/google-plus/ngx */ "./node_modules/@ionic-native/google-plus/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _ionic_native_camera_ngx__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @ionic-native/camera/ngx */ "./node_modules/@ionic-native/camera/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_native_crop_ngx__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ionic-native/crop/ngx */ "./node_modules/@ionic-native/crop/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_native_file_ngx__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ionic-native/file/ngx */ "./node_modules/@ionic-native/file/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_native_image_picker_ngx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic-native/image-picker/ngx */ "./node_modules/@ionic-native/image-picker/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _form_plan_form_plan_page__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./form-plan/form-plan.page */ "./src/app/form-plan/form-plan.page.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/__ivy_ngcc__/fesm2015/forms.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _form_categoria_form_categoria_page__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./form-categoria/form-categoria.page */ "./src/app/form-categoria/form-categoria.page.ts");
+/* harmony import */ var _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @ionic-native/fcm/ngx */ "./node_modules/@ionic-native/fcm/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _list_clientes_list_clientes_page__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./list-clientes/list-clientes.page */ "./src/app/list-clientes/list-clientes.page.ts");
+/* harmony import */ var _list_servicios_list_servicios_page__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./list-servicios/list-servicios.page */ "./src/app/list-servicios/list-servicios.page.ts");
+/* harmony import */ var _list_venta_list_venta_page__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./list-venta/list-venta.page */ "./src/app/list-venta/list-venta.page.ts");
+/* harmony import */ var _ionic_native_barcode_scanner_ngx__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @ionic-native/barcode-scanner/ngx */ "./node_modules/@ionic-native/barcode-scanner/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _form_caja_form_caja_page__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./form-caja/form-caja.page */ "./src/app/form-caja/form-caja.page.ts");
+/* harmony import */ var _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @ionic-native/call-number/ngx */ "./node_modules/@ionic-native/call-number/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @ionic-native/email-composer/ngx */ "./node_modules/@ionic-native/email-composer/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _form_horario_form_horario_page__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./form-horario/form-horario.page */ "./src/app/form-horario/form-horario.page.ts");
+/* harmony import */ var _ionic_native_speech_recognition_ngx__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @ionic-native/speech-recognition/ngx */ "./node_modules/@ionic-native/speech-recognition/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _list_comercios_owner_list_comercios_owner_page__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./list-comercios-owner/list-comercios-owner.page */ "./src/app/list-comercios-owner/list-comercios-owner.page.ts");
+/* harmony import */ var _form_producto_opcion_form_producto_opcion_page__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./form-producto-opcion/form-producto-opcion.page */ "./src/app/form-producto-opcion/form-producto-opcion.page.ts");
+/* harmony import */ var ngx_qrcode2__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ngx-qrcode2 */ "./node_modules/ngx-qrcode2/__ivy_ngcc__/fesm2015/ngx-qrcode2.js");
+/* harmony import */ var _form_invitacion_form_invitacion_page__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./form-invitacion/form-invitacion.page */ "./src/app/form-invitacion/form-invitacion.page.ts");
+/* harmony import */ var ngx_image_cropper__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ngx-image-cropper */ "./node_modules/ngx-image-cropper/__ivy_ngcc__/fesm2015/ngx-image-cropper.js");
+/* harmony import */ var _recortar_imagen_recortar_imagen_page__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./recortar-imagen/recortar-imagen.page */ "./src/app/recortar-imagen/recortar-imagen.page.ts");
+/* harmony import */ var _Components_components_module__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./Components/components.module */ "./src/app/Components/components.module.ts");
+/* harmony import */ var _form_producto_grupo_opciones_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./form-producto-grupo-opciones/form-producto-grupo-opciones.page */ "./src/app/form-producto-grupo-opciones/form-producto-grupo-opciones.page.ts");
+/* harmony import */ var _fullcalendar_angular__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! @fullcalendar/angular */ "./node_modules/@fullcalendar/angular/__ivy_ngcc__/fesm2015/fullcalendar-angular.js");
+/* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/main.js");
+/* harmony import */ var _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! @fullcalendar/timegrid */ "./node_modules/@fullcalendar/timegrid/main.js");
+/* harmony import */ var _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! @fullcalendar/interaction */ "./node_modules/@fullcalendar/interaction/main.js");
+/* harmony import */ var _ionic_native_network_ngx__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! @ionic-native/network/ngx */ "./node_modules/@ionic-native/network/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_native_printer_ngx__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! @ionic-native/printer/ngx */ "./node_modules/@ionic-native/printer/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./form-comercio/form-comercio.page */ "./src/app/form-comercio/form-comercio.page.ts");
+/* harmony import */ var _ionic_native_bluetooth_serial_ngx__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! @ionic-native/bluetooth-serial/ngx */ "./node_modules/@ionic-native/bluetooth-serial/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _Services_woocommerce_woocommerce_interceptor_service__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./Services/woocommerce/woocommerce-interceptor.service */ "./src/app/Services/woocommerce/woocommerce-interceptor.service.ts");
+/* harmony import */ var _ionic_native_file_transfer_ngx__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! @ionic-native/file-transfer/ngx */ "./node_modules/@ionic-native/file-transfer/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var angularfire2_storage__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! angularfire2/storage */ "./node_modules/angularfire2/storage/index.js");
+/* harmony import */ var angularfire2_storage__WEBPACK_IMPORTED_MODULE_51___default = /*#__PURE__*/__webpack_require__.n(angularfire2_storage__WEBPACK_IMPORTED_MODULE_51__);
 
 
 
@@ -5675,90 +5667,89 @@ const firebaseConfig = {
     appId: "1:1050852063833:web:a2db077836d55afc5ccf48",
     measurementId: "G-29X2FKN2TL"
 };
-_fullcalendar_angular__WEBPACK_IMPORTED_MODULE_42__["FullCalendarModule"].registerPlugins([
-    _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_43__["default"],
-    _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_44__["default"],
-    _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_45__["default"]
+_fullcalendar_angular__WEBPACK_IMPORTED_MODULE_41__["FullCalendarModule"].registerPlugins([
+    _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_42__["default"],
+    _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_43__["default"],
+    _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_44__["default"]
 ]);
 let AppModule = class AppModule {
 };
 AppModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [
-            _app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"],
-            _form_plan_form_plan_page__WEBPACK_IMPORTED_MODULE_20__["FormPlanPage"],
-            _form_categoria_form_categoria_page__WEBPACK_IMPORTED_MODULE_23__["FormCategoriaPage"],
-            _form_producto_grupo_opciones_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_41__["FormProductoGrupoOpcionesPage"],
-            _form_producto_opcion_form_producto_opcion_page__WEBPACK_IMPORTED_MODULE_35__["FormProductoOpcionPage"],
-            _form_horario_form_horario_page__WEBPACK_IMPORTED_MODULE_32__["FormHorarioPage"],
-            _form_caja_form_caja_page__WEBPACK_IMPORTED_MODULE_29__["FormCajaPage"],
-            _recortar_imagen_recortar_imagen_page__WEBPACK_IMPORTED_MODULE_39__["RecortarImagenPage"],
-            _form_invitacion_form_invitacion_page__WEBPACK_IMPORTED_MODULE_37__["FormInvitacionPage"],
-            _list_clientes_list_clientes_page__WEBPACK_IMPORTED_MODULE_25__["ListClientesPage"],
-            _list_servicios_list_servicios_page__WEBPACK_IMPORTED_MODULE_26__["ListServiciosPage"],
-            _list_venta_list_venta_page__WEBPACK_IMPORTED_MODULE_27__["ListVentaPage"],
-            _list_comercios_owner_list_comercios_owner_page__WEBPACK_IMPORTED_MODULE_34__["ListComerciosOwnerPage"],
-            _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_48__["FormComercioPage"]
+            _app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"],
+            _form_plan_form_plan_page__WEBPACK_IMPORTED_MODULE_19__["FormPlanPage"],
+            _form_categoria_form_categoria_page__WEBPACK_IMPORTED_MODULE_22__["FormCategoriaPage"],
+            _form_producto_grupo_opciones_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_40__["FormProductoGrupoOpcionesPage"],
+            _form_producto_opcion_form_producto_opcion_page__WEBPACK_IMPORTED_MODULE_34__["FormProductoOpcionPage"],
+            _form_horario_form_horario_page__WEBPACK_IMPORTED_MODULE_31__["FormHorarioPage"],
+            _form_caja_form_caja_page__WEBPACK_IMPORTED_MODULE_28__["FormCajaPage"],
+            _recortar_imagen_recortar_imagen_page__WEBPACK_IMPORTED_MODULE_38__["RecortarImagenPage"],
+            _form_invitacion_form_invitacion_page__WEBPACK_IMPORTED_MODULE_36__["FormInvitacionPage"],
+            _list_clientes_list_clientes_page__WEBPACK_IMPORTED_MODULE_24__["ListClientesPage"],
+            _list_servicios_list_servicios_page__WEBPACK_IMPORTED_MODULE_25__["ListServiciosPage"],
+            _list_venta_list_venta_page__WEBPACK_IMPORTED_MODULE_26__["ListVentaPage"],
+            _list_comercios_owner_list_comercios_owner_page__WEBPACK_IMPORTED_MODULE_33__["ListComerciosOwnerPage"],
+            _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_47__["FormComercioPage"]
         ],
         entryComponents: [
-            _form_plan_form_plan_page__WEBPACK_IMPORTED_MODULE_20__["FormPlanPage"],
-            _form_categoria_form_categoria_page__WEBPACK_IMPORTED_MODULE_23__["FormCategoriaPage"],
-            _form_producto_grupo_opciones_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_41__["FormProductoGrupoOpcionesPage"],
-            _form_producto_opcion_form_producto_opcion_page__WEBPACK_IMPORTED_MODULE_35__["FormProductoOpcionPage"],
-            _form_horario_form_horario_page__WEBPACK_IMPORTED_MODULE_32__["FormHorarioPage"],
-            _form_invitacion_form_invitacion_page__WEBPACK_IMPORTED_MODULE_37__["FormInvitacionPage"],
-            _form_caja_form_caja_page__WEBPACK_IMPORTED_MODULE_29__["FormCajaPage"],
-            _recortar_imagen_recortar_imagen_page__WEBPACK_IMPORTED_MODULE_39__["RecortarImagenPage"],
-            _list_clientes_list_clientes_page__WEBPACK_IMPORTED_MODULE_25__["ListClientesPage"],
-            _list_servicios_list_servicios_page__WEBPACK_IMPORTED_MODULE_26__["ListServiciosPage"],
-            _list_venta_list_venta_page__WEBPACK_IMPORTED_MODULE_27__["ListVentaPage"],
-            _list_comercios_owner_list_comercios_owner_page__WEBPACK_IMPORTED_MODULE_34__["ListComerciosOwnerPage"],
-            _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_48__["FormComercioPage"]
+            _form_plan_form_plan_page__WEBPACK_IMPORTED_MODULE_19__["FormPlanPage"],
+            _form_categoria_form_categoria_page__WEBPACK_IMPORTED_MODULE_22__["FormCategoriaPage"],
+            _form_producto_grupo_opciones_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_40__["FormProductoGrupoOpcionesPage"],
+            _form_producto_opcion_form_producto_opcion_page__WEBPACK_IMPORTED_MODULE_34__["FormProductoOpcionPage"],
+            _form_horario_form_horario_page__WEBPACK_IMPORTED_MODULE_31__["FormHorarioPage"],
+            _form_invitacion_form_invitacion_page__WEBPACK_IMPORTED_MODULE_36__["FormInvitacionPage"],
+            _form_caja_form_caja_page__WEBPACK_IMPORTED_MODULE_28__["FormCajaPage"],
+            _recortar_imagen_recortar_imagen_page__WEBPACK_IMPORTED_MODULE_38__["RecortarImagenPage"],
+            _list_clientes_list_clientes_page__WEBPACK_IMPORTED_MODULE_24__["ListClientesPage"],
+            _list_servicios_list_servicios_page__WEBPACK_IMPORTED_MODULE_25__["ListServiciosPage"],
+            _list_venta_list_venta_page__WEBPACK_IMPORTED_MODULE_26__["ListVentaPage"],
+            _list_comercios_owner_list_comercios_owner_page__WEBPACK_IMPORTED_MODULE_33__["ListComerciosOwnerPage"],
+            _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_47__["FormComercioPage"]
         ],
         imports: [
-            _angular_forms__WEBPACK_IMPORTED_MODULE_21__["FormsModule"],
-            _Components_components_module__WEBPACK_IMPORTED_MODULE_40__["ComponentsModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_21__["ReactiveFormsModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_20__["FormsModule"],
+            _Components_components_module__WEBPACK_IMPORTED_MODULE_39__["ComponentsModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_20__["ReactiveFormsModule"],
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"],
-            ngx_qrcode2__WEBPACK_IMPORTED_MODULE_36__["NgxQRCodeModule"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_13__["HttpClientModule"],
-            ngx_image_cropper__WEBPACK_IMPORTED_MODULE_38__["ImageCropperModule"],
-            _fullcalendar_angular__WEBPACK_IMPORTED_MODULE_42__["FullCalendarModule"],
+            ngx_qrcode2__WEBPACK_IMPORTED_MODULE_35__["NgxQRCodeModule"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_12__["HttpClientModule"],
+            ngx_image_cropper__WEBPACK_IMPORTED_MODULE_37__["ImageCropperModule"],
+            _fullcalendar_angular__WEBPACK_IMPORTED_MODULE_41__["FullCalendarModule"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"].forRoot(),
-            _app_routing_module__WEBPACK_IMPORTED_MODULE_8__["AppRoutingModule"],
-            angularfire2__WEBPACK_IMPORTED_MODULE_10__["AngularFireModule"].initializeApp(_environments_environment__WEBPACK_IMPORTED_MODULE_22__["environment"].firebaseConfig),
-            angularfire2_firestore__WEBPACK_IMPORTED_MODULE_15__["AngularFirestoreModule"].enablePersistence(),
-            angularfire2_database__WEBPACK_IMPORTED_MODULE_11__["AngularFireDatabaseModule"],
-            angularfire2_storage__WEBPACK_IMPORTED_MODULE_52__["AngularFireStorageModule"],
-            angularfire2_auth__WEBPACK_IMPORTED_MODULE_12__["AngularFireAuthModule"],
-            _angular_fire_messaging__WEBPACK_IMPORTED_MODULE_9__["AngularFireMessagingModule"],
+            _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"],
+            angularfire2__WEBPACK_IMPORTED_MODULE_9__["AngularFireModule"].initializeApp(_environments_environment__WEBPACK_IMPORTED_MODULE_21__["environment"].firebaseConfig),
+            angularfire2_firestore__WEBPACK_IMPORTED_MODULE_14__["AngularFirestoreModule"].enablePersistence(),
+            angularfire2_database__WEBPACK_IMPORTED_MODULE_10__["AngularFireDatabaseModule"],
+            angularfire2_storage__WEBPACK_IMPORTED_MODULE_51__["AngularFireStorageModule"],
+            angularfire2_auth__WEBPACK_IMPORTED_MODULE_11__["AngularFireAuthModule"],
+            _angular_fire_messaging__WEBPACK_IMPORTED_MODULE_8__["AngularFireMessagingModule"],
         ],
         providers: [
-            _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_6__["StatusBar"],
-            _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_5__["SplashScreen"],
-            _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_14__["GooglePlus"],
-            _ionic_native_file_transfer_ngx__WEBPACK_IMPORTED_MODULE_51__["FileTransfer"],
-            _ionic_native_crop_ngx__WEBPACK_IMPORTED_MODULE_17__["Crop"],
-            _ionic_native_camera_ngx__WEBPACK_IMPORTED_MODULE_16__["Camera"],
-            _ionic_native_image_picker_ngx__WEBPACK_IMPORTED_MODULE_19__["ImagePicker"],
-            _ionic_native_bluetooth_serial_ngx__WEBPACK_IMPORTED_MODULE_49__["BluetoothSerial"],
-            _ionic_native_file_ngx__WEBPACK_IMPORTED_MODULE_18__["File"],
-            _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_24__["FCM"],
-            angularfire2_firestore__WEBPACK_IMPORTED_MODULE_15__["AngularFirestore"],
-            _ionic_native_barcode_scanner_ngx__WEBPACK_IMPORTED_MODULE_28__["BarcodeScanner"],
-            _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_30__["CallNumber"],
-            _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_31__["EmailComposer"],
-            _ionic_native_speech_recognition_ngx__WEBPACK_IMPORTED_MODULE_33__["SpeechRecognition"],
-            _ionic_native_network_ngx__WEBPACK_IMPORTED_MODULE_46__["Network"],
-            _ionic_native_printer_ngx__WEBPACK_IMPORTED_MODULE_47__["Printer"],
+            _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_5__["StatusBar"],
+            _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_13__["GooglePlus"],
+            _ionic_native_file_transfer_ngx__WEBPACK_IMPORTED_MODULE_50__["FileTransfer"],
+            _ionic_native_crop_ngx__WEBPACK_IMPORTED_MODULE_16__["Crop"],
+            _ionic_native_camera_ngx__WEBPACK_IMPORTED_MODULE_15__["Camera"],
+            _ionic_native_image_picker_ngx__WEBPACK_IMPORTED_MODULE_18__["ImagePicker"],
+            _ionic_native_bluetooth_serial_ngx__WEBPACK_IMPORTED_MODULE_48__["BluetoothSerial"],
+            _ionic_native_file_ngx__WEBPACK_IMPORTED_MODULE_17__["File"],
+            _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_23__["FCM"],
+            angularfire2_firestore__WEBPACK_IMPORTED_MODULE_14__["AngularFirestore"],
+            _ionic_native_barcode_scanner_ngx__WEBPACK_IMPORTED_MODULE_27__["BarcodeScanner"],
+            _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_29__["CallNumber"],
+            _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_30__["EmailComposer"],
+            _ionic_native_speech_recognition_ngx__WEBPACK_IMPORTED_MODULE_32__["SpeechRecognition"],
+            _ionic_native_network_ngx__WEBPACK_IMPORTED_MODULE_45__["Network"],
+            _ionic_native_printer_ngx__WEBPACK_IMPORTED_MODULE_46__["Printer"],
             {
-                provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_13__["HTTP_INTERCEPTORS"],
-                useClass: _Services_woocommerce_woocommerce_interceptor_service__WEBPACK_IMPORTED_MODULE_50__["WoocommerceInterceptorService"],
+                provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_12__["HTTP_INTERCEPTORS"],
+                useClass: _Services_woocommerce_woocommerce_interceptor_service__WEBPACK_IMPORTED_MODULE_49__["WoocommerceInterceptorService"],
                 multi: true
             },
             { provide: _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouteReuseStrategy"], useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicRouteStrategy"] },
         ],
-        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]]
+        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
     })
 ], AppModule);
 
