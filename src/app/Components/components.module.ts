@@ -17,7 +17,7 @@ import { CardProductoWoocommerceComponent } from './card-producto-woocommerce/ca
 
 @NgModule({
 imports: [
-    CommonModule,    
+    CommonModule,     
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
