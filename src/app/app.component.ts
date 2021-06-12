@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthenticationService } from './Services/authentication.service';
 import { Router } from '@angular/router';
@@ -114,6 +115,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private platform: Platform,
+    private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private authService:AuthenticationService,
     private router: Router,
@@ -128,7 +130,10 @@ export class AppComponent implements OnInit {
     private impresoraService:ImpresoraService,
     private rolesService:RolesService
   ) {
-    this.comercioSeleccionado = new Comercio();   
+    this.comercioSeleccionado = new Comercio();
+    
+    console.log("LOGUEO DE APP")
+
     this.initializeApp();  
 
     this.authService.observeRol().subscribe(data=>{
@@ -182,6 +187,7 @@ export class AppComponent implements OnInit {
           });
           
           console.log("Logueado!"+uid)
+          this.splashScreen.hide();
           this.router.navigate(['home']);     
 
           this.notificacionesAppService.getSinLeer(uid).subscribe(snapshot =>{
@@ -226,6 +232,7 @@ export class AppComponent implements OnInit {
           }          
         }  
         else{
+          this.splashScreen.hide();
           this.router.navigate(['login']);
         }    
       });      

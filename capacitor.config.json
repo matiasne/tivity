@@ -1,6 +1,17 @@
 {
-	"appId": "io.socialup.tivity",
-	"appName": "tivity",
-	"webDir": "www",
-	"bundledWebRuntime": false
+  "appId": "io.socialup.tivity",
+  "appName": "tivity",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "cordova": {
+    "preferences": {
+      "ScrollEnabled": "false",
+      "BackupWebStorage": "none",
+      "SplashMaintainAspectRatio": "true",
+      "FadeSplashScreenDuration": "700",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "3000"
+    }
+  }
 }

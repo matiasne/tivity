@@ -5294,6 +5294,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Services/usuarios.service */ "./src/app/Services/usuarios.service.ts");
 /* harmony import */ var _Services_impresora_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Services/impresora.service */ "./src/app/Services/impresora.service.ts");
 /* harmony import */ var _Services_roles_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Services/roles.service */ "./src/app/Services/roles.service.ts");
+/* harmony import */ var _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @ionic-native/splash-screen/ngx */ "./node_modules/@ionic-native/splash-screen/__ivy_ngcc__/ngx/index.js");
+
 
 
 
@@ -5310,7 +5312,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let AppComponent = class AppComponent {
-    constructor(platform, statusBar, authService, router, fcm, toastController, comerciosService, notificacionesAppService, toastService, presenceService, usuariosService, usuarioService, impresoraService, rolesService) {
+    constructor(splashScreen, platform, statusBar, authService, router, fcm, toastController, comerciosService, notificacionesAppService, toastService, presenceService, usuariosService, usuarioService, impresoraService, rolesService) {
+        this.splashScreen = splashScreen;
         this.platform = platform;
         this.statusBar = statusBar;
         this.authService = authService;
@@ -5510,6 +5513,7 @@ let AppComponent = class AppComponent {
     }
 };
 AppComponent.ctorParameters = () => [
+    { type: _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_15__["SplashScreen"] },
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"] },
     { type: _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_3__["StatusBar"] },
     { type: _Services_authentication_service__WEBPACK_IMPORTED_MODULE_4__["AuthenticationService"] },

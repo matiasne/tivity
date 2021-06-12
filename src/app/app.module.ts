@@ -60,6 +60,7 @@ import { WoocommerceInterceptorService } from './Services/woocommerce/woocommerc
 
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAenr8VfNta7u8NL5J4jpMtosnENy-Gcqc",
@@ -133,6 +134,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   ],
   providers: [
     StatusBar,
+    SplashScreen,
     GooglePlus,
     FileTransfer,
     Crop,

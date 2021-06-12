@@ -40,7 +40,7 @@
 
   <ion-item class="form-select" *ngIf="comercio.config.movimientosCajas"> 
     <ion-label position="floating">Desde</ion-label>
-    <ion-select multiple="false" (ionChange)="onChangeAtras($event)">
+    <ion-select multiple=false (ionChange)="onChangeAtras($event)">
       <ion-select-option  [value]="1" selected>Ayer</ion-select-option>
       <ion-select-option  [value]="2">2 días atras</ion-select-option>
       <ion-select-option  [value]="7">Una semana atrás</ion-select-option>
