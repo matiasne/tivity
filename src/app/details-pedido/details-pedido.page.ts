@@ -4,6 +4,7 @@ import { AlertController, ModalController, NavController, NavParams } from '@ion
 import { AngularFirestore } from 'angularfire2/firestore';
 import { type } from 'os';
 import { AddProductoVentaPage } from '../add-producto-venta/add-producto-venta.page';
+import { FormAfipPage } from '../form-afip/form-afip.page';
 import { FormClientePage } from '../form-cliente/form-cliente.page';
 import { FormComentarioPage } from '../form-comentario/form-comentario.page';
 import { FormMesaPage } from '../form-mesa/form-mesa.page';
@@ -895,6 +896,26 @@ export class DetailsPedidoPage implements OnInit {
     this.actualizarPedido()
   }
 
+
+  afip(){
+    let password = localStorage.getItem('AfipPassword')
+
+    if(password == ""){
+      this.showModalAfipPassword()
+      return
+    }
+  }
+
+  async showModalAfipPassword(){
+    const modal = await this.modalController.create({
+      component: FormAfipPage,
+    });
+    
+    modal.present().then(()=>{
+    
+
+    })
+  }
 
 }
   
