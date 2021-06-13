@@ -70,19 +70,16 @@ export class PedidoService extends BaseService{
         );     
   }
 
-  public listSolicitadosUltimosDosDias(){
+  public listSolicitados(){
 
-    let fechaHasta = new Date();
-    let fechaDesde = new Date()
-    fechaDesde.setDate(fechaDesde.getDate() - 2);
-    let date = new Date(fechaDesde) 
-
-    return this.afs.collection(this.path, ref => ref.where('createdAt', '>=', date).where('createdAt', '<=', fechaHasta).orderBy('createdAt',"desc").limit(50)).snapshotChanges()
+    return this.afs.collection(this.path).snapshotChanges()
         .pipe(
             map(changes => {
-                return changes.map((a:any) => {   
-                  if(a.statusCobro == 1){
-                    const data:any = a.payload.doc.data();
+                return changes.filter((a:any) => {                 
+                  
+                  const data:any = a.payload.doc.data();
+                  if(data.statusCobro == 1){
+                    console.log(a)  
                     data.id = a.payload.doc.id;
                     data.fromCache = a.payload.doc.metadata.fromCache;  
                     return data;

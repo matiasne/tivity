@@ -27,17 +27,18 @@
       </ion-row>
     </div> 
         
-    <div class="contenido-card-pedido">     
+    <div class="contenido-card-pedido ion-padding">     
       
-      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.rechazado" style="color: red;">Rechazado por Cocina</span>
-      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.tomado" style="color: green;">En Curso</span>
-      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.solicitado" style="color: blue;"> Solicitado</span>
-      <span *ngIf="item.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido </b></span>
-      <span *ngIf="item.statusCobro == cEstado.cobrado"> <b style="color: green;"> Cobrado ({{item.metodoPago}})</b></span> 
-      <span *ngIf="item.statusCobro == cEstado.reembolsado"> <b style="color: red;"> Reembolsado</b></span> <br>
+      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.rechazado" style="color: red;">Rechazado por Cocina<br></span>
+      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.tomado" style="color: green;">En Curso<br></span>
+      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.solicitado" style="color: blue;"> Solicitado<br></span>
+      <span *ngIf="item.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido </b><br></span>
+      <span *ngIf="item.statusCobro == cEstado.cobrado"> <b style="color: green;"> Cobrado ({{item.metodoPago}})</b><br></span> 
+      <span *ngIf="item.statusCobro == cEstado.reembolsado"> <b style="color: red;"> Reembolsado</b><br></span> 
          
       <ion-row> 
-        <ion-col size="8" center text-center>
+        
+          <ion-icon name="cube-outline"></ion-icon> {{item.productos.length}}<br>
           <span *ngIf="item.clienteNombre" >
             <ion-icon name="person-outline"></ion-icon> {{item.clienteNombre}} <br>
           </span>
@@ -50,11 +51,7 @@
             <span *ngIf="item.direccion.piso"> Piso: {{item.direccion.piso}}</span>
             <span *ngIf="item.direccion.puerta"> Puerta: {{item.direccion.puerta}}</span>
             {{item.direccion.distanciaDelComercio}} Km.
-          </span>
-        </ion-col>     
-        <ion-col size="4" center text-center>        
-          <ion-icon name="cube-outline"></ion-icon> {{item.productos.length}}
-        </ion-col>
+          </span>        
       </ion-row>  
     </div>
   </div>

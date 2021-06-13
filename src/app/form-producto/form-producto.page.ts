@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
-import { ActionSheetController, ModalController, AlertController, NavController } from '@ionic/angular';
+import { ActionSheetController, ModalController, AlertController, NavController, NavParams } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { Camera} from '@ionic-native/camera/ngx';
 import { CategoriasService } from '../Services/categorias.service';
@@ -67,6 +67,8 @@ export class FormProductoPage implements OnInit {
 
   public flagWoocommerce = false
   public woocommerceSyncData:WoocommerceSyncData
+
+  private paramId = "";
   
   constructor(
     private formBuilder: FormBuilder,
@@ -92,7 +94,8 @@ export class FormProductoPage implements OnInit {
     public comercioService:ComerciosService,
     public imageService:ImagesService,
     private modalCtrl:ModalController,
-    private loadingService:LoadingService
+    private loadingService:LoadingService,
+    private navParams:NavParams
   ) { 
 
     this.comercio = new Comercio()
@@ -116,6 +119,8 @@ export class FormProductoPage implements OnInit {
       createdAt:[''],
       recibirPedidos:[true]
     });
+
+    this.paramId = this.navParams.get('id');
   }
 
   get f() { return this.datosForm.controls; }
@@ -125,13 +130,14 @@ export class FormProductoPage implements OnInit {
 
   async ionViewDidEnter(){
 
-    this.loadingService.dismissLoading()
+    
 
-    if(this.route.snapshot.params.id){
+    if(this.paramId != ""){
       this.updating = true; 
-
-      this.productosService.get(this.route.snapshot.params.id).subscribe(producto=>{        
+      this.loadingService.presentLoading()
+      this.productosService.get(this.paramId).subscribe(producto=>{        
         this.titulo = "Editar Producto";
+        this.loadingService.dismissLoading()
         this.datosForm.patchValue(producto);
         this.producto.asignarValores(producto)
 
@@ -145,7 +151,7 @@ export class FormProductoPage implements OnInit {
         this.changeRef.detectChanges()        
       })    
       
-      this.productosService.getWoocommerceValue(this.route.snapshot.params.id).subscribe(data=>{
+      this.productosService.getWoocommerceValue(this.paramId).subscribe(data=>{
         this.woocommerceSyncData.asignarValores(data);
         console.log(data)
       })
@@ -352,8 +358,8 @@ export class FormProductoPage implements OnInit {
       })
       
     }    
-
-    this.navCtrl.back();
+    this.modalCtrl.dismiss()
+    //this.navCtrl.back();
 
   }
 
@@ -396,7 +402,7 @@ export class FormProductoPage implements OnInit {
 
  
   cancelar(){
-   
+   this.modalCtrl.dismiss()
     this.navCtrl.back();
   }
 
@@ -417,9 +423,10 @@ export class FormProductoPage implements OnInit {
         }, {
           text: 'Eliminar',
           handler: () => {
-            this.productosService.delete(this.route.snapshot.params.id);
-            this.productosService.deleteWoocommerceValues(this.route.snapshot.params.id)
-            this.navCtrl.back();
+            this.productosService.delete(this.paramId);
+            this.productosService.deleteWoocommerceValues(this.paramId)
+            //this.navCtrl.back();
+            this.modalCtrl.dismiss();
           }
         }
       ]

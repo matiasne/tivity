@@ -49,8 +49,6 @@ export class DetailsCarritoPage implements OnInit {
   public impresora
   public enumTipo = EnumTipoDescuento
 
-  private back = "";
-
   constructor(
     public authenticationService:AuthenticationService,
     public carritoService:CarritoService,
@@ -79,7 +77,7 @@ export class DetailsCarritoPage implements OnInit {
     })
    
 
-    this.back = this.route.snapshot.params.carritoIntended;
+   // this.back = this.route.snapshot.params.carritoIntended;
 
    
     this.subsCarrio = this.carritoService.getActualCarritoSubs().subscribe(data=>{
@@ -105,7 +103,7 @@ export class DetailsCarritoPage implements OnInit {
 
   atras(){
     
-   if(this.back == "undefined"){ 
+/*   if(this.back == "undefined"){ 
       console.log("!!!!!!!")
       let options: AnimationOptions = {
         animationDirection: 'forward',
@@ -115,12 +113,13 @@ export class DetailsCarritoPage implements OnInit {
    }
     else{
       this.router.navigate([this.back])
-    }
+    }*/
+    this.modalController.dismiss()
   }
 
   async cancelar(){
-    //this.modalController.dismiss();
-    this.navCtrl.back();
+    this.modalController.dismiss();
+    //this.navCtrl.back();
   }
 
 

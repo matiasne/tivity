@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Descuento, EnumTipoDescuento } from '../models/descuento';
 import { CarritoService } from '../Services/global/carrito.service';
+import { ToastService } from '../Services/toast.service';
 
 @Component({
   selector: 'app-form-descuento',
@@ -15,7 +16,8 @@ export class FormDescuentoPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private carritoService:CarritoService
+    private carritoService:CarritoService,
+    private toastService:ToastService
     ) { 
       this.descuento = new Descuento(); 
     }
@@ -28,6 +30,17 @@ export class FormDescuentoPage implements OnInit {
   }
 
   agregar(){
+
+    if(this.descuento.monto == ""){
+      this.toastService.alert("Faltan datos","Por favor agregue un monto");
+      return;
+    }
+
+    if(this.descuento.motivo == ""){
+      this.toastService.alert("Faltan datos","Por favor agregue un motivo");
+      return;
+    }
+
     if(this.descuento.monto){
       this.modalCtrl.dismiss(this.descuento);
     }   

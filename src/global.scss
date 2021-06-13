@@ -432,6 +432,7 @@ ion-avatar{
 }
 
 .encabezado-card-mesa{
+  font-size: 12px;
   background-color: #dd5e2b;
   color: white;
   padding: 5px;
@@ -439,6 +440,7 @@ ion-avatar{
 }
 
 .encabezado-card-general{
+  font-size: 12px;
   background-color: #2b9cdd;
   color: white;
   padding: 5px;
@@ -451,7 +453,6 @@ ion-avatar{
 }
 
 .contenido-card-pedido{
-  padding: 5px;
   font-size: 14px;
   color: #1a1a1a;
 }
@@ -577,6 +578,12 @@ ion-fab{
   background-color:#E91D62;
   height: 100vh;
 }
+
+.modal-wrapper{
+  border: 5px solid #E91D62 !important;
+  border-radius: 10px !important;
+}
+
 
 .modal-custom-wrapper .modal-wrapper{
   border: 5px solid #E91D62 !important;

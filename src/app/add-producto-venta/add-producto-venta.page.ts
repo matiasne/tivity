@@ -14,6 +14,7 @@ import { GrupoOpcionesService } from '../Services/grupo-opciones.service';
 import { CarritoService } from '../Services/global/carrito.service';
 import { LoadingService } from '../Services/loading.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
+import { FormProductoPage } from '../form-producto/form-producto.page';
 
 @Component({
   selector: 'app-add-producto-venta',
@@ -89,9 +90,18 @@ export class AddProductoVentaPage implements OnInit {
 
   }
 
-  editarProducto(){
+  async editarProducto(){
     this.modalCtrl.dismiss()
-    this.router.navigate(['form-producto',{id:this.producto.id}]);
+   // this.router.navigate(['form-producto',{id:this.producto.id}]);
+
+    let modal = await this.modalCtrl.create({
+      component: FormProductoPage,
+      componentProps: {
+        id:this.producto.id
+      }
+    });  
+    return await modal.present();
+
   }
 
   

@@ -406,6 +406,10 @@ const routes: Routes = [
   {
     path: 'modal-input-direccion',
     loadChildren: () => import('./modal-input-direccion/modal-input-direccion.module').then( m => m.ModalInputDireccionPageModule)
+  },
+  {
+    path: 'form-afip',
+    loadChildren: () => import('./form-afip/form-afip.module').then( m => m.FormAfipPageModule)
   }
  
 ];

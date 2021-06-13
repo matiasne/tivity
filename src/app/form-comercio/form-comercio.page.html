@@ -9,22 +9,18 @@
 
 <ion-content class="ion-padding text-center">
 
-    <div class="btn-select-img"> 
-      
-        <app-seleccionar-imagen 
-          [aspectRatio] = "1/1" 
-          [croppedImage]="croppedImageIcono"
-          (onSelectValue)=imagenSeleccionadaIcono($event)>
-        </app-seleccionar-imagen>
-     
-    </div>  
-  
-  
+    <div class="btn-select-img">      
+      <app-seleccionar-imagen 
+        [aspectRatio] = "1/1" 
+        [croppedImage]="croppedImageIcono"
+        (onSelectValue)=imagenSeleccionadaIcono($event)>
+      </app-seleccionar-imagen>     
+    </div>   
     
-      <ion-item class="form-card">
-        <ion-label position="floating">Nombre *</ion-label>
-        <ion-input name="nombre" type="text" [(ngModel)]="comercio.nombre" required></ion-input>
-      </ion-item>
+    <ion-item class="form-card">
+      <ion-label position="floating">Nombre *</ion-label>
+      <ion-input name="nombre" type="text" [(ngModel)]="comercio.nombre" required></ion-input>
+    </ion-item>
      
 
     <ion-button *ngIf="!comercio.direccion.street_name" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
@@ -44,20 +40,18 @@
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
       </ion-item-options>
-    </ion-item-sliding>
-
+    </ion-item-sliding>    
     
+    <ion-item class="form-card">
+      <ion-label color="primary" position="floating">Teléfono</ion-label>
+      <ion-input name="telefono" type="number" [(ngModel)]="comercio.telefono" required></ion-input>
+    </ion-item>
     
-      <ion-item class="form-card">
-        <ion-label color="primary" position="floating">Teléfono</ion-label>
-        <ion-input name="telefono" type="number" [(ngModel)]="comercio.telefono" required></ion-input>
-      </ion-item>
-      
-          
-      <ion-item class="form-card">
-        <ion-label color="primary" position="floating">Descripción</ion-label>
-        <ion-textarea [(ngModel)]="comercio.descripcion"></ion-textarea>
-      </ion-item>
+        
+    <ion-item class="form-card">
+      <ion-label color="primary" position="floating">Descripción</ion-label>
+      <ion-textarea [(ngModel)]="comercio.descripcion"></ion-textarea>
+    </ion-item>
     
 
    

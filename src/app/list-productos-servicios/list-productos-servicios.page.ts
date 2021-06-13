@@ -27,6 +27,8 @@ import { Producto } from '../models/producto';
 import { UsuariosService } from '../Services/usuarios.service';
 import { NotifificacionesAppService } from '../Services/notifificaciones-app.service';
 import { PedidoService } from '../Services/pedido.service';
+import { FormProductoPage } from '../form-producto/form-producto.page';
+import { DetailsCarritoPage } from '../details-carrito/details-carrito.page';
 
 
 @Component({
@@ -170,6 +172,7 @@ export class ListProductosServiciosPage implements OnInit {
 
     this.comerciosService.getSelectedCommerce().subscribe(data=>{
       this.comercio.asignarValores(data);
+      
     })
 
     this.cargaPorVoz.getPermission();
@@ -178,9 +181,8 @@ export class ListProductosServiciosPage implements OnInit {
       this.carrito = data;
     });
 
-    this.pedidosService.listSolicitadosUltimosDosDias().subscribe((pedidos:any)=>{
-      this.pedidosSolicitadosLength = pedidos.length   
-      console.log(this.pedidosSolicitadosLength)
+    this.pedidosService.listSolicitados().subscribe((pedidos:any)=>{
+      this.pedidosSolicitadosLength =  pedidos.length
     })  
 
     /*Mantener toda la lógica en el ngOninit para que solo se subscriba una vez y
@@ -209,7 +211,7 @@ export class ListProductosServiciosPage implements OnInit {
 
     console.log("DidEnter")
     //this.marcarEnCarrito();
-    this.wordpressService.obtainToken()
+  //  this.wordpressService.obtainToken()
     console.log(this.carrito.productos)
     this.validarEnCarrito()
   }
@@ -356,9 +358,18 @@ export class ListProductosServiciosPage implements OnInit {
     this.changeRef.detectChanges()    
   }
 
-  editarProducto(item){
+  async editarProducto(item){
     this.loadingService.presentLoading();
-    this.router.navigate(['form-producto',{id:item.id}]);
+    //this.router.navigate(['form-producto',{id:item.id}]);
+
+    let modal = await this.modalCtrl.create({
+      component: FormProductoPage,
+      componentProps: {
+        id:item.id
+      }
+    });  
+    return await modal.present();
+
   }
 
   show(){
@@ -565,7 +576,18 @@ export class ListProductosServiciosPage implements OnInit {
 
   async verCarrito(){
     console.log(this.route.snapshot.params.carritoIntended)
-    this.router.navigate(['details-carrito',{carritoIntended:this.route.snapshot.params.carritoIntended}])  
+   // this.router.navigate(['details-carrito',{carritoIntended:this.route.snapshot.params.carritoIntended}])  
+    const modal = await this.modalController.create({
+      component: DetailsCarritoPage,
+      componentProps:{}      
+    });    
+
+    modal.onDidDismiss().then((retorno) => {
+      this.validarEnCarrito()
+      if(this.route.snapshot.params.carritoIntended)
+        this.router.navigate([this.route.snapshot.params.carritoIntended]);
+    });
+    return await modal.present();
   }
 
   async cobrarDirectamente(){
@@ -584,6 +606,7 @@ export class ListProductosServiciosPage implements OnInit {
     
     this.navParametrosService.param = editarPedido;
     this.router.navigate(['details-pedido'])
+    
 
   }
 
@@ -638,7 +661,13 @@ export class ListProductosServiciosPage implements OnInit {
       return await modal.present();
     }
     else{
-      this.router.navigate(['form-producto']);
+     // this.router.navigate(['form-producto']);
+
+      let modal = await this.modalController.create({
+        component: FormProductoPage
+      });  
+      return await modal.present();
+
     }
     
   }
