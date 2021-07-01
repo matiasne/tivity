@@ -1,4 +1,6 @@
 //import { Request, Response, NextFunction } from 'express';
+//import cors = require('cors');
+import cors = require('cors');
 import { routes } from './routes';
 
 
@@ -21,7 +23,10 @@ export const rest = (db: FirebaseFirestore.Firestore): any => {
     // Parse bearer token
     app.use(bearerToken());
 
-    // Parse Query String
+    
+
+    // Then pass these options to cors:
+    app.use(cors({ origin: true }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 

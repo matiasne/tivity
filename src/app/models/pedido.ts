@@ -35,10 +35,12 @@ export class Pedido{
     public personalEmail="";
     public personalNombre="";
 
-    public cliente:any
     public clienteId="";
 	public clienteEmail="";
 	public clienteNombre="";
+    public clienteDocTipo="";
+    public clienteDoc="";
+    public clientePersonaJuridica ="";
     
     public mesaId = "";
     public mesaNombre = "";
@@ -58,6 +60,7 @@ export class Pedido{
     public countListos = 0
 
     public metodoPago = "";
+    public metodoDevolucion = "";
     public reembolso ="";
     public cajaUtilizada ="";
 

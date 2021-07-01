@@ -16,6 +16,6 @@ import { FormPlanPage } from './form-plan.page';
     IonicModule,
     FormPlanPageRoutingModule
   ],
-  declarations: []
+  declarations: [FormPlanPage]
 })
 export class FormPlanPageModule {}

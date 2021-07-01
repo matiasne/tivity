@@ -7,7 +7,7 @@ import { AuthenticationService } from '../Services/authentication.service';
 import { FormComercioPage } from '../form-comercio/form-comercio.page';
 import { AlertController, ModalController } from '@ionic/angular';
 import { RolesService } from '../Services/roles.service';
-import { Rol } from '../models/rol';
+import { FormConfiguracionAfipPage } from '../form-configuracion-afip/form-configuracion-afip.page';
 
 @Component({
   selector: 'app-form-comercio-configuracion',
@@ -31,7 +31,8 @@ export class FormComercioConfiguracionPage implements OnInit {
     private authService:AuthenticationService,
     private modalCtrl:ModalController,
     private alertController:AlertController,
-    private rolesService:RolesService
+    private rolesService:RolesService,
+    private modalController:ModalController
   ) { 
     this.comercio = new Comercio();
     this.comerciosService.getSelectedCommerce().subscribe(data=>{
@@ -184,6 +185,17 @@ export class FormComercioConfiguracionPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  async openEditAfip(){
+    const modal = await this.modalController.create({
+      component: FormConfiguracionAfipPage,
+    });
+    
+    modal.present().then(()=>{
+    
+
+    })
   }
 
   

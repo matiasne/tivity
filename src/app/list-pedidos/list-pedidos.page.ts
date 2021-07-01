@@ -83,7 +83,6 @@ export class ListPedidosPage implements OnInit {
   }
 
   ionViewDidEnter(){ 
-    this.loadingService.presentLoadingText("Cargando Pedidos") 
     this.refrescar();
     this.changeRef.detectChanges()    
   }  
@@ -266,7 +265,6 @@ export class ListPedidosPage implements OnInit {
       }
       
     });  
-    this.loadingService.dismissLoading(); 
    
   }
 

@@ -106,10 +106,18 @@
 
     <ion-button class="button-rounded" color="light"  *ngIf="!carrito.clienteId" (click)="seleccionarCliente()"><ion-icon name="add"></ion-icon><ion-icon name="person-outline"></ion-icon>  Cliente</ion-button>
     <ion-item-sliding class="item-card" *ngIf="carrito.clienteId && comercio.config.clientes">
-      <app-card-usuario
-        [cliente]="carrito.cliente"
-        (select)="seleccionarCliente()">
-      </app-card-usuario>
+      <ion-item>
+        <ion-avatar slot="start" (click)="seleccionarCliente()">
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label (click)="seleccionarMesa()">
+          <h2>{{carrito.clienteNombre}}</h2>
+          <p *ngIf="carrito.clienteDocTipo">{{carrito.clienteDocTipo}}: {{carrito.clienteDoc}}</p>
+          <p *ngIf="carrito.clientePersonaJuridica == 1">Responsable Inscripto</p>
+          <p *ngIf="carrito.clientePersonaJuridica == 2">Monotributista</p>
+          <p *ngIf="carrito.clientePersonaJuridica == 3">Iva Exento</p>
+        </ion-label>  
+      </ion-item>
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="eliminarCliente()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
       </ion-item-options>

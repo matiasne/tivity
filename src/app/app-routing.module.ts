@@ -4,8 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Inbox',
-    pathMatch: 'full'
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
     path: 'folder/:id',
@@ -410,6 +409,22 @@ const routes: Routes = [
   {
     path: 'form-afip',
     loadChildren: () => import('./form-afip/form-afip.module').then( m => m.FormAfipPageModule)
+  },
+  {
+    path: 'form-configuracion-afip',
+    loadChildren: () => import('./form-configuracion-afip/form-configuracion-afip.module').then( m => m.FormConfiguracionAfipPageModule)
+  },
+  {
+    path: 'form-cobrar-pedido',
+    loadChildren: () => import('./form-cobrar-pedido/form-cobrar-pedido.module').then( m => m.FormCobrarPedidoPageModule)
+  },
+  {
+    path: 'chat',
+    loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
+  },
+  {
+    path: 'form-devolver-pedido',
+    loadChildren: () => import('./form-devolver-pedido/form-devolver-pedido.module').then( m => m.FormDevolverPedidoPageModule)
   }
  
 ];

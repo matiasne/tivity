@@ -38,7 +38,6 @@ import { DetailsCarritoPage } from '../details-carrito/details-carrito.page';
 })
 export class ListProductosServiciosPage implements OnInit {
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   
   @ViewChild(IonSearchbar, { static: false }) ionSearchbar: IonSearchbar;
 
@@ -52,7 +51,7 @@ export class ListProductosServiciosPage implements OnInit {
 
   itemsAllProductos:any=[];
   itemsProductos:any = [];
-  itemsRenderProductos:any = [] 
+  //itemsRenderProductos:any = [] 
 
   itemsPerPage = 30
   itemsRenderizados = 0;
@@ -208,7 +207,7 @@ export class ListProductosServiciosPage implements OnInit {
   }
  
   ionViewDidEnter(){
-
+    this.buscar(undefined);
     console.log("DidEnter")
     //this.marcarEnCarrito();
   //  this.wordpressService.obtainToken()
@@ -235,7 +234,7 @@ export class ListProductosServiciosPage implements OnInit {
         });
     }) 
   }
-
+/*
   verMas(){
 
     console.log("!!!!! Lazy")
@@ -268,14 +267,13 @@ export class ListProductosServiciosPage implements OnInit {
     this.infiniteScroll.complete();
 
 
-  }
+  }*/
 
 
   buscar(event){ 
 
-    this.itemsRenderProductos = []
+    //this.itemsRenderProductos = []
     this.itemsRenderizados = 0
-    this.infiniteScroll.disabled = false;
     
     if(event)
       this.palabraFiltro = event.target.value;     
@@ -311,11 +309,11 @@ export class ListProductosServiciosPage implements OnInit {
         if(encontrado){
           console.log("agregado a itemsProducto "+item.id)
           this.itemsProductos.push(item);
-          if(this.itemsRenderProductos.length < this.itemsPerPage){
+       /*   if(this.itemsRenderProductos.length < this.itemsPerPage){
             console.log("Renderizando"+item.id)
             this.itemsRenderProductos.push(item)
             this.itemsRenderizados += 1
-          }
+          }*/
           return true;
         }
       });
@@ -338,28 +336,16 @@ export class ListProductosServiciosPage implements OnInit {
       }           
       
     }
-    else{      
-      this.itemsProductos = this.itemsAllProductos;
-      for(let i=0; i < this.itemsPerPage;i++){
-      
-        if(this.itemsProductos[i]){
-          this.itemsRenderProductos.push(this.itemsProductos[i])
-          this.itemsRenderizados +=1;
-        }
-        else{
-          console.log("No hay más!!! fuera del array"+this.itemsRenderizados)
-          this.infiniteScroll.complete();
-          this.infiniteScroll.disabled = true;
-          return;
-        }
-      }
-    }    
+    else{
+      this.itemsProductos = this.itemsAllProductos
+    }
+    
    
     this.changeRef.detectChanges()    
   }
 
   async editarProducto(item){
-    this.loadingService.presentLoading();
+    
     //this.router.navigate(['form-producto',{id:item.id}]);
 
     let modal = await this.modalCtrl.create({

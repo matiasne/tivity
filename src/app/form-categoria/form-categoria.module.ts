@@ -19,6 +19,6 @@ import { ComponentsModule } from '../Components/components.module';
     IonicModule,
     FormCategoriaPageRoutingModule
   ],
-  declarations: []
+  declarations: [FormCategoriaPage]
 })
 export class FormCategoriaPageModule {}

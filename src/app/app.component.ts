@@ -21,6 +21,7 @@ import { Printer } from '@ionic-native/printer/ngx';
 import { ImpresoraService } from './Services/impresora.service';
 import { RolesService } from './Services/roles.service';
 import { Environment } from '@ionic-native/google-maps';
+import { AfipServiceService } from './Services/afip/afip-service.service';
 
 @Component({
   selector: 'app-root',
@@ -128,7 +129,8 @@ export class AppComponent implements OnInit {
     private usuariosService:UsuariosService,
     private usuarioService:UsuariosService,
     private impresoraService:ImpresoraService,
-    private rolesService:RolesService
+    private rolesService:RolesService,
+    private afipService:AfipServiceService
   ) {
     this.comercioSeleccionado = new Comercio();
     
@@ -139,9 +141,9 @@ export class AppComponent implements OnInit {
     this.authService.observeRol().subscribe(data=>{
       this.rolActual = data.rol;
       console.log(this.rolActual)
-      //Aca setea todos los shows
-
     })
+
+   
   }  
 
   initializeApp() {
@@ -251,10 +253,13 @@ export class AppComponent implements OnInit {
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
+
     this.comerciosService.getSelectedCommerce().subscribe(data=>{ 
       console.log(data)  
-      if(data)
+      if(data){
         this.comercioSeleccionado.asignarValores(data);
+        this.afipService.login();
+      }
       else{
         this.comercioSeleccionado = new Comercio();
       } 

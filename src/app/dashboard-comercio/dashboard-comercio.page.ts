@@ -4,6 +4,9 @@ import { CajasService } from '../Services/cajas.service';
 import { MesasService } from '../Services/mesas.service';
 import { Comercio } from '../models/comercio';
 import { CarritoService } from '../Services/global/carrito.service';
+import { AfipServiceService } from '../Services/afip/afip-service.service';
+import { ComerciosService } from '../Services/comercios.service';
+import { LoadingService } from '../Services/loading.service';
 
 @Component({
   selector: 'app-dashboard-comercio',
@@ -14,10 +17,11 @@ export class DashboardComercioPage implements OnInit {
 
   public comercio:Comercio;
   constructor(
-    private cajasService:CajasService,
     public router:Router,
-    private mesasService:MesasService,
-    private carritoService:CarritoService
+    private carritoService:CarritoService,
+    private comerciosService:ComerciosService,
+    private afipService:AfipServiceService,
+    private loadingService:LoadingService
   ) { }
 
   ngOnInit() {
@@ -25,7 +29,19 @@ export class DashboardComercioPage implements OnInit {
   }
 
   ionViewDidEnter(){
-   
+    
+    if(this.comercio.id){
+      this.loadingService.presentLoading()
+    }
+
+    this.comerciosService.getSelectedCommerce().subscribe(data=>{
+      this.loadingService.dismissLoading();
+      this.comercio.asignarValores(data)
+      this.afipService.login();
+    })
+    
+    
+
     
     
   }

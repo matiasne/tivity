@@ -15,7 +15,7 @@ import { FormCajaPage } from './form-caja.page';
     ReactiveFormsModule,
     IonicModule,
     FormCajaPageRoutingModule
-  ],
-  declarations: []
+  ], 
+  declarations: [FormCajaPage]
 })
 export class FormCajaPageModule {}

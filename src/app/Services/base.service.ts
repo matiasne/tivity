@@ -150,7 +150,26 @@ export class BaseService {
             });
         });
         return promise;
-    } 
+    }
+    
+    setMerge(id,item) {  
+        //    delete item.id;  
+            console.log('[BaseService] adding item'+this.path+'/'+id);
+            console.log(item);
+    
+            let time = new Date();
+            const promise = new Promise((resolve, reject) => {
+                this.collection.doc(id).set({...item, createdAt: time},{merge:true}).then(ref => {
+                    const newItem = {
+                        id: item.id,
+                        /* workaround until spread works with generic types */
+                        ...(item as any)
+                    };
+                    resolve(newItem);
+                });
+            });
+            return promise;
+        }
     
     
     

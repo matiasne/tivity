@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -56,11 +56,13 @@ import { Network } from '@ionic-native/network/ngx';
 import { Printer, PrintOptions } from '@ionic-native/printer/ngx';
 import { FormComercioPage } from './form-comercio/form-comercio.page';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
-import { WoocommerceInterceptorService } from './Services/woocommerce/woocommerce-interceptor.service';
+import { HTTPInterceptorService } from './Services/http-interceptor.service';
 
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+
+import {AutosizeModule} from 'ngx-autosize'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAenr8VfNta7u8NL5J4jpMtosnENy-Gcqc",
@@ -83,34 +85,10 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
 @NgModule({
   declarations: [
     AppComponent,
-    FormPlanPage,
-    FormCategoriaPage,
-    FormProductoGrupoOpcionesPage,
-    FormProductoOpcionPage,
-    FormHorarioPage,
-    FormCajaPage,
-    RecortarImagenPage,
-    FormInvitacionPage,
-    ListClientesPage,
-    ListServiciosPage,
-    ListVentaPage,
-    ListComerciosOwnerPage,
-    FormComercioPage
+    
   ],
   entryComponents: [
-    FormPlanPage,
-    FormCategoriaPage,
-    FormProductoGrupoOpcionesPage,
-    FormProductoOpcionPage,
-    FormHorarioPage,
-    FormInvitacionPage,
-    FormCajaPage,
-    RecortarImagenPage,
-    ListClientesPage,
-    ListServiciosPage,
-    ListVentaPage,
-    ListComerciosOwnerPage,
-    FormComercioPage
+    
   ],
   imports: [
     FormsModule,
@@ -135,6 +113,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   providers: [
     StatusBar,
     SplashScreen,
+    AutosizeModule,
     GooglePlus,
     FileTransfer,
     Crop,
@@ -152,11 +131,12 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     Printer,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: WoocommerceInterceptorService,
+      useClass: HTTPInterceptorService,
       multi: true
     },  
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -95,12 +95,13 @@ export class CarritoService {
 
 
   setearCliente(cliente:Cliente){
-    this.carrito.cliente = cliente;
     this.carrito.clienteId = cliente.id
     this.carrito.clienteNombre = cliente.nombre
     this.carrito.clienteEmail = cliente.email
+    this.carrito.clienteDocTipo = cliente.documentoTipo
+    this.carrito.clienteDoc = cliente.documento
+    this.carrito.clientePersonaJuridica = cliente.personaJuridica
 
-    console.log(this.carrito.cliente)
     this.carrito.on = true;    
     this.actualCarritoSubject.next(this.carrito); 
   }
@@ -132,7 +133,7 @@ export class CarritoService {
     this.carrito.personalId = this.authenticationService.getUID();
     this.carrito.personalEmail = this.authenticationService.getEmail();
     this.carrito.personalNombre = this.authenticationService.getNombre();
-    
+    this.carrito.total = this.getTotal()
     
     this.impresoraService.impresionComanda(this.carrito)
     

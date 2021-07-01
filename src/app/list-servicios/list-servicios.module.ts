@@ -15,6 +15,6 @@ import { ListServiciosPage } from './list-servicios.page';
     IonicModule,
     ListServiciosPageRoutingModule
   ],
-  declarations: []
+  declarations: [ListServiciosPage]
 })
 export class ListServiciosPageModule {}

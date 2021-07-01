@@ -41,7 +41,6 @@ import { FormMesaPage } from '../form-mesa/form-mesa.page';
 export class DetailsCarritoPage implements OnInit {
 
   public carrito = new Pedido();
-  public cliente = new Cliente();
   public comercio:Comercio;
   public subsComercio: Subscription;
   public subsCarrio:Subscription;
@@ -216,7 +215,6 @@ export class DetailsCarritoPage implements OnInit {
     modal.onDidDismiss()
     .then((retorno) => {
       if(retorno.data){    
-        this.cliente = retorno.data.item;    
         this.carritoService.setearCliente(retorno.data.item);
       }           
     });

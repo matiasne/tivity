@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-grid>
+  <ion-row *ngFor="let mensaje of mensajes">
+    <ion-col size="9" *ngIf="user.email !== mensaje.senderEmail" class="message other-message">
+      <span>{{mensaje.senderEmail}}</span><br>
+      <span>{{mensaje.text}}</span><br>
+      <ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}
+    </ion-col>    
+
+    <ion-col offset="3" size="9" *ngIf="user.email === mensaje.senderEmail" class="message my-message">
+      <span>{{mensaje.senderEmail}}</span><br>
+      <span>{{mensaje.text}}</span><br>
+      <span class="time"><ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}</span>
+    </ion-col>
+
+  </ion-row>
+</ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="light">
+    <ion-row aling-items-center no-padding>
+      <ion-col size="10">
+        <textarea autosize maxRow="3" [(ngModel)]="comentario.text" class="message-input"></textarea>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button expand="block" fill="clear" color="primary" [disabled]="comentario.text === ''" class="msg-btn" (click)="enviar()">
+          <ion-icon name="send"></ion-icon>
+        </ion-button>
+        
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

@@ -1,23 +1,18 @@
 import {NextFunction, Request, Response, Router } from 'express';
 import { AfipController} from './controllers/afip'
-import { WoocommerceWebHook } from './controllers/WoocommerceWebHook';
 import { isAfipAuth,  } from './middleware/isAfipAuth';
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{  
   
-  let BusBoyMiddleware = require('./middleware')
-  let afipController = new AfipController()
-  let wooWebHook = new WoocommerceWebHook()
-
-  
+  let afipController = new AfipController()  
 
   app.post('/afip/prueba', (req: Request, res: Response) => {
     console.log(req.body)
     return afipController.prueba(req,res,db);
   });
 
-  app.post('/afip/registro', BusBoyMiddleware,  (req: Request, res: Response,next:NextFunction) => {
+  app.post('/afip/registro', (req: Request, res: Response,next:NextFunction) => {
     return afipController.registro(req,res,db);
   });
 
@@ -39,6 +34,14 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{
 
   app.post('/afip/createVoucher',isAfipAuth, (req: Request, res: Response) => {
     return afipController.createVoucher(req,res,db);
+  });
+
+  app.post('/afip/createFacturaFromPedido',isAfipAuth, (req: Request, res: Response) => {
+    return afipController.createFacturaFromPedido(req,res,db);
+  });
+
+  app.post('/afip/createNotaCreditoFromPedido',isAfipAuth, (req: Request, res: Response) => {
+    return afipController.createNotaCreditoFromPedido(req,res,db);
   });
 
   app.post('/afip/salesPoint',isAfipAuth, (req: Request, res: Response) => {
@@ -74,7 +77,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{
   });
 
   app.post('/NuevoPedido', (req: Request, res: Response) => {
-    return wooWebHook.nuevoPedido(req,res,db);
+    return afipController.nuevoPedido(req,res,db);
+    
   });
 
 };

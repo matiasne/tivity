@@ -16,6 +16,6 @@ import { FormHorarioPage } from './form-horario.page';
     IonicModule,
     FormHorarioPageRoutingModule
   ],
-  declarations: []
+  declarations: [FormHorarioPage]
 })
 export class FormHorarioPageModule {}

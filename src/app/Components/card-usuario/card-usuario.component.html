@@ -5,7 +5,8 @@
   </ion-avatar>
   <ion-label>
     <h2>{{cliente.nombre}}</h2>
-    <h3>{{cliente.email}}</h3>
-    <h3>{{cliente.direccion}}</h3>
+    <h3 *ngIf="cliente.email">{{cliente.email}}</h3>
+    <h3 *ngIf="cliente.direccion.street_name">{{cliente.direccion}}</h3>
+    <p *ngIf="cliente.direccion.documento">{{item.documentoTipo}}: {{item.documento}}</p> 
   </ion-label>             
 </ion-item>

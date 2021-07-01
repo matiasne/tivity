@@ -94,7 +94,6 @@ export class FormProductoPage implements OnInit {
     public comercioService:ComerciosService,
     public imageService:ImagesService,
     private modalCtrl:ModalController,
-    private loadingService:LoadingService,
     private navParams:NavParams
   ) { 
 
@@ -109,9 +108,9 @@ export class FormProductoPage implements OnInit {
       destacado:[false],
       precio: ['', Validators.required],
       promocion:[''],
-      unidad: ['unidades',Validators.required],
+      unidad: ['unidades'],
       valorPor:[1],
-      stock: [1, Validators.required],
+      stock: [1],
       descripcion:[''],
       cocinaId:[''],
       categorias:[''],
@@ -130,14 +129,14 @@ export class FormProductoPage implements OnInit {
 
   async ionViewDidEnter(){
 
-    
+    console.log(this.paramId)
 
-    if(this.paramId != ""){
+    if(this.paramId){
       this.updating = true; 
-      this.loadingService.presentLoading()
+    //  this.loadingService.presentLoading()
       this.productosService.get(this.paramId).subscribe(producto=>{        
         this.titulo = "Editar Producto";
-        this.loadingService.dismissLoading()
+      //  this.loadingService.dismissLoading()
         this.datosForm.patchValue(producto);
         this.producto.asignarValores(producto)
 
@@ -338,8 +337,7 @@ export class FormProductoPage implements OnInit {
       this.producto.imagenes.push(json)     
     }
 
-    if(this.comercio.config.woocommerce){
-      
+    if(this.comercio.config.woocommerce){      
       console.log(this.woocommerceSyncData)
       this.woocommerceSyncData.changeDate = new Date()
       let wSyncData = JSON.parse(JSON.stringify(this.woocommerceSyncData));

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-form-afip',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FormAfipPage implements OnInit {
 
-  constructor() { }
+  public password="";
+  constructor(
+    private modalCtrl:ModalController
+  ) { }
 
   ngOnInit() {
   }
+
+  cancelar(){
+    this.modalCtrl.dismiss();
+  }
+
+  guardar(){
+    
+  }
+  
 
 }

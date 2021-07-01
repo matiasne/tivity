@@ -5,8 +5,9 @@ export class Cliente{
     public id="";
     public comercioId="";
     public nombre="";
-    public documento_tipo ="";  
+    public documentoTipo ="";  
     public documento ="";  
+    public personaJuridica ="";
     public fecha_nacimiento="";
     public telefono="";   
     public email="";   

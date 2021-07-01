@@ -78,8 +78,9 @@ export class FormClientePage implements OnInit {
     this.datosForm = this.formBuilder.group({
 
       nombre: ['', Validators.required],
-      documento_tipo :[''],  
+      documentoTipo :[''],  
       documento :[''],  
+      personaJuridica:[''],
       fecha_nacimiento : [''],
       telefono:[''],   
       email:  [''],   

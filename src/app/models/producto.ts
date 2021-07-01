@@ -11,9 +11,9 @@ export class Producto {
     public barcode="";
     public cocinaId ="";
     public cocinaNombre =""; //Se rellena cuando se pide el producto
-    public precio = 0;
+    public precio = 0;    
+    public promocion=0;
     public precioTotal = 0;
-    public promocion="";
     public destacado = false;
     public unidad="";
     public valorPor = 0;
@@ -30,7 +30,7 @@ export class Producto {
     public opcionesSeleccionadas =[];
     public keywords = [];
     public estadoComanda = "";
-
+    public impuestoPorcentaje = "0.21";
     public enCarrito = 0
 
     public imagenes = []

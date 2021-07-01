@@ -71,7 +71,8 @@
             </ion-item>
           </ion-col>          
 
-          <ion-col size="12" size-xs="12" size-sm="6" size-md="4" size-lg="3" *ngFor="let producto of itemsRenderProductos">           
+          <ion-virtual-scroll [items]="itemsProductos">
+          <ion-col size="12" size-xs="12" size-sm="6" size-md="4" size-lg="3" *virtualItem="let producto">           
 
             <ion-item-sliding class="item-card fivePhasesFadeIn" (ionDrag)="onDrag($event,producto)"> 
               <app-card-producto   
@@ -92,7 +93,7 @@
 
             </ion-item-sliding>
           </ion-col>
-
+        </ion-virtual-scroll>
           
   
         </ion-row>
@@ -140,12 +141,12 @@
     <p >No existe un producto con ese nombre! Agrega uno nuevo.</p>
   </div>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+  <!--ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Cargando más productos...">
     </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  </ion-infinite-scroll-->
 
 </ion-content>
 

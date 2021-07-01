@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">     
+<ion-content class="ion-padding">      
   
     <div class="icono-foto-producto">
       <app-seleccionar-imagen
@@ -48,11 +48,7 @@
         <ion-item-options side="end">
           <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
         </ion-item-options>
-      </ion-item-sliding>
-
-      
-
-     
+      </ion-item-sliding>    
       
       <div [ngClass]="{'form-card': true, 'form-card-error': submitted && !datosForm.controls.telefono.valid}">
         <ion-text color="primary">
@@ -80,22 +76,31 @@
         </div>
       </div>
 
-      <div [ngClass]="{'form-card': true, 'form-card-error': submitted && !datosForm.controls.documento_tipo.valid}">
+      
+      
         <ion-item>   
           <ion-label position="floating">Tipo de Documento</ion-label>                 
-          <ion-select  formControlName="documento_tipo">
+          <ion-select  formControlName="documentoTipo">
             
-            <ion-select-option [value]="1" selected>D.N.I.</ion-select-option>
-            <ion-select-option [value]="2" selected>CUIT</ion-select-option>
+            <ion-select-option [value]="'DNI'" selected>D.N.I.</ion-select-option>
+            <ion-select-option [value]="'CUIT'" selected>C.U.I.T.</ion-select-option>
+            <ion-select-option [value]="'CUIL'" selected>C.U.I.L.</ion-select-option>
           </ion-select>        
         </ion-item>
-        <div *ngIf="submitted && f.documento_tipo.errors" class="invalid-feedback">
-          <div *ngIf="f.documento_tipo.errors.required"><h5>Selecciona el tipo de documento</h5></div>
-        </div>
-      </div>
+
+        <ion-item>   
+          <ion-label position="floating">Tipo Persona Jurídica</ion-label>                 
+          <ion-select  formControlName="personaJuridica">
+            
+            <ion-select-option [value]="2" selected>Monotributista</ion-select-option>
+            <ion-select-option [value]="1" selected>Responsable Inscripto</ion-select-option>
+            <ion-select-option [value]="3" selected>Iva Exento</ion-select-option>
+          </ion-select>        
+        </ion-item>
+       
       
 
-      <div [ngClass]="{'form-card': true, 'form-card-error': submitted && !datosForm.controls.documento.valid}">
+      
         <ion-text color="primary">
           <h4>Número de Documento</h4>    
         </ion-text>
@@ -103,10 +108,7 @@
         <ion-item>
           <ion-input name="documento" type="number" formControlName="documento"></ion-input>
         </ion-item>
-        <div *ngIf="submitted && f.documento.errors" class="invalid-feedback">
-          <div *ngIf="f.documento.errors.required"><h5>Ingresa el documento</h5></div>
-        </div>
-      </div>
+        
      
       
       <div [ngClass]="{'form-card': true, 'form-card-error': submitted && !datosForm.controls.fecha_nacimiento.valid}">

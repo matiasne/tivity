@@ -378,6 +378,9 @@ export class AddProductoVentaPage implements OnInit {
 
   valorTotal(){
     let valorUno = this.producto.precio;
+    if(this.producto.promocion)
+      valorUno = this.producto.promocion
+    
     this.gruposOpciones.forEach(grupos =>{
       grupos.opciones.forEach (opcion =>{
         if(opcion.seleccionada || opcion.cantidad > 0)

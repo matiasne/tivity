@@ -41,17 +41,20 @@
           <ion-icon name="cube-outline"></ion-icon> {{item.productos.length}}<br>
           <span *ngIf="item.clienteNombre" >
             <ion-icon name="person-outline"></ion-icon> {{item.clienteNombre}} <br>
-          </span>
+          </span><br>
           <span *ngIf="item.mesaNombre" >
             <ion-icon name="grid-outline"></ion-icon> {{item.mesaNombre}} <br>
-          </span>
+          </span><br>
           <span *ngIf="item.direccion.street_name" >
             <ion-icon name="location-outline"></ion-icon> 
             {{item.direccion.street_name}} {{item.direccion.street_number}},{{item.direccion.locality}},{{item.direccion.state}}. <br>
             <span *ngIf="item.direccion.piso"> Piso: {{item.direccion.piso}}</span>
             <span *ngIf="item.direccion.puerta"> Puerta: {{item.direccion.puerta}}</span>
             {{item.direccion.distanciaDelComercio}} Km.
-          </span>        
+          </span>  <br> 
+          <span *ngIf="item.afip" >
+            <img style="width:18px;" src="../../../assets/img/logo_afip.fw.png" alt=""> {{item.afip.CbteLetra}} {{item.afip.CAE}} <br>
+          </span>      
       </ion-row>  
     </div>
   </div>
