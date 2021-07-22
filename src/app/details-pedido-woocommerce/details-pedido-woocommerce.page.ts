@@ -33,7 +33,7 @@ export class DetailsPedidoWoocommercePage implements OnInit {
   public cajas = []
   public cajaSeleccionadaIndex=0;
   public cajaSeleccionada:Caja;
-  public metodoPagoSeleccionado ="";
+  public metodoPagoSeleccionado =[]; //!!!!!!!!!!!!!!! aca debe 
   public cantidadMetodos=0;
   public metodoTexto ="";
 
@@ -140,9 +140,9 @@ export class DetailsPedidoWoocommercePage implements OnInit {
         this.cantidadMetodos++;
       }    
        
-      this.metodoPagoSeleccionado ="";
+      this.metodoPagoSeleccionado =[];
       if(this.cantidadMetodos == 1){    
-        this.metodoPagoSeleccionado = setear;    
+        this.metodoPagoSeleccionado.push(setear);    
       } 
   }
 
@@ -184,16 +184,7 @@ export class DetailsPedidoWoocommercePage implements OnInit {
       //restar stock de productos 
     })
 
-    
-    var reembolso = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getEmail());      
-    reembolso.tipo = this.enumTipoMovimientoCaja.devolucion;
-    reembolso.cajaId = this.cajaSeleccionada.id;
-    reembolso.metodoPago = this.metodoPagoSeleccionado;
-    reembolso.monto =  - Number(this.order.total);
-    reembolso.motivo = "Pago de pedido Web id:"+this.order.id  
-    this.movimientosService.setearPath(this.cajaSeleccionada.id)     
-    this.movimientosService.add(reembolso)
-    this.navCtrl.back();
+    //!!!!!!!!!!!!aca debe mostrar modal de reembolso
   }
 
   async suspender(){
@@ -235,17 +226,7 @@ export class DetailsPedidoWoocommercePage implements OnInit {
     this.ordersService.updateStatus(this.order).subscribe(data=>{
       
     })
-
-    
-    var pago = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getEmail());      
-    pago.tipo = this.enumTipoMovimientoCaja.pago;
-    pago.cajaId = this.cajaSeleccionada.id;
-    pago.metodoPago = this.metodoPagoSeleccionado;
-    pago.monto= Number(this.order.total);
-    pago.motivo = "Pago de pedido Web id:"+this.order.id      
-    this.movimientosService.setearPath(this.cajaSeleccionada.id) 
-    this.movimientosService.add(pago)
-    this.navCtrl.back()
+    //!!!!!!!!!!!!!!!aca debe mostrar modal de cobro
   }
 /*
   mantenerStock(){ //esto se hace para asegurar que en woocommerce y en firebase existe el mismo stock

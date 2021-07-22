@@ -8,7 +8,8 @@ import { EnumTipoDescuento } from '../models/descuento';
 import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
-import { EnumEstadoCocina, EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCocina } from 'src/app/models/producto';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { AuthenticationService } from '../Services/authentication.service';
 import { CajasService } from '../Services/cajas.service';
@@ -16,7 +17,7 @@ import { ClientesService } from '../Services/clientes.service';
 import { ComerciosService } from '../Services/comercios.service';
 import { CtaCorrientesService } from '../Services/cta-corrientes.service';
 import { CarritoService } from '../Services/global/carrito.service';
-import { ImpresoraService } from '../Services/impresora.service';
+import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { LoadingService } from '../Services/loading.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { MovimientosService } from '../Services/movimientos.service';
@@ -37,13 +38,12 @@ export class FormDevolverPedidoPage implements OnInit {
   public enumTipo = EnumTipoDescuento
 
   @Input() pedido:Pedido;
-  @Input() subPedidos = []
   @Input() comercio:Comercio;
   
   public cajas = []
   public cajaSeleccionadaIndex=0;
   public cajaSeleccionada:Caja;
-  public metodoPagoSeleccionado ="";
+  public metodoPagoSeleccionado =[];
   public cantidadMetodos=0;
 
   public ctasCorrientes =[];
@@ -56,7 +56,9 @@ export class FormDevolverPedidoPage implements OnInit {
 
   public facturar = false
 
-  public total = 0;
+  public totalReembolso = 0;
+
+  
 
   constructor(
     public comerciosService:ComerciosService,
@@ -113,6 +115,8 @@ export class FormDevolverPedidoPage implements OnInit {
         })
       })
     }
+
+    this.calcularReembolso()
   }
 
   updateFacturar(event){
@@ -122,17 +126,28 @@ export class FormDevolverPedidoPage implements OnInit {
 
   async reembolsar(){
 
+    let seleccionReembolsado = false;
+    this.pedido.productos.forEach(p =>{    
+      if(p.reembolsar){
+        seleccionReembolsado = true;
+      }
+    })
+    if(!seleccionReembolsado){
+      this.toastServices.alert("Sebe seleccionar al menos un producto para reembolsar","");
+      return;
+    }
+
     if(this.cajas.length == 0){
       this.toastServices.alert("Debe abrir una caja antes de continuar","De este modo podrá tener un registro de los pagos");
       return;
     }
     
-    if(this.metodoPagoSeleccionado == ""){
+    if(this.metodoPagoSeleccionado.length == 0){
       this.toastServices.alert("Por favor seleccione un método de pago antes de continuar","De este modo podrá tener un registro de los pagos");
       return;
     }
     
-    if(this.metodoPagoSeleccionado == "ctaCorriente"){
+    if(this.metodoPagoSeleccionado.includes("ctaCorriente")){
       if(this.ctaCorrienteSelecccionadaId == ""){
         this.toastServices.alert("Por favor seleccione una cuenta corriente antes de continuar","");
         return;
@@ -145,7 +160,7 @@ export class FormDevolverPedidoPage implements OnInit {
     try{
 
       if(this.facturar){
-        let res = await this.afipService.notaCreditoPedido(this.pedido.id)
+        let res = await this.afipService.notaCreditoPedido(this.pedido.id,this.totalReembolso)
         console.log(res);
         this.loadingService.dismissLoading();
       }
@@ -155,17 +170,18 @@ export class FormDevolverPedidoPage implements OnInit {
 
       if(this.pedido.productos.length > 0){
 
-        let productosId = [];
         this.pedido.productos.forEach(p =>{    
-          delete p.keywords;     
-          let deltaStock = 0;
-          if(p.valorPor)
-            deltaStock =  + (Number(p.cantidad) * Number(p.valorPor));
-          else
-            deltaStock = + Number(p.cantidad);
-          
-          this.productosService.updateStock(deltaStock,p.id)
-          productosId.push(p.id);        
+          if(p.reembolsar){
+            delete p.keywords;     
+            let deltaStock = 0;
+            if(p.valorPor)
+              deltaStock =  + (Number(p.cantidad) * Number(p.valorPor));
+            else
+              deltaStock = + Number(p.cantidad);
+            
+            this.productosService.updateStock(deltaStock,p.id)
+          }
+                  
         })
       }
     
@@ -173,49 +189,62 @@ export class FormDevolverPedidoPage implements OnInit {
         
       if(this.comercio.config.movimientosCajas){
 
-        if(this.metodoPagoSeleccionado != "ctaCorriente"){
+        
           
-          var pago = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getNombre());      
-          pago.id = this.firestore.createId();
-          pago.tipo = this.enumTipoMovimientoCaja.pago;
-          pago.clienteId = this.pedido.clienteId;
-          pago.cajaId = this.cajaSeleccionada.id;
-          pago.metodoPago = this.metodoPagoSeleccionado;
-          pago.monto= - this.getTotal();
-          pago.vendedorNombre = this.authenticationService.getNombre();         
-          pago.motivo="Devolucion de productos";
+          this.metodoPagoSeleccionado.forEach(metodo =>{
 
-          this.movimientosService.setearPath(this.cajaSeleccionada.id)   
-          this.movimientosService.add(pago).then(data=>{
-            console.log(data)
-          });
-        }
-        else{
-          var deposito = new MovimientoCtaCorriente(this.authenticationService.getUID(), this.authenticationService.getNombre());
-          deposito.id = this.firestore.createId();
-          deposito.clienteId=this.pedido.clienteId;
-          deposito.ctaCorrienteId=this.ctaCorrienteSelecccionadaId;
-          deposito.motivo="Devolucion de productos";
-          deposito.monto = Number(this.getTotal());
-          deposito.vendedorNombre = this.authenticationService.getNombre();
-          console.log(deposito.vendedorNombre);
-          this.movimientosService.crearMovimientoCtaCorriente(deposito);
+            let monto = 0;
+            if(metodo === "efectivo"){
+              monto = this.pedido.montoPagoEfectivo;
+            }
+            if(metodo === "debito"){
+              monto = this.pedido.montoPagoDebito;
+            }
+            if(metodo === "credito"){
+              monto = this.pedido.montoPagoCredito;
+            }
+
+            if(metodo != "ctaCorriente"){
+              var pago = new MovimientoCaja(
+                this.firestore.createId(),
+                this.enumTipoMovimientoCaja.devolucion,
+                this.pedido.clienteId,
+                this.cajaSeleccionada.id,
+                metodo,
+                - monto,
+                "Reembolso de pedido",
+                this.authenticationService.getUID(), 
+                this.authenticationService.getNombre());      
+              
+    
+              this.movimientosService.setearPath(this.cajaSeleccionada.id)   
+              this.movimientosService.add(pago).then(data=>{
+                console.log(data)
+              });
+            }
+            
+          })
+          
+        if(this.metodoPagoSeleccionado.includes("ctaCorriente")){     
+
+            this.movimientosService.agregarMovimientoEnCtaCorriente(
+              this.ctaCorrienteSelecccionadaId,
+              this.pedido.clienteId,
+              "",
+              "",
+              "",
+              this.pedido.montoPagoCtaCorriente,
+              "Devolucion de productos"
+            )
         }           
       }  
       
       this.pedido.statusCobro = this.cEstado.reembolsado;
       this.pedido.metodoDevolucion = this.metodoPagoSeleccionado; 
       this.pedido.cajaUtilizada = this.cajaSeleccionada.id;  
-      this.pedido.total = this.getTotal();    
+      this.pedido.total = this.totalReembolso;    
 
-      if(this.subPedidos.length > 0){ //si es un array de pedidos porque viene de cierre de mesa      
-          this.subPedidos.forEach(pedido => {       
-          pedido.statusCobro = this.cEstado.reembolsado;
-          pedido.metodoDevolucion = this.metodoPagoSeleccionado;  
-          this.actualizarPedido()
-        });      
-      }
-      else if(this.pedido.id == ""){
+      if(this.pedido.id == ""){
         this.pedido.direccion = JSON.parse(JSON.stringify(this.pedido.direccion));
         this.pedidosService.add(this.pedido).then(data=>{
           console.log("agregado pedido")
@@ -228,11 +257,8 @@ export class FormDevolverPedidoPage implements OnInit {
       console.log(this.pedido);
       this.actualizarMontosCaja()
 
-
-      let impresora = this.impresoraService.obtenerImpresora();
-      if(impresora.pedidosFinalizar){
-        this.imprimir()
-      }
+      this.imprimir()
+      
       
         
       this.modalNotificacion.success("Devuelto","El pedido ha sido cobrado.")
@@ -241,7 +267,9 @@ export class FormDevolverPedidoPage implements OnInit {
     }catch(err){
       console.log(err);
       this.mostrarError(err.error.message)
-      
+      this.pedido.productos.forEach(p=>{
+        p.reembolsar = false;
+      })
       this.loadingService.dismissLoading();
     }
     
@@ -249,14 +277,14 @@ export class FormDevolverPedidoPage implements OnInit {
   }  
 
   actualizarMontosCaja(){
-    if(this.metodoPagoSeleccionado == "efectivo"){
-      this.cajaSeleccionada.totalEfectivo = Number(this.cajaSeleccionada.totalEfectivo)- Number(this.getTotal());
+    if(this.metodoPagoSeleccionado.includes("efectivo")){
+      this.cajaSeleccionada.totalEfectivo = Number(this.cajaSeleccionada.totalEfectivo)- Number(this.totalReembolso);
     }
-    if(this.metodoPagoSeleccionado == "credito"){
-      this.cajaSeleccionada.totalCredito = Number(this.cajaSeleccionada.totalCredito)- Number(this.getTotal());
+    if(this.metodoPagoSeleccionado.includes("credito")){
+      this.cajaSeleccionada.totalCredito = Number(this.cajaSeleccionada.totalCredito)- Number(this.totalReembolso);
     }
-    if(this.metodoPagoSeleccionado == "debito"){
-      this.cajaSeleccionada.totalDebito = Number(this.cajaSeleccionada.totalDebito) - Number(this.getTotal());
+    if(this.metodoPagoSeleccionado.includes("debito")){
+      this.cajaSeleccionada.totalDebito = Number(this.cajaSeleccionada.totalDebito) - Number(this.totalReembolso);
     }
 
     const param1 = JSON.parse(JSON.stringify(this.cajaSeleccionada));
@@ -280,9 +308,7 @@ export class FormDevolverPedidoPage implements OnInit {
  
       var setear = "";  
       
-      this.cantidadMetodos = 0;
-  
-     
+      this.cantidadMetodos = 0;     
       
       if(this.cajas[this.cajaSeleccionadaIndex].debito){
         setear = "debito"; 
@@ -302,9 +328,9 @@ export class FormDevolverPedidoPage implements OnInit {
         this.cantidadMetodos++;
       }    
        
-      this.metodoPagoSeleccionado ="";
+      this.metodoPagoSeleccionado =[];
       if(this.cantidadMetodos == 1){    
-        this.metodoPagoSeleccionado = setear;    
+        this.metodoPagoSeleccionado.push(setear);    
       } 
   }
 
@@ -317,19 +343,26 @@ export class FormDevolverPedidoPage implements OnInit {
     }
   }  
 
-  public getTotal(){ 
-    this.total =  this.pedidosService.getTotal(this.pedido) 
-    console.log(this.total)
-    return this.total
-  }
 
   async imprimir(){
     alert("falta hacer")
-    await this.impresoraService.impresionTicket(this.pedido);    
+  
   }
 
   cancelar(){
+    this.pedido.productos.forEach(p =>{    
+      p.reembolsar = false;   
+    })
     this.modalController.dismiss();
+  }
+
+  calcularReembolso(){
+    this.totalReembolso = 0
+    this.pedido.productos.forEach(p =>{    
+      if(p.reembolsar){
+        this.totalReembolso += p.precioTotal   
+      }      
+    })
   }
 
 

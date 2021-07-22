@@ -43,4 +43,28 @@ export class ComentariosService extends BaseService{
         );          
   }    
 
+  async incrementarNumeroMensajes(tipo,id){
+
+    var docRef =  this.afs.firestore.collection('comercios/'+this.comercioId +'/'+tipo).doc(id);
+    let doc = await  this.afs.firestore.runTransaction(t => t.get(docRef)); 
+    if (!doc.exists) {throw ("doc not found");}
+    
+    var countMensajes = doc.data().countMensajes + 1;
+    await doc.ref.update({ countMensajes: countMensajes });
+
+    return countMensajes;
+
+  }
+
+  async decrementarNumeroMensajes(tipo,id){
+    var docRef =  this.afs.firestore.collection('comercios/'+this.comercioId +'/'+tipo).doc(id);
+    let doc = await  this.afs.firestore.runTransaction(t => t.get(docRef)); 
+    if (!doc.exists) {throw ("doc not found");}
+    
+    var countMensajes = doc.data().countMensajes - 1;
+    await doc.ref.update({ countMensajes: countMensajes });
+
+    return countMensajes;
+  }
+
 }

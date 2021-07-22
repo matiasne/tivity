@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Cobrar</ion-title>
+    <ion-title  size="small">Cobrar {{getTotal()}} / Vuelto: {{vuelto}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -17,7 +17,7 @@
 
   <ion-item class="item-card">
     <ion-label position="floating">Método</ion-label>
-    <ion-select [(ngModel)]="metodoPagoSeleccionado">
+    <ion-select multiple=true [(ngModel)]="metodoPagoSeleccionado" (ionChange)="setMontos()">
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].efectivo" [value]="'efectivo'">Efectivo</ion-select-option>
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].debito" [value]="'debito'">Débito</ion-select-option>
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].credito" [value]="'credito'">Crédito</ion-select-option>
@@ -25,17 +25,49 @@
     </ion-select>    
   </ion-item>
 
-  
+  <ion-row *ngIf="metodoPagoSeleccionado.includes('efectivo')">
+    <ion-col size="8">
+      <ion-item class="item-card">
+        <ion-label position="floating" >Monto en efectivo</ion-label>
+        <ion-input type="number" min="0" [(ngModel)]="pedido.montoPagoEfectivo" (ionChange)="setPagoTotal()"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
 
-  <ion-item class="item-card" *ngIf="metodoPagoSeleccionado == 'ctaCorriente'">
+  <ion-row *ngIf="metodoPagoSeleccionado.includes('debito')">
+    <ion-col size="8">
+      <ion-item class="item-card">
+        <ion-label position="floating" >Monto en débito</ion-label>
+        <ion-input type="number" min="0" [(ngModel)]="pedido.montoPagoDebito" (ionChange)="setPagoTotal()"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="metodoPagoSeleccionado.includes('credito')">
+    <ion-col size="8">
+      <ion-item class="item-card">
+        <ion-label position="floating" >Monto en crédito</ion-label>
+        <ion-input type="number" min="0" [(ngModel)]="pedido.montoPagoCredito" (ionChange)="setPagoTotal()"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-item class="item-card" *ngIf="metodoPagoSeleccionado.includes('ctaCorriente')">
     <ion-label position="floating" >Cuenta Corriente:</ion-label>
     <ion-select  [(ngModel)]="ctaCorrienteSelecccionadaId">
       <ion-select-option *ngFor="let cta of ctasCorrientes" [value]="cta.id">{{cta.nombre}}</ion-select-option>
-    </ion-select>
+    </ion-select>    
   </ion-item>
 
+  <ion-col size="8" *ngIf="metodoPagoSeleccionado.includes('ctaCorriente')">
+    <ion-item class="item-card">
+      <ion-label position="floating" >Monto en cta. corriente</ion-label>
+      <ion-input type="number" min="0" [(ngModel)]="pedido.montoPagoCtaCorriente" (ionChange)="setPagoTotal()"></ion-input>
+    </ion-item>
+  </ion-col>
+  
   <ion-item class="item-card">
-    <ion-checkbox color="primary" slot="start" [(ngModel)]="facturar" (ionChange)="updateFacturar($event)"></ion-checkbox>
+    <ion-checkbox color="primary" slot="start" [(ngModel)]="facturar" (ionChange)="updateFacturar($event)"  [disabled]="!comercio.config.afip"></ion-checkbox>
     <ion-label> <img style="padding:14px" src="../../assets/img/logo_afip.png" alt=""> Generar Factura Afip</ion-label>
   </ion-item>
 

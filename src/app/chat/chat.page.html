@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>chat</ion-title>
+    <ion-title  size="small">chat</ion-title>
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button> 
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +11,7 @@
 <ion-grid>
   <ion-row *ngFor="let mensaje of mensajes">
     <ion-col size="9" *ngIf="user.email !== mensaje.senderEmail" class="message other-message">
-      <span>{{mensaje.senderEmail}}</span><br>
+      <span class="email">{{mensaje.senderEmail}}</span><br>
       <span>{{mensaje.text}}</span><br>
       <ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}
     </ion-col>    

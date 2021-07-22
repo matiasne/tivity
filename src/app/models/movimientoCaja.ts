@@ -10,26 +10,24 @@ export enum EnumTipoMovimientoCaja {
 
 export class MovimientoCaja{
 
-    public id ="";
-    public clienteId = "";
-    public servicioId ="";
-    public cajaId ="";
-    public metodoPago ="";    
-    public monto=0;
-    public motivo="";
+    public servicioId =""; 
     public ventaId="";
     public pagareId ="";
     public ctaCorrienteId ="";    
-    public depositoId="";
-    public extraccionId="";
+    public movimientoCtaCorrienteId="";
     public createdAt = new Date();
     public isCierre = false;
-    public isApertura = false;
     public fotoCaja:any; //Estado de la caja al momento de realizar el movimiento
-
-    public tipo
+    public pedidoId = "";
 
 	constructor(
+        public id:any,
+        public tipo:EnumTipoMovimientoCaja,
+        public clienteId:any,
+        public cajaId:any,
+        public metodoPago:string,
+        public monto:number,
+        public motivo:string,
 		public vendedorId:"", 
         public vendedorNombre:""
 		){

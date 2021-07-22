@@ -1,31 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Afip</ion-title>
+    <ion-title  size="small">Afip</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  Contacta a nuestro equipo y solicita una clave para poder realizar facturas válidas por Afip!
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="10">
+        <p>
+          <b>Habilitar Facturación Afip</b><br>
+          
+        </p>
+      </ion-col>
+      <ion-col size="2">
+        <ion-toggle [(ngModel)]="comercio.config.afip" (ionChange)="update()"  [ngModelOptions]="{standalone: true}"></ion-toggle>    
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  
  
-  <ion-item class="form-card">
+  <ion-item class="form-card" *ngIf="comercio.config.afip">
+    Contacta a nuestro equipo y solicita una clave para poder realizar facturas válidas por Afip!
     <ion-label position="floating">Clave</ion-label>
     <ion-input name="nombre" type="text" [(ngModel)]="password" required></ion-input>
   </ion-item>
 
-  <ion-item class="form-select"> 
-    <ion-label position="floating">Desde</ion-label>
-    <ion-select multiple=false >
-      <ion-select-option  [value]="1" selected>Ayer</ion-select-option>
-      <ion-select-option  [value]="2">2 días atras</ion-select-option>
-      <ion-select-option  [value]="7">Una semana atrás</ion-select-option>
-    </ion-select>       
-  </ion-item>
-  
+  <ion-toolbar *ngIf="comercio.config.afip">   
+    <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button class="button-rounded" slot="end" color="success" (click)="validar()">Validar</ion-button>
+  </ion-toolbar>
+
 </ion-content>
 
-<ion-footer class="ion-no-border ion-padding"> 
-  <ion-toolbar>   
-    <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
-    <ion-button class="button-rounded" slot="end" color="success" (click)="guardar()">Guardar</ion-button>
-  </ion-toolbar>
-</ion-footer> 

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Cajas</ion-title>
+    <ion-title  size="small">Cajas</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -57,7 +57,7 @@
       'egreso-card': item.egreso
     }"
     >
-    <ion-item>
+    <ion-item (click)=seleccionar(item)>
       
       <div style="color:#50b223" *ngIf="item.tipo == enumTipoMovimientoCaja.pago">
         <ion-icon name="caret-up-circle-outline"></ion-icon>
@@ -100,7 +100,7 @@
       </ion-label> 
 
       <ion-label *ngIf="item.tipo == enumTipoMovimientoCaja.egreso" class="ion-text-wrap">
-        <h2>Egreso: <b>{{item.monto | currency}}</b> en efectivo</h2>         
+        <h2>Egreso: <b>{{item.monto | currency}}</b> en {{item.metodoPago}}</h2>         
         <p>
           {{item.motivo}}
         </p> 

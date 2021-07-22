@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Afip</ion-title>
+    <ion-title  size="small">Afip</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,18 +8,32 @@
   Contacta a nuestro equipo y solicita una clave para poder realizar facturas válidas por Afip!
  
   <ion-item class="form-card">
+    <ion-label position="floating">Razón Social</ion-label>
+    <ion-input name="nombre" type="text" [(ngModel)]="password" required></ion-input>
+  </ion-item>
+
+  <ion-item class="form-card">
+    <ion-label position="floating">Tipo Documento</ion-label>
+    <ion-input name="nombre" type="text" [(ngModel)]="password" required></ion-input>
+  </ion-item>
+  
+  <ion-item class="form-card">
+    <ion-label position="floating">Numero de Documento</ion-label>
+    <ion-input name="nombre" type="text" [(ngModel)]="password" required></ion-input>
+  </ion-item>
+
+  <ion-item class="form-card">
+    <ion-label position="floating">Punto de Venta</ion-label>
+    <ion-input name="nombre" type="text" [(ngModel)]="password" required></ion-input>
+  </ion-item>
+
+  <ion-item class="form-card">
     <ion-label position="floating">Clave</ion-label>
     <ion-input name="nombre" type="text" [(ngModel)]="password" required></ion-input>
   </ion-item>
 
-  <ion-item class="form-select"> 
-    <ion-label position="floating">Desde</ion-label>
-    <ion-select multiple=false >
-      <ion-select-option  [value]="1" selected>Ayer</ion-select-option>
-      <ion-select-option  [value]="2">2 días atras</ion-select-option>
-      <ion-select-option  [value]="7">Una semana atrás</ion-select-option>
-    </ion-select>       
-  </ion-item>
+
+  
   
 </ion-content>
 

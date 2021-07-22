@@ -1,4 +1,4 @@
-import { AfipVoucher, EnumAfipConceptos, EnumAfipMoneda, EnumAfipPersonaJuridica, EnumAfipTiposComprobantes, EnumAfipTiposDocumentos, IvaItem } from "../models/afipVoucher";
+import { AfipVoucher, CbteAsoc, EnumAfipConceptos, EnumAfipMoneda, EnumAfipPersonaJuridica, EnumAfipTiposComprobantes, EnumAfipTiposDocumentos, IvaItem } from "../models/afipVoucher";
 import * as admin from 'firebase-admin';
 import {  Response } from "express";
 
@@ -58,13 +58,13 @@ export class AfipController {
       
       try{
 
-        let TAfile = os.tmpdir()+'/TA-'+req.user.cuit+'-wsfe.json';
+        let TAfile = os.tmpdir()+'/TA-'+req.user.nroDoc+'-wsfe.json';
         if (!fs.existsSync(TAfile)){
           console.log("TA no existe") 
           if(doc.data().afipTA) {
             console.log("AfipTA existe")
             let data = JSON.stringify(doc.data().afipTA)
-            await fs.writeFile(os.tmpdir()+'/TA-'+req.user.cuit+'-wsfe.json', data,function(err:any, result:any) {
+            await fs.writeFile(os.tmpdir()+'/TA-'+req.user.nroDoc+'-wsfe.json', data,function(err:any, result:any) {
               if(err) console.log('error', err);
             });
           }
@@ -82,7 +82,7 @@ export class AfipController {
 
       
       try{
-        const afip = new Afip({ CUIT: req.user.cuit, cert: req.user.comercioId+req.user.ptoVenta+".pem",key: req.user.comercioId+req.user.ptoVenta+".key", res_folder: os.tmpdir(),ta_folder:os.tmpdir() });
+        const afip = new Afip({ CUIT: req.user.nroDoc, cert: req.user.comercioId+req.user.ptoVenta+".pem",key: req.user.comercioId+req.user.ptoVenta+".key", res_folder: os.tmpdir(),ta_folder:os.tmpdir() });
         return afip;
       }
       catch(err){
@@ -105,13 +105,28 @@ export class AfipController {
         return null;
       }    
     
-      if(!req.body.cuit){
-        res.status(400).send({message:"Falta cuit"});
+      if(!req.body.tipoDoc){
+        res.status(400).send({message:"Falta Tipo Doc"});
+        return null;
+      }
+
+      if(!req.body.nroDoc){
+        res.status(400).send({message:"Falta Número Doc"});
         return null;
       }
 
       if(!req.body.personaJuridica){
         res.status(400).send({message:"Falta Persona Jurídica"});
+        return null;
+      }
+
+      if(!req.body.razonSocial){
+        res.status(400).send({message:"Falta Razón Social (razonSocial)"});
+        return null;
+      }
+
+      if(!req.body.ingresosBrutos){
+        res.status(400).send({message:"Falta Número de Ingresos Brutos"});
         return null;
       }
 
@@ -137,14 +152,18 @@ export class AfipController {
     
       let data = {
         comercioId:req.body.comercioId,
-        cuit:req.body.cuit,
-        personaJuridica:req.body.personaJuridica,
+        razonSocial:req.body.razonSocial,
+        tipoDoc:req.body.tipoDoc,
+        nroDoc:req.body.nroDoc,
+        personaJuridica:req.body.personaJuridica,        
+        ingresosBrutos:req.body.ingresosBrutos,
         ptoVenta:req.body.ptoVenta,
         password:"",
         pem:req.body.pem,
         key:req.body.key    
       } 
-    
+
+      
       await bcrypt.hash(req.body.password, saltRounds, (err:any, hash:any) => {
         
         if(err)
@@ -153,6 +172,8 @@ export class AfipController {
         data.password = hash
         const afipRef = db.collection('afip');
         afipRef.doc(data.comercioId).set(data);
+
+        
     
         return  res.status(200).send("Registrado!");
       },(err:any)=>{
@@ -171,16 +192,24 @@ export class AfipController {
         db.collection('afip').doc(comercioId).get().then((doc:any)=>{
       
           if(doc.exists){
-            console.log(doc.data().cuit)
+            console.log(doc.data().nroDoc)
       
             bcrypt.compare(password, doc.data().password, function(err:any, result:any) {
       
               console.log(err)
               if(err !== undefined)
-                return  res.status(500).send(err);
-      
+                return  res.status(500).send(err);      
+
               if(result){     
-                let token = jwt.sign({cuit:doc.data().cuit,comercioId:doc.data().comercioId,ptoVenta:doc.data().ptoVenta}, "claveSecretaDelToken");     
+                let token = jwt.sign({
+                  razonSocial:doc.data().razonSocial,
+                  personaJuridica:doc.data().personaJuridica,
+                  ingresosBrutos:doc.data().ingresosBrutos,
+                  tipoDoc:doc.data().tipoDoc,
+                  nroDoc:doc.data().nroDoc,
+                  comercioId:doc.data().comercioId,
+                  ptoVenta:doc.data().ptoVenta
+                }, "claveSecretaDelToken");     
                 return res.status(200).send({token:token});
               }
               else{
@@ -310,55 +339,58 @@ export class AfipController {
             pedido.id = doc.id;
   
             let voucherTipo = EnumAfipTiposComprobantes.facturaC;
+            let CbteLetra = "C";
+
             if(req.user.personaJuridica == EnumAfipPersonaJuridica.responsableInscripto){
               if(pedido.clientePersonaJuridica == EnumAfipPersonaJuridica.responsableInscripto){
                 voucherTipo = EnumAfipTiposComprobantes.facturaA;
+                CbteLetra = "A";
               }
   
               if(pedido.clientePersonaJuridica != EnumAfipPersonaJuridica.responsableInscripto){
                 voucherTipo = EnumAfipTiposComprobantes.facturaB;
+                CbteLetra = "B"
               }
             }
-            
 
             const afip:any = await this.initAfip(req,db)    
             let puntoDeVenta = req.user.ptoVenta;      
             const voucherDate = parseInt(req.body.CbteFch.replace(/-/g, ''))          
-            const lastVoucherNumber = await afip.ElectronicBilling.getLastVoucher(puntoDeVenta,voucherTipo); //Devuelve la información del ultimo voucher
-            const voucherNumber = Number(lastVoucherNumber) +1;                    
-            const voucher = this.createVoucherFromPedido(pedido,voucherNumber,voucherDate,voucherTipo,puntoDeVenta)
-            let CbteLetra = "C";   
+                              
+            const voucher = await this.createVoucherFromPedido(afip,pedido,voucherDate,voucherTipo,puntoDeVenta)
+               
             try{
               const respuesta = await afip.ElectronicBilling.createVoucher(voucher);  
-              console.log("respuesta")
-              console.log(respuesta)
               
-
-             
-              if(voucherTipo == EnumAfipTiposComprobantes.facturaA){
-                CbteLetra = "A";
-              }
-              else if(voucherTipo == EnumAfipTiposComprobantes.facturaB){
-                CbteLetra = "B"
-              }
-              else if(voucherTipo == EnumAfipTiposComprobantes.facturaC){
-                CbteLetra = "C"
-              }
-
-              let datos = {afipFactura:{CbteLetra:CbteLetra,CbteTipo:voucherTipo,CAE:respuesta['CAE'],CAEFchVto:respuesta['CAEFchVto']}}
+              let fechaEmision = new Date()
+              let datos = {
+                afipFactura:{
+                  emisorRazonSocial:req.user.razonSocial,
+                  emisorTipoDoc:req.user.tipoDoc,
+                  emisorNroDoc:req.user.nroDoc,
+                  emisorPersonaJuridica:req.user.personaJuridica,
+                  ptoVenta:req.user.ptoVenta,
+                  ingresosBrutos:req.user.ingresosBrutos,
+                  CbteLetra:CbteLetra,
+                  CbteTipo:voucherTipo,
+                  CAE:respuesta['CAE'],
+                  CAEFchVto:respuesta['CAEFchVto'],
+                  voucherNumber:voucher.CbteHasta,
+                  fechaEmision:fechaEmision
+                }}
               
-              var writeOperation = await pedidoRef.set(datos,{merge:true})
+              var writeOperation = await pedidoRef.set(datos,{merge:true}) //lo seteamos desde el back para asegurarnos que se guarden los datos
               console.log(writeOperation)
 
-              this.guardarArchivoTA(req.user.comercioId,req.user.cuit,db)
-              return res.status(200).send({CbteTipo:voucherTipo, CAE:respuesta['CAE'], CAEFchVto:respuesta['CAEFchVto']});
+              this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
+              return res.status(200).send(datos);
     
               
             }
             catch(err){
               console.log("err")
               console.log(err)
-              this.guardarArchivoTA(req.user.comercioId,req.user.cuit,db)
+              this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
               return res.status(500).send({message:err.message});
             }
 
@@ -366,7 +398,7 @@ export class AfipController {
   
           }
           else{
-            this.guardarArchivoTA(req.user.comercioId,req.user.cuit,db)
+            this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
             res.status(200).send({message:"Pedido no existe"});
           }
         }).catch((err:any)=>{
@@ -392,21 +424,22 @@ export class AfipController {
             let pedido:any = doc.data();
             pedido.id = doc.id;
   
-            let voucherTipo = EnumAfipTiposComprobantes.notaCreditoA;
-            if(pedido.afipFactura.voucherTipo == EnumAfipTiposComprobantes.facturaB){
+            let voucherTipo = EnumAfipTiposComprobantes.notaCreditoC;
+
+            if(doc.data().afipFactura.voucherTipo == EnumAfipTiposComprobantes.facturaB){
               voucherTipo = EnumAfipTiposComprobantes.notaCreditoB;
             }
-            if(pedido.afipFactura.voucherTipo == EnumAfipTiposComprobantes.facturaC){
-              voucherTipo = EnumAfipTiposComprobantes.notaCreditoC;
+
+            if(doc.data().afipFactura.voucherTipo == EnumAfipTiposComprobantes.facturaA){
+              voucherTipo = EnumAfipTiposComprobantes.notaCreditoA;
             }
             
             const afip:any = await this.initAfip(req,db)    
             let puntoDeVenta = req.user.ptoVenta;      
             const voucherDate = parseInt(req.body.CbteFch.replace(/-/g, ''))          
-            const lastVoucherNumber = await afip.ElectronicBilling.getLastVoucher(puntoDeVenta,voucherTipo); //Devuelve la información del ultimo voucher
-            const voucherNumber = Number(lastVoucherNumber) +1;                    
-            const voucher = this.createVoucherFromPedido(pedido,voucherNumber,voucherDate,voucherTipo,puntoDeVenta)
-            
+                                
+            const voucher = await this.createVoucherFromPedido(afip,pedido,voucherDate,voucherTipo,puntoDeVenta,req.body.montoReembolso,null,null,null)
+                                 
             try{
               const respuesta = await afip.ElectronicBilling.createVoucher(voucher);  
               console.log("respuesta")
@@ -417,15 +450,15 @@ export class AfipController {
               var writeOperation = await pedidoRef.set(datos,{merge:true})
               console.log(writeOperation)
 
-              this.guardarArchivoTA(req.user.comercioId,req.user.cuit,db)
-              return res.status(200).send({CbteTipo:voucherTipo, CAE:respuesta['CAE'], CAEFchVto:respuesta['CAEFchVto']});
+              this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
+              return res.status(200).send(datos);
     
               
             }
             catch(err){
               console.log("err")
               console.log(err)
-              this.guardarArchivoTA(req.user.comercioId,req.user.cuit,db)
+              this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
               return res.status(500).send({message:err.message});
             }
 
@@ -433,7 +466,7 @@ export class AfipController {
   
           }
           else{
-            this.guardarArchivoTA(req.user.comercioId,req.user.cuit,db)
+            this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
             res.status(200).send({message:"Pedido no existe"});
           }
         }).catch((err:any)=>{
@@ -449,8 +482,8 @@ export class AfipController {
       
     }
 
-    guardarArchivoTA(comercioId:any,cuit:any,db:any){ //debido a que el archivo temp al finalizar la funcion desaparece lo guardamos en firestor y luego lo retomamos al iniciar afip
-      let TAfile = os.tmpdir()+'/TA-'+cuit+'-wsfe.json';
+    guardarArchivoTA(comercioId:any,nroDoc:any,db:any){ //debido a que el archivo temp al finalizar la funcion desaparece lo guardamos en firestor y luego lo retomamos al iniciar afip
+      let TAfile = os.tmpdir()+'/TA-'+nroDoc+'-wsfe.json';
       if (fs.existsSync(TAfile)) {
         console.log("Guardando archivo en documento")
         fs.readFile(TAfile,'utf-8',function(err:any, jsonData:any){
@@ -470,9 +503,12 @@ export class AfipController {
 
       
 
-    createVoucherFromPedido(pedido:any,voucherNumber:any,voucherDate:any,voucherTipo:any,puntoDeVenta:any,FchServDesde = null,FchServHasta=null,FchVtoPago=null){
+    async createVoucherFromPedido(afip:any,pedido:any,voucherDate:any,voucherTipo:any,puntoDeVenta:any,montoReembolso=0,FchServDesde = null,FchServHasta=null,FchVtoPago=null){
       let voucher:AfipVoucher = new AfipVoucher();    
       
+      const lastVoucherNumber = await afip.ElectronicBilling.getLastVoucher(puntoDeVenta,voucherTipo); //Devuelve la información del ultimo voucher
+      const voucherNumber = Number(lastVoucherNumber) +1;
+
       voucher.CantReg = "1";
       voucher.PtoVta = puntoDeVenta; // Punto de venta          
       voucher.CbteTipo = voucherTipo; //6,  // Tipo de comprobante (ver tipos disponibles) A B o C depende del tipo de persona juridica (viene del frontend)
@@ -492,32 +528,58 @@ export class AfipController {
         impIVA = "0"
         delete voucher.Iva
       }
-      else{  //Saco calculos del Iva para facturas tipo A y B
+
+      //Debe discrimar IVA
+      if(voucherTipo == EnumAfipTiposComprobantes.facturaA || voucherTipo == EnumAfipTiposComprobantes.facturaB){  //Saco calculos del Iva para facturas tipo A
+
+        let impuesto = 0;
 
         if(pedido.productos.length > 0){           
           pedido.productos.forEach((item:any) => {
+            impuesto = item.impuestoPorcentaje;
             console.log(item.nombre)
             impNeto += (Number(item.precioTotal) / (1+Number(item.impuestoPorcentaje))).toFixed(2)
             impIVA += (Number(impNeto) * Number(item.impuestoPorcentaje)).toFixed(2)
           });
         }
       
-        if(pedido.servicios.length > 0){           
-          pedido.servicios.forEach((item:any) => {
-            impNeto += (Number(item.precioTotal) / (1+Number(item.impuestoPorcentaje))).toFixed(2)
-            impIVA += (Number(impNeto) * Number(item.impuestoPorcentaje)).toFixed(2)
+
+        if(pedido.recargos.length > 0){           
+          pedido.recargos.forEach((item:any) => {
+            console.log(item.nombre)
+            impNeto += (Number(item.monto) / (1+Number(impuesto))).toFixed(2)
+            impIVA += (Number(impNeto) * Number(impuesto)).toFixed(2)
           });
         }
+
+        //No recuerdo si el descuento se factura
+      /*  if(pedido.descuentos.length > 0){           
+          pedido.descuentos.forEach((item:any) => {
+            console.log(item.nombre)
+            impNeto += (Number(item.monto) / (1+Number(impuesto))).toFixed(2)
+            impIVA += (Number(impNeto) * Number(impuesto)).toFixed(2)
+          });
+        }*/
         
       
         impTotal = (Number(impNeto) + Number(impIVA)).toFixed(2);
-
+        voucher.Iva=[]
         let iva = new IvaItem()
         iva.Id= "5";
         iva.BaseImp = impNeto;
         iva.Importe = impIVA;
         voucher.Iva.push(iva)
 
+      }
+
+      if(voucherTipo == EnumAfipTiposComprobantes.notaCreditoA || voucherTipo == EnumAfipTiposComprobantes.notaCreditoB || voucherTipo == EnumAfipTiposComprobantes.notaCreditoC){
+        voucher.ImpTotal = montoReembolso.toString()
+        voucher.CbtesAsoc = [];
+        let voucherAsociado = new CbteAsoc();
+        voucherAsociado.Tipo = pedido.afipFactura.CbteTipo;
+        voucherAsociado.PtoVta = puntoDeVenta;
+        voucherAsociado.Nro = pedido.afipFactura.voucherNumber;
+        voucher.CbtesAsoc.push(voucherAsociado)
       }
 
       if(pedido.productos.length > 0){
@@ -532,9 +594,9 @@ export class AfipController {
       }
       
      
-        if(pedido.productos.length > 0 && pedido.servicios.length > 0){
-          concepto =  EnumAfipConceptos.productosServicios;
-        }
+      if(pedido.productos.length > 0 && pedido.servicios.length > 0){
+        concepto =  EnumAfipConceptos.productosServicios;
+      }
                     
 
       let tipoDoc = EnumAfipTiposDocumentos.consumidorFinal;      

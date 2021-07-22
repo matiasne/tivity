@@ -6,6 +6,7 @@
   <ion-label style="color:black">                
     <h2><b>{{item.nombre}}</b> 
       <span *ngIf="item.suspendido == 1"> <b style="color: red;"> Suspendido</b></span>
+      <span *ngIf="item.reembolsar == true"> <b style="color: red;"> Reembolsado</b></span>
     </h2>
     <p>
       <span *ngIf="item.valorPor && (item.valorPor * item.cantidad)==1 && item.unidad == 'unidades'">

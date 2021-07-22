@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dispositivos Emparejados</ion-title>
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <span *ngFor="let printer of impresoras">
+    <app-item-bluetooth-device
+      [item] = "printer"
+      (seleccionar) = seleccionar(printer)
+    ></app-item-bluetooth-device>
+  </span>
+</ion-content>

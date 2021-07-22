@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ComerciosService } from '../Services/comercios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CajasService } from '../Services/cajas.service';
 import { VentasService } from '../Services/ventas.service';
 import { LoadingService } from '../Services/loading.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Caja } from '../models/caja';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { MovimientosService } from '../Services/movimientos.service';
 import { Comercio } from '../models/comercio';
+import { PedidoService } from '../Services/pedido.service';
+import { Pedido } from '../models/pedido';
+import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
+import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
 
 @Component({
   selector: 'app-details-caja',
@@ -46,7 +50,11 @@ export class DetailsCajaPage implements OnInit {
     public alertController:AlertController,
     private movimientosService:MovimientosService,
     private route:ActivatedRoute,
-    private comercioService:ComerciosService
+    private comercioService:ComerciosService,
+    private pedidosService:PedidoService,
+    public navParametrosService:NavegacionParametrosService,
+    private modalController:ModalController,
+    public changeRef:ChangeDetectorRef,
   ) { 
     this.comercio = new Comercio()
     this.caja = new Caja();
@@ -81,16 +89,17 @@ export class DetailsCajaPage implements OnInit {
 
   refrescar(){
     
-    
+    this.cajasService.get(this.caja.id).subscribe(data=>{
+      this.caja.asignarValores(data);
+      console.log(data)
+      console.log("Cambiando valores de caja!")
+      this.changeRef.detectChanges()   
+    })
     
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter(){    
     
-    this.cajasService.get(this.caja.id).subscribe(data=>{
-      this.caja.asignarValores(data);
-      console.log("Cambiando valores de caja!")
-    })
     this.refrescar();        
           
   }
@@ -150,12 +159,37 @@ export class DetailsCajaPage implements OnInit {
 
             
             this.movimientosService.eliminarMovimientoCaja(this.caja,item);
-           
+            this.refrescar();
           }
         }
       ]
     });
     await alert.present();    
+  }
+
+  seleccionar(item){
+    if(item.pedidoId){
+      let obs = this.pedidosService.get(item.pedidoId).subscribe(async data=>{
+
+        let editarPedido = new Pedido();
+        editarPedido.asignarValores(data);
+        
+        this.navParametrosService.param = editarPedido;
+      // this.router.navigate(['details-pedido'])
+
+        const modal = await this.modalController.create({
+          component: DetailsPedidoPage,
+          id:'detail-pedido'      
+        });
+        modal.onDidDismiss()
+        .then((retorno) => {
+          this.refrescar()
+        })
+
+        
+        await modal.present();  
+      })
+    }
   }
 
 

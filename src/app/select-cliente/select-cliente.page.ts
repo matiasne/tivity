@@ -137,7 +137,7 @@ export class SelectClientePage implements OnInit {
     return await modal.present();
 }
 
-  cancelar(){
+  cerrar(){
     this.modalCtrl.dismiss();
   }
 

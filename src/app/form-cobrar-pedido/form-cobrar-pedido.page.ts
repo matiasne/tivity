@@ -8,7 +8,8 @@ import { EnumTipoDescuento } from '../models/descuento';
 import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
-import { EnumEstadoCocina, EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCocina } from 'src/app/models/producto';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { AuthenticationService } from '../Services/authentication.service';
 import { CajasService } from '../Services/cajas.service';
@@ -16,7 +17,7 @@ import { ClientesService } from '../Services/clientes.service';
 import { ComerciosService } from '../Services/comercios.service';
 import { CtaCorrientesService } from '../Services/cta-corrientes.service';
 import { CarritoService } from '../Services/global/carrito.service';
-import { ImpresoraService } from '../Services/impresora.service';
+import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { LoadingService } from '../Services/loading.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { MovimientosService } from '../Services/movimientos.service';
@@ -25,7 +26,7 @@ import { ProductosService } from '../Services/productos.service';
 import { ToastService } from '../Services/toast.service';
 
 @Component({
-  selector: 'app-form-cobrar-pedido',
+  selector: 'app-form-cobrar-pedido', 
   templateUrl: './form-cobrar-pedido.page.html',
   styleUrls: ['./form-cobrar-pedido.page.scss'],
 })
@@ -37,14 +38,15 @@ export class FormCobrarPedidoPage implements OnInit {
   public enumTipo = EnumTipoDescuento
 
   @Input() pedido:Pedido;
-  @Input() subPedidos = []
   @Input() comercio:Comercio;
   
   public cajas = []
   public cajaSeleccionadaIndex=0;
   public cajaSeleccionada:Caja;
-  public metodoPagoSeleccionado ="";
-  public cantidadMetodos=0;
+  public metodoPagoSeleccionado =[];
+
+  public pagoTotal = 0;
+  public vuelto = 0;
 
   public ctasCorrientes =[];
 
@@ -73,7 +75,7 @@ export class FormCobrarPedidoPage implements OnInit {
     private carritoService:CarritoService,
     private modalNotificacion:ModalNotificacionService,
     private ctasCorrientesService:CtaCorrientesService,
-    private afipService:AfipServiceService,
+    public afipService:AfipServiceService,
     private loadingService:LoadingService,
     private alertController:AlertController
   ) { 
@@ -82,9 +84,12 @@ export class FormCobrarPedidoPage implements OnInit {
 
   ngOnInit() {
 
-    if(localStorage.getItem('facturar') == "true")
+    if(this.comercio.config.afip && (localStorage.getItem('facturar') == "true"))
       this.facturar = true
-
+    else{
+      this.facturar = false;
+    }
+    console.log(this.facturar)
 
     console.log(this.pedido)
     this.cajasService.list().subscribe((cajas:any)=>{      
@@ -115,14 +120,35 @@ export class FormCobrarPedidoPage implements OnInit {
         })
       })
     }
-
   }
 
   updateFacturar(event){
     console.log(event.target.checked)
-    localStorage.setItem('facturar',event.target.checked)
+    if(this.comercio.config.afip)
+      localStorage.setItem('facturar',event.target.checked)
   }
 
+
+  setMontos(){
+
+    if(this.metodoPagoSeleccionado.includes("efectivo")){
+      this.pedido.montoPagoEfectivo = this.getTotal();
+    }
+    else if(this.metodoPagoSeleccionado.includes("debito")){
+      this.pedido.montoPagoDebito = this.getTotal();
+    }
+    else if(this.metodoPagoSeleccionado.includes("credito")){
+      this.pedido.montoPagoCredito = this.getTotal();
+    }
+    else if(this.metodoPagoSeleccionado.includes("ctaCorriente")){
+      this.pedido.montoPagoCtaCorriente = this.getTotal();
+    }
+  }
+
+  setPagoTotal(){
+    this.pagoTotal = this.pedido.montoPagoEfectivo + this.pedido.montoPagoDebito + this.pedido.montoPagoCredito + this.pedido.montoPagoCtaCorriente
+    this.vuelto = this.getTotal() - this.pagoTotal;
+  }
  
   async cobrar(){
 
@@ -131,83 +157,107 @@ export class FormCobrarPedidoPage implements OnInit {
       return;
     }
     
-    if(this.metodoPagoSeleccionado == ""){
+    if(this.metodoPagoSeleccionado.length == 0){
       this.toastServices.alert("Por favor seleccione un método de pago antes de continuar","De este modo podrá tener un registro de los pagos");
       return;
     }
+
     
-    if(this.metodoPagoSeleccionado == "ctaCorriente"){
+    if(this.metodoPagoSeleccionado.includes("ctaCorriente")){
       if(this.ctaCorrienteSelecccionadaId == ""){
         this.toastServices.alert("Por favor seleccione una cuenta corriente antes de continuar","");
         return;
       }
     }  
+    if(this.metodoPagoSeleccionado.includes("efectivo") && this.pedido.montoPagoEfectivo === 0 || this.pedido.montoPagoEfectivo === null){
+        this.toastServices.alert("Por favor ingrese el monto en efectivo","");
+        return;     
+    }  
 
+
+    if(this.metodoPagoSeleccionado.includes("debito") && this.pedido.montoPagoDebito === 0 || this.pedido.montoPagoDebito === null){
+      this.toastServices.alert("Por favor ingrese el monto en débito","");
+      return;
+    } 
+
+    if(this.metodoPagoSeleccionado.includes("credito") && this.pedido.montoPagoCredito === 0 || this.pedido.montoPagoCredito === null){
+      this.toastServices.alert("Por favor ingrese el monto en crédito","");
+      return;
+    }  
     
-
-    this.loadingService.presentLoadingText("Creando factura electrónica")
+    if(this.metodoPagoSeleccionado.includes("ctaCorriente") && this.pedido.montoPagoCtaCorriente === 0 || this.pedido.montoPagoCredito === null){
+      this.toastServices.alert("Por favor ingrese el monto en cuenta corriente","");
+      return;
+    }  
 
     try{
 
       if(this.facturar){
-        let res = await this.afipService.facturarPedido(this.pedido.id)
+        this.loadingService.presentLoadingText("Creando factura electrónica")
+        let res:any = await this.afipService.facturarPedido(this.pedido.id)
         console.log(res);
+        this.pedido.afipFactura = res.afipFactura //para poder imprimirlo
         this.loadingService.dismissLoading();
-      }
+      } 
 
       this.cajaSeleccionada = this.cajas[this.cajaSeleccionadaIndex];
       console.log(this.cajaSeleccionada)
 
-      if(this.pedido.productos.length > 0){
-
-        let productosId = [];
-        this.pedido.productos.forEach(p =>{
-    
+      if(this.pedido.productos.length > 0){      
+        this.pedido.productos.forEach(p =>{    
           delete p.keywords;     
-
           let deltaStock = 0;
           if(p.valorPor)
             deltaStock =  - (Number(p.cantidad) * Number(p.valorPor));
           else
-            deltaStock = - Number(p.cantidad);
-          
+            deltaStock = - Number(p.cantidad);          
           this.productosService.updateStock(deltaStock,p.id)
-          productosId.push(p.id);        
         })
     
         
         
-        if(this.comercio.config.movimientosCajas){
-
-          if(this.metodoPagoSeleccionado != "ctaCorriente"){
+        if(this.comercio.config.movimientosCajas){        
             
-            var pago = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getNombre());      
-            pago.id = this.firestore.createId();
-            pago.tipo = this.enumTipoMovimientoCaja.pago;
-            pago.clienteId = this.pedido.clienteId;
-            pago.cajaId = this.cajaSeleccionada.id;
-            pago.metodoPago = this.metodoPagoSeleccionado;
-            pago.monto= this.getTotal();
-            pago.vendedorNombre = this.authenticationService.getNombre();         
-            pago.motivo="Venta de productos";
+          this.metodoPagoSeleccionado.forEach(metodo =>{
+            let monto = 0;
+            if(metodo === "efectivo"){
+              monto = this.pedido.montoPagoEfectivo;
+            }
+            if(metodo === "debito"){
+              monto = this.pedido.montoPagoDebito;
+            }
+            if(metodo === "credito"){
+              monto = this.pedido.montoPagoCredito;
+            }
 
-            this.movimientosService.setearPath(this.cajaSeleccionada.id)   
-            this.movimientosService.add(pago).then(data=>{
-              console.log(data)
-            });
+            if(metodo != "ctaCorriente"){
+
+              
+              this.movimientosService.agregarMovimientoCaja(this.cajaSeleccionada.id,this.pedido.clienteId,this.enumTipoMovimientoCaja.pago,"",metodo, monto,
+              "Venta de productos")
+
+            }
+            
+              
+          })
+            
+          if(this.metodoPagoSeleccionado.includes("ctaCorriente")){
+
+            if(this.metodoPagoSeleccionado.includes("ctaCorriente")){     
+
+              this.movimientosService.agregarMovimientoEnCtaCorriente(
+                this.ctaCorrienteSelecccionadaId,
+                this.pedido.clienteId,
+                "",
+                "",
+                "",
+                - this.pedido.montoPagoCtaCorriente,
+                "Cobro de productos"
+              )
+            } 
+           
+
           }
-          else{
-
-            var extraccion = new MovimientoCtaCorriente(this.authenticationService.getUID(), this.authenticationService.getNombre());
-            extraccion.id = this.firestore.createId();
-            extraccion.clienteId=this.pedido.clienteId;
-            extraccion.ctaCorrienteId=this.ctaCorrienteSelecccionadaId;
-            extraccion.motivo="Venta de productos";
-            extraccion.monto = -Number(this.getTotal());
-            extraccion.vendedorNombre = this.authenticationService.getNombre();
-            console.log(extraccion.vendedorNombre);
-            this.movimientosService.crearMovimientoCtaCorriente(extraccion);
-          }           
         }
       }         
 
@@ -218,14 +268,7 @@ export class FormCobrarPedidoPage implements OnInit {
       this.pedido.cajaUtilizada = this.cajaSeleccionada.id;  
       this.pedido.total = this.getTotal();    
 
-      if(this.subPedidos.length > 0){ //si es un array de pedidos porque viene de cierre de mesa      
-          this.subPedidos.forEach(pedido => {       
-          pedido.statusCobro = this.cEstado.cobrado;
-          pedido.metodoPago = this.metodoPagoSeleccionado;  
-          this.actualizarPedido()
-        });      
-      }
-      else if(this.pedido.id == ""){
+      if(this.pedido.id == ""){
         this.pedido.direccion = JSON.parse(JSON.stringify(this.pedido.direccion));
         this.pedidosService.add(this.pedido).then(data=>{
           console.log("agregado pedido")
@@ -233,19 +276,25 @@ export class FormCobrarPedidoPage implements OnInit {
         })
       }
       else{        
-        this.actualizarPedido()
-      }
-      console.log(this.pedido);
-      this.actualizarMontosCaja()
-      
-      
-      
+        //solamente actualizar estos valores!!!! así no pisa los que actualiza el backend
+        let update = {
+          afipFactura: this.pedido.afipFactura,
+          statusCobro : this.cEstado.cobrado,
+          metodoPago : this.metodoPagoSeleccionado, 
+          montoPagoEfectivo:this.pedido.montoPagoEfectivo,
+          montoPagoDebito:this.pedido.montoPagoDebito,
+          montoPagoCredito:this.pedido.montoPagoCredito,
+          montoPagoCtaCorriente:this.pedido.montoPagoCtaCorriente,
+          cajaUtilizada : this.cajaSeleccionada.id,  
+          total : this.getTotal()    
+        }
+        this.pedido.direccion = JSON.parse(JSON.stringify(this.pedido.direccion));
+        this.pedidosService.setMerge(this.pedido.id,update).then(data=>{
+          console.log(data)
+        }) 
+      }    
 
-      let impresora = this.impresoraService.obtenerImpresora();
-      if(impresora.pedidosFinalizar){
-        this.imprimir()
-      }
-      
+      this.imprimir()           
         
       this.modalNotificacion.success("Cobrado","El pedido ha sido cobrado.")
       this.modalController.dismiss("cobrado")   
@@ -259,21 +308,6 @@ export class FormCobrarPedidoPage implements OnInit {
     
    
   }  
-
-  actualizarMontosCaja(){
-    if(this.metodoPagoSeleccionado == "efectivo"){
-      this.cajaSeleccionada.totalEfectivo = Number(this.cajaSeleccionada.totalEfectivo)+ Number(this.getTotal());
-    }
-    if(this.metodoPagoSeleccionado == "credito"){
-      this.cajaSeleccionada.totalCredito = Number(this.cajaSeleccionada.totalCredito)+ Number(this.getTotal());
-    }
-    if(this.metodoPagoSeleccionado == "debito"){
-      this.cajaSeleccionada.totalDebito = Number(this.cajaSeleccionada.totalDebito) + Number(this.getTotal());
-    }
-
-    const param1 = JSON.parse(JSON.stringify(this.cajaSeleccionada));
-    this.actualizarPedido()
-  }
 
   setSavedCaja(){
     this.cajaSeleccionadaIndex = Number(localStorage.getItem('cajaSeleccionadaIndex'));
@@ -292,46 +326,37 @@ export class FormCobrarPedidoPage implements OnInit {
  
       var setear = "";  
       
-      this.cantidadMetodos = 0;
+      let cantidadMetodos = 0;
   
      
       
       if(this.cajas[this.cajaSeleccionadaIndex].debito){
         setear = "debito"; 
         this.metodoTexto = "Solo Débito";     
-        this.cantidadMetodos++;
+        cantidadMetodos++;
       }
   
       if(this.cajas[this.cajaSeleccionadaIndex].credito){
         setear = "credito";
         this.metodoTexto = "Solo Crédito";    
-        this.cantidadMetodos++;
+        cantidadMetodos++;
       }    
   
       if(this.cajas[this.cajaSeleccionadaIndex].efectivo){
         setear = "efectivo";
         this.metodoTexto = "Solo Efectivo";    
-        this.cantidadMetodos++;
+        cantidadMetodos++;
       }    
        
-      this.metodoPagoSeleccionado ="";
-      if(this.cantidadMetodos == 1){    
-        this.metodoPagoSeleccionado = setear;    
+      this.metodoPagoSeleccionado =[];
+      if(cantidadMetodos == 1){    
+        this.metodoPagoSeleccionado.push(setear);    
       } 
   }
 
-  actualizarPedido(){
-    if(this.pedido.id){
-      this.pedido.direccion = JSON.parse(JSON.stringify(this.pedido.direccion));
-      this.pedidosService.setMerge(this.pedido.id,this.pedido).then(data=>{
-        console.log(data)
-      }) 
-    }
-  }  
 
   public getTotal(){ 
     this.total =  this.pedidosService.getTotal(this.pedido) 
-    console.log(this.total)
     return this.total
   }
 

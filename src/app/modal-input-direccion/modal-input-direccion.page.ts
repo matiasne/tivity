@@ -233,7 +233,7 @@ export class ModalInputDireccionPage implements OnInit {
     this.modalCtrl.dismiss(this.localizacion);
   }
 
-  cancelar(){
+  cerrar(){
     this.modalCtrl.dismiss()
   }
 

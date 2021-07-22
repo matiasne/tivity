@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Detalle Pedido</ion-title>    
+    <ion-title  size="small">Detalle Pedido</ion-title>    
   </ion-toolbar>
 </ion-header>
 
@@ -37,31 +37,7 @@
 </ion-content>
 
 <ion-footer *ngIf="order.statusCobro != cEstado.reembolsado" class="ion-no-border ion-padding">    
-  <ion-grid *ngIf="order.payment_method == 'cod' && order.statusCobro != cEstado.suspendido">
-    <ion-row>
-      <ion-col size="6">
-        <ion-item *ngIf="cajas.length > 0" class="item-card">
-          <ion-label position="floating">Caja</ion-label>
-          <ion-select [(ngModel)]="cajaSeleccionadaIndex" (ionChange)="setearCaja()">
-            <span *ngFor="let caja of cajas;let i=index">
-              <ion-select-option [value]="i" selected>{{caja.nombre}}</ion-select-option>
-            </span>          
-          </ion-select> 
-        </ion-item>
-       
-      </ion-col>
-      <ion-col size="6">
-        <ion-item class="item-card" *ngIf="cajas[cajaSeleccionadaIndex]">
-          <ion-label position="floating">Método</ion-label>
-          <ion-select [(ngModel)]="metodoPagoSeleccionado">
-            <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].efectivo" [value]="'efectivo'">Efectivo</ion-select-option>
-            <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].debito" [value]="'debito'">Débito</ion-select-option>
-            <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].credito" [value]="'credito'">Crédito</ion-select-option>
-          </ion-select>    
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+ 
    
   <ion-grid *ngIf="order.payment_method != 'cod'">
     <ion-row>

@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { FormImpresoraConfigPageRoutingModule } from './form-impresora-config-routing.module';
 
 import { FormImpresoraConfigPage } from './form-impresora-config.page';
+import { ComponentsModule } from '../Components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     ReactiveFormsModule,
     FormsModule,
     IonicModule,

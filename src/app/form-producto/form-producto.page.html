@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{titulo}} <p class="header-subtitulo">{{producto.nombre}}</p></ion-title>    
+    <ion-title  size="small">{{titulo}} <p class="header-subtitulo">{{producto.nombre}}</p></ion-title>    
   </ion-toolbar>
 </ion-header>
 
@@ -77,7 +77,7 @@
         <ion-row>
           <ion-col>
             <ion-item [class.invalid]="submitted && !datosForm.controls.precio.valid">
-              <ion-label color="primary" position="floating">Precio *</ion-label>
+              <ion-label color="primary" position="floating">Precio (Iva incluido) *</ion-label>
               <ion-input name="precio" type="number" formControlName="precio" required></ion-input>              
             </ion-item>
             <div *ngIf="submitted && f.precio.errors" class="invalid-feedback">

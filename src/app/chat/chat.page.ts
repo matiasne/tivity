@@ -18,8 +18,8 @@ export class ChatPage implements OnInit {
   @Input() objeto
   @Input() id
   private obs:any
-  private mensajes =[];
-  private user:any
+  public mensajes =[];
+  public user:any
   constructor(
     private authService:AuthenticationService,
     private comentariosService:ComentariosService ,

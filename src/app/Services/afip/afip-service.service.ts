@@ -19,7 +19,18 @@ export class AfipServiceService {
     private toastService:ToastService
   ) { }
 
+
+  guardarPasswordValidado(password){
+    localStorage.setItem('AfipPassword'+this.comerciosService.getSelectedCommerceValue().id,password)
+  }
+
   async login(){
+    let pass = localStorage.getItem('AfipPassword'+this.comerciosService.getSelectedCommerceValue().id)
+    console.log(pass)
+    if(pass == null){
+      return
+    } 
+
     let httpHeaders = new HttpHeaders({
 
     });      
@@ -29,7 +40,7 @@ export class AfipServiceService {
 
     let body ={
       comercioId:this.comerciosService.getSelectedCommerceValue().id,
-      password:localStorage.getItem('AfipPassword'+this.comerciosService.getSelectedCommerceValue().id)
+      password:pass
     }
     
     this.http.post(environment.afipUrl+"/login",body,options).subscribe((data:any)=>{
@@ -37,9 +48,7 @@ export class AfipServiceService {
       this.voucherTypes()
     },err=>{
       console.log(err)
-    })
-    
-   
+    })  
   }
 
   getTiposFactura(): Observable<any>{
@@ -107,7 +116,7 @@ export class AfipServiceService {
     return this.http.post(environment.afipUrl+"/createFacturaFromPedido",body,options).toPromise()
   }
 
-  async notaCreditoPedido(pedidoId){
+  async notaCreditoPedido(pedidoId,montoReembolso){
     let httpHeaders = new HttpHeaders({
       'Authorization' : 'Bearer '+localStorage.getItem('afipToken')
     });      
@@ -121,7 +130,8 @@ export class AfipServiceService {
 
     let body ={
       pedidoId:pedidoId,
-      CbteFch:fecha
+      CbteFch:fecha,
+      montoReembolso:montoReembolso
     }
     
     return this.http.post(environment.afipUrl+"/createNotaCreditoFromPedido",body,options).toPromise()
@@ -140,6 +150,41 @@ export class AfipServiceService {
 
     return [year, month, day].join('-');
 }
+
+getURLforQR(pedido){
+
+  let url = "https://www.afip.gob.ar/fe/qr/?p="
+
+  let fecha = pedido.afipFactura.fechaEmision 
+  //dar formato a fecha
+  //let fechaFormateada = this.formatDate(pedido.afipFactura.fechaEmision.toDate())
+
+  let fechaFormateada = fecha.substring(0,10)
+
+  console.log(fechaFormateada)
+
+  let json = {
+    ver:1,
+    fecha:"2021-10-13", //"2020-10-13"
+    cuit:pedido.afipFactura.emisorNroDoc,
+    ptoVta:pedido.afipFactura.ptoVenta,
+    tipoCmp:pedido.afipFactura.CbteTipo,
+    nroCmp:pedido.afipFactura.voucherNumber,
+    importe:pedido.total,
+    moneda:"ARS",
+    ctz:1,
+    tipoDocRec:pedido.clienteDoc,
+    nroDocRec:pedido.clienteDocTipo,
+    tipoCodAut:"E",
+    codAut: pedido.afipFactura.CAE
+  }  
+
+  let base64string = btoa(JSON.stringify(json))
+  console.log(atob(base64string))
+
+  return url+base64string;
+}
+
 
 
 }

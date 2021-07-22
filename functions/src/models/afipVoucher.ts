@@ -62,13 +62,13 @@ export class IvaItem {
     }
 }
 
-export class CbtesAsoc{
+export class CbteAsoc{
     public Tipo ="";
     public PtoVta ="";
     public Nro="";
     public Cuit="";
 
-    public asignarValores(init?: Partial<CbtesAsoc>) {
+    public asignarValores(init?: Partial<CbteAsoc>) {
         Object.assign(this, init);
     }
 }
@@ -125,7 +125,8 @@ export class AfipVoucher{
     public ImpTrib=""; //esto se agrega cuando es un adquirido
     public MonId=""; //esto se agrega cuando es un adquirido
     public MonCotiz=""; //esto se agrega cuando es un adquirido
-    [Iva: string]: any
+    [Iva: string]: any;
+    
     //public Iva?=[]; //esto se agrega cuando es un adquirido
     
 

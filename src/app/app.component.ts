@@ -18,10 +18,11 @@ import { UsuariosService } from './Services/usuarios.service';
 import { Network } from '@ionic-native/network/ngx';
 import { PedidoService } from './Services/pedido.service';
 import { Printer } from '@ionic-native/printer/ngx';
-import { ImpresoraService } from './Services/impresora.service';
+import { ImpresoraService } from './Services/impresora/impresora.service';
 import { RolesService } from './Services/roles.service';
 import { Environment } from '@ionic-native/google-maps';
 import { AfipServiceService } from './Services/afip/afip-service.service';
+import { BluetoothService } from './Services/bluetooth.service';
 
 @Component({
   selector: 'app-root',
@@ -128,9 +129,10 @@ export class AppComponent implements OnInit {
     public presenceService:PresenceService,
     private usuariosService:UsuariosService,
     private usuarioService:UsuariosService,
-    private impresoraService:ImpresoraService,
+    private bluetoothService:BluetoothService,
     private rolesService:RolesService,
-    private afipService:AfipServiceService
+    private afipService:AfipServiceService,
+    private impresoraService:ImpresoraService
   ) {
     this.comercioSeleccionado = new Comercio();
     
@@ -155,7 +157,7 @@ export class AppComponent implements OnInit {
 
       this.statusBar.styleDefault();
       
-
+      
      
 
       /*this.notifiacionesDesktopService.requestPermission();
@@ -174,7 +176,7 @@ export class AppComponent implements OnInit {
         };
       });
 
-      this.impresoraService.bluetoothEnable();  
+      this.bluetoothService.enable();
 
       this.authService.getActualUserIdObservable().subscribe(uid=>{       
 
@@ -218,6 +220,9 @@ export class AppComponent implements OnInit {
           })
         
           if (this.platform.is('cordova')) {
+
+            this.impresoraService.conectarImpresora()
+
             this.fcm.subscribeToTopic('gestion');
         
             this.fcm.getToken().then(token => {     
@@ -239,11 +244,8 @@ export class AppComponent implements OnInit {
         }    
       });      
 
-     /* let impresora = this.impresoraService.obtenerImpresora()
-      if(impresora.bluetooth){
-        this.impresoraService.conectarBluetoothEImpresora()
-      }*/       
-
+      
+      
     });
   }
 

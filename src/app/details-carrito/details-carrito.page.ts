@@ -19,7 +19,6 @@ import { Comercio } from '../models/comercio';
 import { Pedido } from '../models/pedido';
 import { PedidoService } from '../Services/pedido.service';
 import { AuthenticationService } from '../Services/authentication.service';
-import { ImpresoraService } from '../Services/impresora.service';
 import { ComentariosService } from '../Services/comentarios.service';
 import { async } from 'rxjs/internal/scheduler/async';
 import { Comentario } from '../models/comentario';
@@ -32,6 +31,7 @@ import { ModalNotificacionService } from '../Services/modal-notificacion.service
 import { ModalInputDireccionPage } from '../modal-input-direccion/modal-input-direccion.page';
 import { Localizacion } from '../models/localizacion';
 import { FormMesaPage } from '../form-mesa/form-mesa.page';
+import { ImpresoraService } from '../Services/impresora/impresora.service';
 
 @Component({
   selector: 'app-details-carrito',
@@ -64,7 +64,6 @@ export class DetailsCarritoPage implements OnInit {
     private alertController:AlertController,
     private modalNotificacion:ModalNotificacionService
   ) {
-    this.impresora = this.impresoraService.obtenerImpresora()
     this.comercio = new Comercio();
     this.carrito = new Pedido(); 
 
@@ -101,24 +100,11 @@ export class DetailsCarritoPage implements OnInit {
   } 
 
   atras(){
-    
-/*   if(this.back == "undefined"){ 
-      console.log("!!!!!!!")
-      let options: AnimationOptions = {
-        animationDirection: 'forward',
-       }
-      
-      this.navCtrl.back(options);
-   }
-    else{
-      this.router.navigate([this.back])
-    }*/
     this.modalController.dismiss()
   }
 
   async cancelar(){
     this.modalController.dismiss();
-    //this.navCtrl.back();
   }
 
 
@@ -135,11 +121,10 @@ export class DetailsCarritoPage implements OnInit {
  
 
   crearPedido(){
+    this.imprimir()   
     this.carritoService.crearPedido()
-
    
     this.atras()
-
   }  
 
   imprimir(){
@@ -307,6 +292,10 @@ export class DetailsCarritoPage implements OnInit {
 
   eliminarDireccion(){
     this.carrito.direccion = new Localizacion();
+  }
+
+  cerrar(){
+    this.modalController.dismiss()
   }
 
 }

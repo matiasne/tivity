@@ -8,6 +8,8 @@
           <div class="encabezado-time">
             <ion-icon name="time-outline"></ion-icon>
             {{item.createdAt.toDate() | date:'hh:mm aaa dd/MM/yy'}}
+            <ion-icon name="receipt-outline"></ion-icon>
+            {{item.comanda.numero}}
           </div>              
         </ion-col>
       </ion-row>
@@ -22,40 +24,86 @@
           <div class="encabezado-time">
             <ion-icon name="time-outline"></ion-icon>
             {{item.createdAt.toDate() | date:'hh:mm aaa dd/MM/yy'}}
+            <ion-icon name="receipt-outline"></ion-icon>
+            {{item.comanda.numero}}
           </div>              
         </ion-col>
       </ion-row>
     </div> 
         
-    <div class="contenido-card-pedido ion-padding">     
-      
-      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.rechazado" style="color: red;">Rechazado por Cocina<br></span>
-      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.tomado" style="color: green;">En Curso<br></span>
-      <span *ngIf="comercio.config.comandas && item.statusComanda == pEstado.solicitado" style="color: blue;"> Solicitado<br></span>
-      <span *ngIf="item.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido </b><br></span>
-      <span *ngIf="item.statusCobro == cEstado.cobrado"> <b style="color: green;"> Cobrado ({{item.metodoPago}})</b><br></span> 
-      <span *ngIf="item.statusCobro == cEstado.reembolsado"> <b style="color: red;"> Reembolsado</b><br></span> 
+    <div class="contenido-card-pedido">     
+      <ion-row>
+        <span class="pedido-item" *ngIf="comercio.config.comandas">
+          <img style="width:18px;" src="../../../assets/img/chef_hat_icon.fw.png" alt=""> 
+          <span *ngIf="item.comanda.estado == pEstado.rechazado" style="color: red;">Rechazado</span>
+          <span *ngIf="item.comanda.estado == pEstado.tomado" style="color: blue;">En Curso</span>
+          <span *ngIf="item.comanda.estado == pEstado.solicitado" style="color: blue;"> Solicitado</span>
+          <span *ngIf="item.comanda.estado == pEstado.completo" style="color: green;"> Listo</span>
+        </span> 
+      </ion-row>    
+       
+      <ion-row>
+        <span class="pedido-item" *ngIf="item.statusCobro != cEstado.pendiente">
+        
+          <span *ngIf="item.statusCobro == cEstado.suspendido" style="color: red;">
+            <ion-icon name="hand-right-outline"></ion-icon>  Suspendido
+          </span>
+          <span *ngIf="item.statusCobro == cEstado.cobrado" style="color: green;">
+            Cobrado ({{item.metodoPago}})
+  
+            <span *ngIf="item.montoPagoEfectivo > 0">
+              <ion-icon name="cash-outline"></ion-icon> {{item.montoPagoEfectivo | currency}}
+            </span>
+            <span *ngIf="item.montoPagoDebito > 0">
+              <ion-icon name="card-outline"></ion-icon> {{item.montoPagoDebito | currency}}
+            </span>
+            <span *ngIf="item.montoPagoCredito > 0">
+              <ion-icon name="card-outline"></ion-icon> {{item.montoPagoCredito | currency}}
+            </span>
+            <span *ngIf="item.montoPagoCtaCorriente > 0">
+              <ion-icon name="person-outline"></ion-icon> {{item.montoPagoCtaCorriente | currency}}
+            </span>
+             
+          </span> 
+          <span *ngIf="item.statusCobro == cEstado.reembolsado" style="color: red;"> <ion-icon name="play-back-outline"></ion-icon> Reembolsado</span>
+           
+        </span>
+        <span class="pedido-item" *ngIf="item.afipFactura.CAE != ''" >
+          <img style="width:18px;" src="../../../assets/img/logo_afip.fw.png" alt=""> Factura: {{item.afipFactura.CbteLetra}}
+        </span> 
+       </ion-row>    
          
       <ion-row> 
-        
-          <ion-icon name="cube-outline"></ion-icon> {{item.productos.length}}<br>
-          <span *ngIf="item.clienteNombre" >
-            <ion-icon name="person-outline"></ion-icon> {{item.clienteNombre}} <br>
-          </span><br>
-          <span *ngIf="item.mesaNombre" >
-            <ion-icon name="grid-outline"></ion-icon> {{item.mesaNombre}} <br>
-          </span><br>
-          <span *ngIf="item.direccion.street_name" >
-            <ion-icon name="location-outline"></ion-icon> 
-            {{item.direccion.street_name}} {{item.direccion.street_number}},{{item.direccion.locality}},{{item.direccion.state}}. <br>
-            <span *ngIf="item.direccion.piso"> Piso: {{item.direccion.piso}}</span>
-            <span *ngIf="item.direccion.puerta"> Puerta: {{item.direccion.puerta}}</span>
-            {{item.direccion.distanciaDelComercio}} Km.
-          </span>  <br> 
-          <span *ngIf="item.afip" >
-            <img style="width:18px;" src="../../../assets/img/logo_afip.fw.png" alt=""> {{item.afip.CbteLetra}} {{item.afip.CAE}} <br>
-          </span>      
+          <div class="pedido-item"> 
+            <ion-icon name="cube-outline"></ion-icon> {{item.productos.length}} 
+          </div>
+          
+          <span class="pedido-item" *ngIf="item.clienteNombre" >
+            <ion-icon name="person-outline"></ion-icon> {{item.clienteNombre}} 
+          </span>
+          <span class="pedido-item" *ngIf="item.mesaNombre" >
+            <ion-icon name="grid-outline"></ion-icon> {{item.mesaNombre}} 
+          </span>     
+          
+          <div class="pedido-item"> 
+            <ion-icon name="chatbubble-outline"></ion-icon> {{item.countMensajes}} 
+          </div>
+                  
       </ion-row>  
+      <ion-row>
+        <span class="pedido-item" *ngIf="item.direccion.street_name" >
+          <ion-icon name="location-outline"></ion-icon> 
+          {{item.direccion.street_name}} {{item.direccion.street_number}},{{item.direccion.locality}},{{item.direccion.state}}. 
+          <span *ngIf="item.direccion.piso"> Piso: {{item.direccion.piso}}</span>
+          <span *ngIf="item.direccion.puerta"> Puerta: {{item.direccion.puerta}}</span>
+          {{item.direccion.distanciaDelComercio}} Km.
+        </span> 
+      </ion-row>
     </div>
+    <div *ngIf="item.primerMensaje"  class="footer-card-mensajes">     
+      <ion-row> 
+        <ion-icon name="chatbox-outline"></ion-icon>&nbsp; {{item.primerMensaje}} 
+      </ion-row>
+    </div> 
   </div>
 

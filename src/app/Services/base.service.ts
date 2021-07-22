@@ -166,7 +166,7 @@ export class BaseService {
                         ...(item as any)
                     };
                     resolve(newItem);
-                });
+                }); 
             });
             return promise;
         }

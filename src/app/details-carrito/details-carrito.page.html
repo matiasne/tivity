@@ -3,10 +3,10 @@
     <ion-buttons slot="start">
       <ion-back-button  (click)="cancelar()"></ion-back-button>
     </ion-buttons>
-    <ion-title>Detalle Carrito</ion-title>    
-    <ion-button fill="clear" (click)="preguntarVaciar()" color="danger" slot="end">
-      <ion-icon name="trash"></ion-icon>
-    </ion-button>
+    <ion-title  size="small">Detalle Carrito</ion-title>   
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button> 
   </ion-toolbar>
 </ion-header>
 
@@ -85,7 +85,7 @@
       <ion-textarea [(ngModel)]="carritoService.comentario"></ion-textarea>   
     </div>
 
-    
+    <ion-button (click)="preguntarVaciar()" class="button-rounded" color="danger"><ion-icon name="trash"></ion-icon>Vaciar Todo</ion-button>
 
     <ion-button *ngIf="!carrito.mesaId && comercio.config.mesas" (click)="seleccionarMesa()" class="button-rounded" color="light" ><ion-icon name="add"></ion-icon><ion-icon name="grid-outline"></ion-icon>  Mesa</ion-button>
     <ion-item-sliding class="item-card" *ngIf="carrito.mesaId && comercio.config.mesas">  
@@ -113,9 +113,9 @@
         <ion-label (click)="seleccionarMesa()">
           <h2>{{carrito.clienteNombre}}</h2>
           <p *ngIf="carrito.clienteDocTipo">{{carrito.clienteDocTipo}}: {{carrito.clienteDoc}}</p>
-          <p *ngIf="carrito.clientePersonaJuridica == 1">Responsable Inscripto</p>
-          <p *ngIf="carrito.clientePersonaJuridica == 2">Monotributista</p>
-          <p *ngIf="carrito.clientePersonaJuridica == 3">Iva Exento</p>
+          <p *ngIf="carrito.clientePersonaJuridica == '1'">Responsable Inscripto</p>
+          <p *ngIf="carrito.clientePersonaJuridica == '2'">Monotributista</p>
+          <p *ngIf="carrito.clientePersonaJuridica == '3'">Iva Exento</p>
         </ion-label>  
       </ion-item>
       <ion-item-options side="end">
@@ -142,6 +142,8 @@
         <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
+
+    
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
    

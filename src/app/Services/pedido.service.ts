@@ -79,7 +79,6 @@ export class PedidoService extends BaseService{
                   
                   const data:any = a.payload.doc.data();
                   if(data.statusCobro == 1){
-                    console.log(a)  
                     data.id = a.payload.doc.id;
                     data.fromCache = a.payload.doc.metadata.fromCache;  
                     return data;
@@ -137,6 +136,19 @@ export class PedidoService extends BaseService{
 
     total = total+totalMonto;
     return total;
+  }
+
+  async incrementarNumeroMensajes(id){
+
+    var docRef =  this.afs.firestore.collection(this.path).doc(id);
+    let doc = await  this.afs.firestore.runTransaction(t => t.get(docRef)); 
+    if (!doc.exists) {throw ("doc not found");}
+    
+    var countMensajes = doc.data().countMensajes + 1;
+    await doc.ref.update({ countMensajes: countMensajes });
+
+    return countMensajes;
+
   }
   
 

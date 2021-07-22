@@ -31,7 +31,9 @@ export class FormEgresoCajaPage implements OnInit {
 
   public caja:Caja;
   private egreso:MovimientoCaja;
-  cajasSubs:Subscription;
+
+  public monto = 0;
+  public motivo = 0;
 
   public comercio:Comercio;
 
@@ -51,16 +53,7 @@ export class FormEgresoCajaPage implements OnInit {
   ) { 
     this.comercio = new Comercio()
     this.caja = new Caja();
-    this.egreso = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getEmail());
-    this.egreso.id = this.firestore.createId();
-
     
-    
-    this.datosForm = this.formBuilder.group({
-      monto: ['', Validators.required],
-      motivo:['', Validators.required]
-    });
-
    }
 
    get f() { return this.datosForm.controls; }
@@ -110,32 +103,20 @@ export class FormEgresoCajaPage implements OnInit {
 
     this.submitted = true;
     
-    if (this.datosForm.invalid) {
-      this.toastServices.alert('Por favor completar todos los campos marcados con * antes de continuar',"");
-      return;
-    } 
 
     if (this.metodoPagoSeleccionado =="efectivo" && this.caja.id == "") {
       this.toastServices.alert('Por favor seleccione una caja antes de continuar',"");
       return;
     } 
 
-    if(this.metodoPagoSeleccionado =="efectivo" && this.datosForm.controls.monto.value > this.totalActual){
+    if(this.metodoPagoSeleccionado =="efectivo" && this.monto > this.totalActual){
       this.toastServices.alert("El monto de egreso no puede ser mayor al monto total de efectivo en caja","");
       return;
     }
 
-    this.actualizarMontosCaja()
-    
-    if(this.comercio.config.movimientosCajas){
-      this.egreso.cajaId = this.caja.id;
-      this.egreso.tipo = this.enumTipoMovimientoCaja.egreso;
-      this.egreso.asignarValores(this.datosForm.value);
-      this.egreso.metodoPago = this.metodoPagoSeleccionado;
-      this.egreso.monto = - Number(this.datosForm.controls.monto.value);
-      this.egreso.motivo = this.datosForm.controls.motivo.value;
-      this.movimientosService.add(this.egreso);
-    }
+     
+    this.movimientosService.agregarMovimientoCaja(this.caja.id,"",this.enumTipoMovimientoCaja.egreso,"","efectivo", - this.monto,this.motivo)
+
     
     this.navCtrl.back(); 
   }
@@ -144,19 +125,5 @@ export class FormEgresoCajaPage implements OnInit {
     this.navCtrl.back();
   }
 
-  actualizarMontosCaja(){
-    if(this.metodoPagoSeleccionado == "efectivo"){
-      this.caja.totalEfectivo = Number(this.caja.totalEfectivo)- Number(this.datosForm.controls.monto.value);
-    }
-    if(this.metodoPagoSeleccionado == "credito"){
-      this.caja.totalCredito = Number(this.caja.totalCredito)- Number(this.datosForm.controls.monto.value);
-    }
-    if(this.metodoPagoSeleccionado == "debito"){
-      this.caja.totalDebito = Number(this.caja.totalDebito) - Number(this.datosForm.controls.monto.value);
-    }
-
-    const param1 = JSON.parse(JSON.stringify(this.caja));
-    this.cajasService.update(param1);
-  }
 
 }

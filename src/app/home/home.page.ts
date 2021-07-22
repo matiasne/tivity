@@ -13,13 +13,14 @@ import { UsuariosService } from '../Services/usuarios.service';
 import { ToastService } from '../Services/toast.service';
 import { FormComercioPage } from '../form-comercio/form-comercio.page';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
-import { ImpresoraService } from '../Services/impresora.service';
 import { WoocommerceService } from '../Services/woocommerce/woocommerce.service';
 import { FotoService } from '../Services/fotos.service';
 import { Archivo } from '../models/foto';
 import { ImagesService } from '../Services/images.service';
 import { CambiarPlanPage } from '../cambiar-plan/cambiar-plan.page';
 import { EnumPlanes, User } from '../models/user';
+import { EscPosService } from '../Services/impresora/esc-pos.service';
+import { ImpresoraService } from '../Services/impresora/impresora.service';
 
 
 @Component({
@@ -54,16 +55,19 @@ export class HomePage implements OnInit {
     public AuthenticationService:AuthenticationService,
     public toastService:ToastService,
     private modalCtrl:ModalController,
-    private platform: Platform
+    private platform: Platform,
+    private impresoraService:ImpresoraService
   ) { 
      
     this.user = new User()
 
     this.platform.backButton.subscribeWithPriority(10, () => {
       console.log('Handler was called!');
-    });
+    }); 
 
-  }
+    
+
+  } 
 
 
   ngOnInit() {

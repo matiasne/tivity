@@ -65,10 +65,8 @@ export class DetailsCtaCorrientePage implements OnInit {
 
       this.clientes=[];
       this.ctaCorriente.coTitularesId.forEach(titularId => {
-        this.clienteSubs = this.clientesServices.get(titularId).subscribe(snap =>{
-          let client:any = snap.payload.data();
-          client.id = snap.payload.id;
-          this.clientes.push(client);
+        this.clienteSubs = this.clientesServices.get(titularId).subscribe(data =>{
+          this.clientes.push(data);
         })
       });
     })
@@ -96,7 +94,7 @@ export class DetailsCtaCorrientePage implements OnInit {
         this.items.push(item);
         
       });    
-        
+        console.log(this.items)
     }); 
   }
 

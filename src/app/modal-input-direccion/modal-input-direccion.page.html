@@ -1,7 +1,13 @@
-<div class="ion-padding">
-  <ion-text>
-    <h5>Dirección</h5>
-  </ion-text>
+<ion-header>
+  <ion-toolbar>    
+    <ion-title  size="small">Dirección</ion-title>  
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>  
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+ 
   <div>
     <ion-item>
       <ion-label position="floating">Direccion</ion-label>
@@ -26,10 +32,9 @@
     <div id="mapDiv" class="map"></div>
   </div>  
   Distancia: {{localizacion.distanciaDelComercio}} Km.
-</div>
+</ion-content>
 <ion-footer>
   <ion-toolbar>   
-    <ion-button slot="start" class="button-rounded"  color="light" (click)="cancelar()">Cancelar</ion-button>
     <ion-button slot="end" class="button-rounded"  color="success" (click)="guardar()">Guardar</ion-button>
   </ion-toolbar> 
 

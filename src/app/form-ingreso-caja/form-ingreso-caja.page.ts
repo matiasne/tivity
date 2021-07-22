@@ -99,18 +99,12 @@ export class FormIngresoCajaPage implements OnInit {
       alert("El monto de egreso no puede ser mayor al monto total de efectivo en caja");
       return;
     }
-    this.actualizarMontosCaja()
-    if(this.comercio.config.movimientosCajas){
+   
+      this.movimientosService.agregarMovimientoCaja(this.caja.id,"",this.enumTipoMovimientoCaja.ingreso,"","efectivo", this.datosForm.controls.monto.value,
+      this.datosForm.controls.motivo.value)
+
+      
     
-      var ingreso = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getEmail());      
-      ingreso.tipo = this.enumTipoMovimientoCaja.ingreso;
-      ingreso.cajaId = this.caja.id;
-      ingreso.metodoPago = this.metodoPagoSeleccionado;
-      ingreso.monto= this.datosForm.controls.monto.value;
-      ingreso.motivo = this.datosForm.controls.motivo.value;        
-      console.log(this.caja.id);    
-      this.movimientosService.add(ingreso)
-    }
 
 
     this.navCtrl.back();
@@ -156,19 +150,5 @@ export class FormIngresoCajaPage implements OnInit {
     this.navCtrl.back();
   }
 
-  actualizarMontosCaja(){
-    if(this.metodoPagoSeleccionado == "efectivo"){
-      this.caja.totalEfectivo = Number(this.caja.totalEfectivo)+ Number(this.datosForm.controls.monto.value);
-    }
-    if(this.metodoPagoSeleccionado == "credito"){
-      this.caja.totalCredito = Number(this.caja.totalCredito)+ Number(this.datosForm.controls.monto.value);
-    }
-    if(this.metodoPagoSeleccionado == "debito"){
-      this.caja.totalDebito = Number(this.caja.totalDebito) + Number(this.datosForm.controls.monto.value);
-    }
-
-    const param1 = JSON.parse(JSON.stringify(this.caja));
-    this.cajasService.update(param1);
-  }
 
 }

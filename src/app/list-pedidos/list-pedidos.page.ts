@@ -1,10 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, IonSearchbar, ModalController } from '@ionic/angular';
+import Fuse from 'fuse.js'
 import { Observable, Subscriber } from 'rxjs';
 import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
 import { FormFilterPedidosPage } from '../form-filter-pedidos/form-filter-pedidos.page';
-import { EnumEstadoCocina, EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCocina } from 'src/app/models/producto';
 import { WCOrder } from '../models/woocommerce/order';
 import { AuthenticationService } from '../Services/authentication.service';
 import { ComentariosService } from '../Services/comentarios.service';
@@ -83,6 +85,7 @@ export class ListPedidosPage implements OnInit {
   }
 
   ionViewDidEnter(){ 
+    this.seccionActiva = this.cEstado.pendiente
     this.refrescar();
     this.changeRef.detectChanges()    
   }  
@@ -138,7 +141,20 @@ export class ListPedidosPage implements OnInit {
     editarPedido.asignarValores(item);
     
     this.navParametrosService.param = editarPedido;
-    this.router.navigate(['details-pedido'])
+   // this.router.navigate(['details-pedido'])
+
+    const modal = await this.modalController.create({
+      component: DetailsPedidoPage,
+      id:'detail-pedido'      
+    });
+    modal.onDidDismiss()
+    .then((retorno) => {
+      this.refrescar()
+    })
+
+    
+    await modal.present();    
+
   }
 
   buscarWoocommerce(){
@@ -193,78 +209,49 @@ export class ListPedidosPage implements OnInit {
 
   buscar(){ 
 
-    var retorno = false;
+    this.pedidosLocales = [];
 
-    this.pedidosLocales = []; 
-
-    this.pedidosLocalesAll.forEach(item => {  
-      
-      var encontrado = true;      
-      //si no es administrador solo ve los pedidos generados por el
+    
+    for(let i=0;i< this.pedidosLocalesAll.length;i++){
+      let encontrado = false
       if(this.userRol == "Administrador"){
         encontrado = true;
       }
       else{
-        if(this.authService.getActualUserId() == item.personalId)
+        if(this.authService.getActualUserId() == this.pedidosLocalesAll[i].personalId)
           encontrado = true;
       } 
 
-      if(encontrado){
-        encontrado = false;
-
-        if(this.palabraFiltro != ""){
-
-          encontrado = false;
-          var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "")      
+      if(encontrado){          
         
-          if(item.clienteNombre){
-            retorno =  (item.clienteNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-            if(retorno)
-              encontrado = true;
-          }
-
-          if(item.mesaNombre){
-            retorno =  (item.mesaNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-            if(retorno)
-              encontrado = true;
-          }   
-          
-          if(item.personalEmail){
-            retorno =  (item.personalEmail.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-            if(retorno)
-              encontrado = true;
-          }  
-
-          if(item.personalNombre){
-            retorno =  (item.personalNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-            if(retorno)
-              encontrado = true;
-          }  
+        if(this.seccionActiva == this.pedidosLocalesAll[i].statusCobro){          
+          this.pedidosLocales.push(this.pedidosLocalesAll[i])
         }
-        else{
-          encontrado = true; 
-        }
-      }      
-
-      
-      if(encontrado){         
-
-        let countListos = 0      
-        item.productos.forEach(element => {
-          if(element.estadoComanda == "Listo")
-            countListos++;             
-        });   
-        
-        item.countListos = countListos 
-        
-        if(this.seccionActiva == item.statusCobro){          
-          this.pedidosLocales.push(item)
-        }
-                 
-        return true;
       }
-      
-    });  
+
+
+    }
+
+    console.log(this.pedidosLocales)
+
+    const options = {
+      keys: [
+        "clienteNombre",
+        "mesaNombre",
+        "personalEmail",
+        "personalNombre"
+      ]
+    };
+    
+    const fuse = new Fuse(this.pedidosLocales, options);
+    
+    let result:any = fuse.search(this.palabraFiltro)
+
+    result.forEach(element => {
+      this.pedidosLocales.push(element.item)
+    }); 
+    console.log(this.pedidosLocales)
+    
    
   }
 
@@ -311,7 +298,6 @@ export class ListPedidosPage implements OnInit {
       this.pedidosWoocommerceAll = pedidos;
       this.buscarWoocommerce();      
     })
-
   }
 
   nuevoPedido(){

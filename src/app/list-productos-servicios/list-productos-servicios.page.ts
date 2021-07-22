@@ -29,7 +29,9 @@ import { NotifificacionesAppService } from '../Services/notifificaciones-app.ser
 import { PedidoService } from '../Services/pedido.service';
 import { FormProductoPage } from '../form-producto/form-producto.page';
 import { DetailsCarritoPage } from '../details-carrito/details-carrito.page';
-
+import Fuse from 'fuse.js'
+import { ImpresoraService } from '../Services/impresora/impresora.service';
+import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
 
 @Component({
   selector: 'app-list-productos-servicios',
@@ -93,6 +95,9 @@ export class ListProductosServiciosPage implements OnInit {
   public showSearchBar = false;
 
   public pedidosSolicitadosLength = 0;
+
+  public impresoraStatus = false;
+
   constructor(
     public loadingController: LoadingController,
     private router: Router,
@@ -118,10 +123,14 @@ export class ListProductosServiciosPage implements OnInit {
     private wordpressService:WordpressService,
     private usuariosServices:UsuariosService,
     private notificacionesAppService:NotifificacionesAppService,
-    private pedidosService:PedidoService
+    private pedidosService:PedidoService,
+    private impresoraService:ImpresoraService
     
   ) { 
     
+    
+    
+
 
     console.log(this.ionSearchbar)
     this.notificacionesAppService.getSinLeer(this.usuariosServices.usuarioLogueado).subscribe(snapshot =>{
@@ -279,45 +288,25 @@ export class ListProductosServiciosPage implements OnInit {
       this.palabraFiltro = event.target.value;     
 
     if(this.palabraFiltro != ""){
-      var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-
-      var retorno = false;
-
-      this.itemsProductos = [];
       
-      this.itemsAllProductos.forEach((item) => {      
-  
-        var encontrado = false;
-        if(item.nombre){
-          retorno =  (item.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-          if(retorno)
-            encontrado = true;
-        }
+      this.itemsProductos = [];
 
-        if(item.descripcion){
-          retorno =  (item.descripcion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-          if(retorno)
-            encontrado = true;
-        }
+      const options = {
+        keys: [
+          "nombre",
+          "barcode"
+        ]
+      };
+      
+      const fuse = new Fuse(this.itemsAllProductos, options);
+      
+      let result:any = fuse.search(this.palabraFiltro)
 
-        if(item.barcode){
-          if(item.barcode.includes(palabra)){
-            encontrado = true;
-          }            
-        }       
-  
-        if(encontrado){
-          console.log("agregado a itemsProducto "+item.id)
-          this.itemsProductos.push(item);
-       /*   if(this.itemsRenderProductos.length < this.itemsPerPage){
-            console.log("Renderizando"+item.id)
-            this.itemsRenderProductos.push(item)
-            this.itemsRenderizados += 1
-          }*/
-          return true;
-        }
+      result.forEach(element => {
+        this.itemsProductos.push(element.item)
       });
-
+      console.log(this.itemsProductos)
+      
       if(this.buscandoBarCode){
         this.buscandoBarCode = false;
         if(this.itemsProductos.length == 1){
@@ -376,7 +365,10 @@ export class ListProductosServiciosPage implements OnInit {
           producto.producto = true;
           producto.enCarrito = 0;      
       }); 
-      this.buscar(undefined);   
+      this.buscar(undefined); 
+      
+      
+
       
     });  
   }
@@ -587,11 +579,24 @@ export class ListProductosServiciosPage implements OnInit {
     pedido.personalEmail = this.authenticationService.getEmail();
     pedido.personalNombre = this.authenticationService.getNombre();   
 
-    let editarPedido = new Pedido();
-    editarPedido.asignarValores(pedido);
     
-    this.navParametrosService.param = editarPedido;
-    this.router.navigate(['details-pedido'])
+    pedido.direccion = JSON.parse(JSON.stringify(pedido.direccion));
+    this.pedidosService.add( pedido).then(async data=>{
+  
+      let editarPedido = new Pedido();
+      editarPedido.asignarValores(data);
+
+      this.navParametrosService.param = editarPedido;
+      const modal = await this.modalController.create({
+        component: DetailsPedidoPage,
+        id:'detail-pedido'      
+      });
+      
+      await modal.present();    
+    })
+    
+    
+    
     
 
   }
@@ -665,5 +670,9 @@ export class ListProductosServiciosPage implements OnInit {
     this.ionSearchbar.setFocus();
     },100);
   
+  }
+
+  verImpresora(){
+    this.router.navigate(['form-impresora-config'])
   }
 }

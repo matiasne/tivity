@@ -9,37 +9,52 @@
   <br>  
   <span *ngIf="pedido.mesaId">Mesa: {{pedido.mesaNombre}}</span><br>
   <span *ngIf="pedido.clienteId">Cliente: {{pedido.clienteNombre}}</span> 
-  
+  <span *ngIf="pedido.comanda.numero" (click)="open()"><ion-icon name="receipt-outline"></ion-icon>{{pedido.comanda.numero}}</span>
+  <span *ngIf="pedido.comanda.demora" (click)="open()"> <ion-icon name="alarm-outline"></ion-icon> {{pedido.comanda.demora}}</span>
   <ion-item>                
     <ion-label>            
       <span *ngFor="let item of pedido.productos; let i = index">
-        <ion-item>            
+        <ion-item *ngIf="cocinasFiltro.includes(item.cocinaId)">            
           <ion-label>                
             <h2><b>{{item.cantidad}} X {{item.nombre}}</b> 
               <span *ngIf="pedido.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido</b></span>
-            </h2>           
-          
+            </h2>            
             <span *ngFor="let opcion of item.opcionesSeleccionadas">
               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="color-text-green">{{opcion.cantidad}}X </span>{{opcion.nombreGrupo}} {{opcion.nombre}} </p>
-            </span>   
-           
+            </span>           
             <p>
               {{item.descripcion_venta}}
-            </p>         
-            
+            </p>              
           </ion-label>  
-          <ion-button *ngIf="pedido.statusComanda != 'Listo'" color="success" slot="end" (click)="productoListo(item)" >Listo</ion-button>   
+          <ion-checkbox slot="end" [(ngModel)]="item.listoComanda"></ion-checkbox>
+        </ion-item>
+        <ion-item *ngIf="!cocinasFiltro.includes(item.cocinaId)">            
+          <ion-label style="opacity: 0.1;">                
+            <h2><b>{{item.cantidad}} X {{item.nombre}}</b> 
+              <span *ngIf="pedido.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido</b></span>
+            </h2>            
+            <span *ngFor="let opcion of item.opcionesSeleccionadas">
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="color-text-green">{{opcion.cantidad}}X </span>{{opcion.nombreGrupo}} {{opcion.nombre}} </p>
+            </span>           
+            <p>
+              {{item.descripcion_venta}}
+            </p>              
+          </ion-label>   
         </ion-item>
       </span>                     
     </ion-label>    
   </ion-item>
-  <ion-item *ngIf="pedido.statusCobro != cEstado.suspendido"> 
-    <ion-button *ngIf="pedido.statusComanda ==  pEstado.solicitado" color="light" slot="start" (click)="rechazar()">Rechazar</ion-button>
-    <ion-button *ngIf="pedido.statusComanda == pEstado.solicitado" slot="end" (click)="tomar()">Tomado</ion-button>  
-
-    <ion-button *ngIf="pedido.statusComanda == pEstado.tomado" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
-
-    <ion-button *ngIf="pedido.statusComanda == pEstado.completo" color="light" slot="start" (click)="volver()">Volver</ion-button>        
-    <ion-button *ngIf="pedido.statusComanda == pEstado.completo" color="danger" slot="end" (click)="finalizar()">Finalizar</ion-button>                   
+  <ion-item> 
+    <ion-toolbar>
+      <ion-button class="button-rounded" *ngIf="pedido.comanda.estado ==  pEstado.solicitado" color="light" slot="start" (click)="rechazar()">Rechazar</ion-button>
+      <ion-button class="button-rounded" *ngIf="pedido.comanda.estado == pEstado.solicitado" slot="end" (click)="tomar()">Tomar</ion-button>  
+  
+      <ion-button class="button-rounded" *ngIf="pedido.comanda.estado == pEstado.tomado" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
+      <ion-button class="button-rounded" *ngIf="pedido.comanda.estado == pEstado.tomado" slot="end" (click)="listo()">Listo</ion-button> 
+  
+      <ion-button class="button-rounded" *ngIf="pedido.comanda.estado == pEstado.completo" color="light" slot="start" (click)="volver()">Volver</ion-button>        
+      <ion-button class="button-rounded" *ngIf="pedido.comanda.estado == pEstado.completo" color="danger" slot="end" (click)="finalizar()">Finalizar</ion-button>                   
+    </ion-toolbar>
+    
   </ion-item>
 </ion-card>

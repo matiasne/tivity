@@ -1,21 +1,24 @@
 export class MovimientoCtaCorriente{
 
-    public id="";
-    public cajaId =""; 
-    public clienteId="";
-    public ctaCorrienteId="";
     public ventaId ="";
     public servicioId="";
-    public motivo="";
-    public monto=0;
-    public metodoPago ="";
+    public metodoPago =[];
     public createdAt="";
-    public pagoId="";
+    
     public fotoCtaCorriente:any;
     
+    public cajaId=""
+    public movimientoCajaId="";
+
 	constructor(
-		public vendedorId:"", 
-        public vendedorNombre:""
+        public id:string,
+        public clienteid:string,
+        public ctaCorrienteId:string,
+        public motivo:string,
+        public metodo:string,
+        public monto:number,
+		public vendedorId:string, 
+        public vendedorNombre:string
 		){
 
     }

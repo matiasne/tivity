@@ -39,9 +39,6 @@ export class ComerciosService extends BaseService {
     return this.commerceSubject.value.id
   }
 
-  
-
-
   getByNombre(nombre){
     return this.afs.collection(this.path, ref =>  ref.where('nombre','==',nombre)).valueChanges();    
   }
@@ -115,6 +112,35 @@ export class ComerciosService extends BaseService {
     this.afs.collection(this.woocommerceSyncPath).doc("1").delete().then(data=>{
       console.log("Actualizados los valores de woocommerce")
     })
+  }
+
+  async obtenerActualizarNumeroPedido(){
+
+    var docRef =  this.afs.firestore.collection("comercios").doc(this.commerceSubject.value.id);
+
+    let doc = await  this.afs.firestore.runTransaction(t => t.get(docRef));
+ 
+    if (!doc.exists) {throw ("doc not found");}
+
+    let fechaUltimo = new Date()
+    if(doc.data().ultimoPedidoFecha)
+      fechaUltimo = doc.data().ultimoPedidoFecha.toDate();    
+
+    
+    var countPedidoDia = Number(doc.data().countPedidoDia) + 1;
+
+    let fecha = new Date();
+    console.log(fecha.getDate()+" "+fechaUltimo.getDate())
+    if(fecha.getDate() > fechaUltimo.getDate()){
+      countPedidoDia = 0;
+    }
+
+    console.log(countPedidoDia)
+
+    await doc.ref.update({ countPedidoDia: countPedidoDia, ultimoPedidoFecha:fecha });
+
+    return countPedidoDia;
+
   }
 
 }

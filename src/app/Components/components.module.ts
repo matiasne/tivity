@@ -12,6 +12,8 @@ import { CardComandaV2Component } from './card-comanda-v2/card-comanda-v2.compon
 import { BtnSeleccionarImagenComponent } from './btn-seleccionar-imagen/btn-seleccionar-imagen.component';
 import { CardPedidoWoocommerceComponent } from './card-pedido-woocommerce/card-pedido-woocommerce.component';
 import { CardProductoWoocommerceComponent } from './card-producto-woocommerce/card-producto-woocommerce.component';
+import { ItemBluetoothDeviceComponent } from './item-bluetooth-device/item-bluetooth-device.component';
+import { ItemBluetoothPrinterComponent } from './item-bluetooth-printer/item-bluetooth-printer.component';
 
 
 
@@ -33,6 +35,8 @@ imports: [
     CardPedidoComponent,
     CardPedidoWoocommerceComponent,
     CardProductoWoocommerceComponent,
+    ItemBluetoothDeviceComponent,
+    ItemBluetoothPrinterComponent
   ],
   exports: [
     BtnSeleccionarImagenComponent,
@@ -43,8 +47,9 @@ imports: [
     CardSubscriptionComponent,
     CardPedidoComponent,
     CardPedidoWoocommerceComponent,
-    CardProductoWoocommerceComponent 
-    
+    CardProductoWoocommerceComponent, 
+    ItemBluetoothDeviceComponent,
+    ItemBluetoothPrinterComponent
   ]
 })
 export class ComponentsModule {}

@@ -101,7 +101,7 @@ this.input.setFocus();
     this.modalCtrl.dismiss();
   }
 
-  cancelar(){
+  cerrar(){
     this.modalCtrl.dismiss();
   }
 

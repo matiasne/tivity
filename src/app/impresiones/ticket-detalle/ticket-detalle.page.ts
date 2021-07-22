@@ -32,8 +32,9 @@ export class TicketDetallePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.pedido = new Pedido()
    this.comercio = this.comercioService.getSelectedCommerceValue()
-   this.pedido = this.navParams.get('pedido');
+   this.pedido.asignarValores(this.navParams.get('pedido'))
   }
 
   ionViewDidEnter(){

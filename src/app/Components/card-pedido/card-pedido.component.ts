@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as firebase from 'firebase';
 import { Comercio } from 'src/app/models/comercio';
-import { EnumEstadoCocina, EnumEstadoCobro, Pedido } from 'src/app/models/pedido';
+import { EnumEstadoCobro, Pedido } from 'src/app/models/pedido';
+import { EnumEstadoCocina } from 'src/app/models/producto';
 import { ComerciosService } from 'src/app/Services/comercios.service';
 
 @Component({

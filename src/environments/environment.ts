@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  webClientId:"1050852063833-6h7nfk9a8ithssi498f5c2h6odj6ci1k.apps.googleusercontent.com",
+  webClientId:"902663639749-mc65bdpt1bo5p0n7r78ba7mcd416pqo5.apps.googleusercontent.com",
   firebase: {
     vapidKey: 'BOHbXSuRE-89N26L35dHM_Ut0aiVjZhZTI2kfyt0Kw_gTrEC4O_EvW_a5cI8z2OKw62d-Ov7RrfhWgJPYv50WyY',
     claveServidor: 'AAAA9Kup-lk:APA91bFYlNlzma5wp5aLISYAPHu_aroBrL8EuKmxdnVcyDQLx3gezF11rCfLpkgEpAXcB5YZMpbsGRmAeD6hx0Y-YTtI9edxKRMbNMnVS4uEv7vnyZlQr1vpb512lMT58cOZe2-lw6oT'

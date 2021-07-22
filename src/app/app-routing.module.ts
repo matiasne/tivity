@@ -425,6 +425,18 @@ const routes: Routes = [
   {
     path: 'form-devolver-pedido',
     loadChildren: () => import('./form-devolver-pedido/form-devolver-pedido.module').then( m => m.FormDevolverPedidoPageModule)
+  },
+  {
+    path: 'form-user',
+    loadChildren: () => import('./form-user/form-user.module').then( m => m.FormUserPageModule)
+  },
+  {
+    path: 'list-select-bluetooth-device',
+    loadChildren: () => import('./list-select-bluetooth-device/list-select-bluetooth-device.module').then( m => m.ListSelectBluetoothDevicePageModule)
+  },
+  {
+    path: 'form-impresora',
+    loadChildren: () => import('./form-impresora/form-impresora.module').then( m => m.FormImpresoraPageModule)
   }
  
 ];

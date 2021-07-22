@@ -452,7 +452,16 @@ ion-avatar{
   text-align: right;
 }
 
+.footer-card-mensajes{
+  font-size: 14px;
+  background-color: rgb(243, 243, 243);
+  color:#1e2023;
+  padding: 5px;
+  border-radius: 5px 5px 0px 0px;
+  padding-left: 22px;
+}
 .contenido-card-pedido{
+  padding: 9px;
   font-size: 14px;
   color: #1a1a1a;
 }
@@ -533,9 +542,11 @@ ion-fab{
 @keyframes FadeIn {
   0% {
     opacity: 0;
+    margin-left: 650px;
   }
   100% {
     opacity: 1;
+    margin-left: 0px;
   }
 }
 
@@ -659,4 +670,13 @@ ion-fab{
   max-width: 200px;
   text-align: center;
   margin: auto;
+}
+
+.pedido-item{
+  border: 1px solid #8080801f;
+  padding: 9px;
+  border-radius: 20px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  margin-top: 14px;
 }

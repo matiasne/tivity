@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ComentariosService } from '../Services/comentarios.service';
 import { LoadingService } from '../Services/loading.service';
 import { PedidoService } from '../Services/pedido.service';
-import { EnumEstadoCocina } from 'src/app/models/pedido';
+import { EnumEstadoCocina } from 'src/app/models/producto';
 import { CocinasService } from '../Services/cocinas.service';
 import { AlertController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -81,11 +81,11 @@ export class ListComandasV2Page implements OnInit {
       this.itemsRechazados = [];   
 
       this.loadingService.dismissLoading()               
-      this.pedidosAll = pedidos;  
-      console.log(this.pedidosAll)          
+      this.pedidosAll = pedidos;    
       this.filtrar(); 
     });
   }
+
 
   async presentAlertCrearCocinas() {
     const alert = await this.alertController.create({
@@ -120,7 +120,6 @@ export class ListComandasV2Page implements OnInit {
   }
 
   segmentChanged(event){
-    console.log(event.target.value);
     this.seccionActiva = event.target.value;
   }
 
@@ -136,17 +135,13 @@ export class ListComandasV2Page implements OnInit {
     this.pedidosAll.forEach(item => { 
             
       var encontrado = false;      
-      this.cocinaFiltro.forEach(cocina =>{     
-        console.log(cocina) 
-        
+      this.cocinaFiltro.forEach(cocina =>{             
         item.productos.forEach(prod => {
-          console.log(prod.cocinaId) 
           if(prod.cocinaId == cocina){
             encontrado = true;  
           } 
         });        
       })
-      console.log(encontrado)  
       
       if(encontrado){
        
@@ -178,32 +173,24 @@ export class ListComandasV2Page implements OnInit {
           encontrado = true;
         }   
       } 
-
-      console.log(encontrado)  
-
       if(encontrado){ 
-        console.log(item)  
-       // if(item.suspendido == 1){
-         // this.itemsRechazados.push(item);
-      //  } 
-        //else{
-          if(item.statusComanda == EnumEstadoCocina.rechazado){
-            this.itemsRechazados.push(item);
-          }
-          if(item.statusComanda == EnumEstadoCocina.solicitado){
-            this.itemsPendientes.push(item);
-          }
-          if(item.statusComanda == EnumEstadoCocina.tomado){
-            this.itemsProceso.push(item);
-          }
-          if(item.statusComanda == EnumEstadoCocina.completo){
-            this.itemsListas.push(item);
-          }
-      //  }    
-        console.log(this.itemsPendientes)     
-        return true; 
+        console.log(true)
+
+        if(item.estadoComanda == EnumEstadoCocina.rechazado){
+          this.itemsRechazados.push(item);
+        }
+        if(item.estadoComanda == EnumEstadoCocina.solicitado){
+          this.itemsPendientes.push(item);
+        }
+        if(item.estadoComanda == EnumEstadoCocina.tomado){
+          this.itemsProceso.push(item);
+        }
+        if(item.estadoComanda == EnumEstadoCocina.completo){
+          this.itemsListas.push(item);
+        }
       }
-    });    
+      return true; 
+    })  
   }
 
   nuevoPedido(){

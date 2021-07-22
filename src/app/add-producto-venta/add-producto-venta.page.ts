@@ -5,7 +5,7 @@ import { ProductosService } from '../Services/productos.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CargaPorVozService } from '../Services/carga-por-voz.service';
 import { ToastService } from '../Services/toast.service';
-import { Producto } from '../models/producto';
+import { EnumEstadoCocina, Producto } from '../models/producto';
 import { GrupoOpciones } from '../models/grupoOpciones';
 import { Opcion } from '../models/opcion';
 import { Subscription } from 'rxjs';
@@ -15,6 +15,7 @@ import { CarritoService } from '../Services/global/carrito.service';
 import { LoadingService } from '../Services/loading.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { FormProductoPage } from '../form-producto/form-producto.page';
+import { EnumEstadoCobro } from '../models/pedido';
 
 @Component({
   selector: 'app-add-producto-venta',
@@ -55,9 +56,11 @@ export class AddProductoVentaPage implements OnInit {
   ngOnInit() {
     console.log("!!!")
     this.producto = new Producto();
+    console.log(this.producto)
     this.producto.asignarValores(this.navParams.get('producto'));
     this.producto.cantidad = 1;
     this.producto.descripcion_venta = "";
+    this.producto.listoComanda = false;
 
     this.gruposOpciones = [];  
     
@@ -416,6 +419,8 @@ export class AddProductoVentaPage implements OnInit {
     }, stepTime);
   }
 
-  
+  cerrar(){
+    this.modalCtrl.dismiss();
+  }
 
 }

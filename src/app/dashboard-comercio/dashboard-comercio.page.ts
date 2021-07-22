@@ -7,6 +7,7 @@ import { CarritoService } from '../Services/global/carrito.service';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { ComerciosService } from '../Services/comercios.service';
 import { LoadingService } from '../Services/loading.service';
+import { ImpresoraService } from '../Services/impresora/impresora.service';
 
 @Component({
   selector: 'app-dashboard-comercio',
@@ -21,27 +22,32 @@ export class DashboardComercioPage implements OnInit {
     private carritoService:CarritoService,
     private comerciosService:ComerciosService,
     private afipService:AfipServiceService,
-    private loadingService:LoadingService
-  ) { }
-
-  ngOnInit() {
-    this.carritoService.vaciar()
+    private loadingService:LoadingService,
+    private impresoraService:ImpresoraService
+  ) { 
+    this.comercio = new Comercio()
+  }
+ 
+  ngOnInit() { 
+    this.carritoService.vaciar() 
+  //  this.impresoraService.impresionPrueba("matias") 
   }
 
   ionViewDidEnter(){
     
-    if(this.comercio.id){
+    if(this.comercio.id == "" ){
       this.loadingService.presentLoading()
     }
 
     this.comerciosService.getSelectedCommerce().subscribe(data=>{
       this.loadingService.dismissLoading();
+      this.comercio = new Comercio();
       this.comercio.asignarValores(data)
       this.afipService.login();
     })
     
     
-
+    
     
     
   }

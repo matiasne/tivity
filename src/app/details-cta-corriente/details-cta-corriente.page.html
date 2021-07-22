@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Detalles Cta. Corriente</ion-title>
+    <ion-title  size="small">Detalles Cta. Corriente</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -70,7 +70,7 @@
     </ion-label> 
 
     <ion-label *ngIf="item.extraccion">
-      <h2>Extraccion: <b>{{item.monto | currency}}</b></h2>         
+      <h2>Extraccion: <b>{{item.monto | currency}} {{item.metodo}}</b></h2>         
       <p>
         {{item.motivo}}
       </p> 

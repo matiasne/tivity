@@ -8,14 +8,7 @@ import { Recargo } from './recargo';
 import { Localizacion } from './localizacion';
 
 
-export enum EnumEstadoCocina {
-    rechazado = 1, 
-    solicitado = 2, 
-    tomado = 3,  
-    completo = 4,
-    finalizado = 5, 
-    suspendido = 6
-}
+
 
 export enum EnumEstadoCobro {
     pendiente = 1, 
@@ -28,7 +21,6 @@ export class Pedido{
 
     public id="";
 
-    public statusComanda = EnumEstadoCocina.solicitado;
     public statusCobro = EnumEstadoCobro.pendiente;    
 
     public personalId = "";
@@ -53,19 +45,41 @@ export class Pedido{
     public servicios:Servicio[] = [];
 	 
     public cantidadComentarios = 0;
-    
-
     public createdAt:any
 
     public countListos = 0
 
-    public metodoPago = "";
-    public metodoDevolucion = "";
+    public metodoPago = [];
+    public metodoDevolucion = []
     public reembolso ="";
     public cajaUtilizada ="";
 
+    public montoPagoEfectivo =  0;
+    public montoPagoDebito = 0;
+    public montoPagoCredito = 0;
+    public montoPagoCtaCorriente = 0;
+
     public direccion:Localizacion;
-    public total = 0
+    public total = 0;
+    public entregaEfectivo=0;
+    
+
+    public primerMensaje ="";
+
+    public afipFactura = {
+        emisorRazonSocial:"",
+        emisorTipoDoc:"",
+        emisorNroDoc:"",
+        emisorPersonaJuridica:"",      
+        ptoVenta:"",
+        CbteLetra:"",
+        CbteTipo:"",
+        CAE:"",
+        CAEFchVto:"",
+        voucherNumber:"",      
+        ingresosBrutos:"",  
+        fechaEmision:""      
+    }
     
 	constructor(){
         this.direccion = new Localizacion();

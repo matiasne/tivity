@@ -2,6 +2,15 @@ import { GrupoOpciones } from './grupoOpciones';
 import { Opcion } from './opcion';
 import { OpcionSeleccionada } from './opcionSeleccionada';
 
+export enum EnumEstadoCocina {
+    rechazado = 1, 
+    solicitado = 2, 
+    tomado = 3,  
+    completo = 4,
+    finalizado = 5, 
+    suspendido = 6
+}
+
 export class Producto {
 
     public id="";
@@ -27,11 +36,13 @@ export class Producto {
     public recibirPedidos=true;
     public gruposOpcionesId = [];
     public gruposOpciones:GrupoOpciones[];
+
     public opcionesSeleccionadas =[];
     public keywords = [];
-    public estadoComanda = "";
+    public listoComanda = false;
     public impuestoPorcentaje = "0.21";
     public enCarrito = 0
+    public reembolsar = false 
 
     public imagenes = []
 

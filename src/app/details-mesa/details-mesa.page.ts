@@ -25,9 +25,6 @@ export class DetailsMesaPage implements OnInit {
   public mesa:Mesa;
   public comercio:Comercio;
   public pedidos = []
-  public productos = []
-  public descuentos = []
-  public recargos = []
 
   public cEstado = EnumEstadoCobro;
 
@@ -36,7 +33,6 @@ export class DetailsMesaPage implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
-    private modalController:ModalController,
     private alertController:AlertController,
     private comercioService:ComerciosService,
     private mesasSerivce:MesasService,
@@ -44,7 +40,8 @@ export class DetailsMesaPage implements OnInit {
     private pedidosService:PedidoService,
     private navCtrl:NavController,
     private navParametrosService:NavegacionParametrosService,
-    private router:Router
+    private router:Router,
+    private modalController:ModalController
   ) {
     this.mesa = new Mesa();
     this.comercio = new Comercio();
@@ -59,32 +56,14 @@ export class DetailsMesaPage implements OnInit {
 
     this.loadingService.presentLoading(); 
 
-    this.pedidosService.getByMesa(this.route.snapshot.params.id).subscribe((pedidos:any)=>{                 
-      this.pedidos = [];
-      this.productos = [];
+    this.pedidosService.getByMesa(this.route.snapshot.params.id).subscribe((pedidos:any)=>{ 
+      this.pedidos = [];        
       pedidos.forEach(element => {
         if(element.statusCobro == this.cEstado.pendiente){
-          let objPedido = new Pedido()
-          objPedido.asignarValores(element)
-          this.pedidos.push(objPedido)
-
-          element.productos.forEach(element => {
-            let objProducto = new Producto();
-            objProducto.asignarValores(element)
-            this.productos.push(objProducto)
-          });
-
-          element.recargos.forEach(element => {
-            this.recargos.push(element)
-            console.log(element)
-          });
-
-          element.descuentos.forEach(element => {
-            this.descuentos.push(element)
-            console.log(element)
-          });
+          this.pedidos.push(element);  
         }
-      });
+      });        
+          
       this.loadingService.dismissLoading();    
     });   
   }
@@ -92,31 +71,8 @@ export class DetailsMesaPage implements OnInit {
   ionViewDidEnter(){    
 
   }
+   
   
-  async cancelar(item){  
-
-    const alert = await this.alertController.create({
-      header: 'Está seguro que desea suspender el pedido en curso?',
-      message: '',
-      buttons: [
-        {
-          text: 'No',
-          handler: (blah) => {
-            
-          }
-        }, {
-          text: 'Sí',
-          handler: () => {               
-            item.suspendido = 1;
-            this.pedidosService.update(item).then(data=>{
-              console.log("El pedido ha sido suspendido");
-            })     
-          }
-        }
-      ]
-    });
-    await alert.present();   
-  }
 
   atras(){
     this.navCtrl.back()
@@ -125,15 +81,27 @@ export class DetailsMesaPage implements OnInit {
   async cerrar(){     
     this.navParametrosService.param =  this.pedidos;
     this.router.navigate(['details-pedido'])
-
   }
 
   async seleccionar(item){
-   
-    let editarPedido = new Pedido();
-    editarPedido.asignarValores(item);
-    
-    this.navParametrosService.param = editarPedido;
-    this.router.navigate(['details-pedido'])
-  }
+     
+      let editarPedido = new Pedido();
+      editarPedido.asignarValores(item);
+      
+      this.navParametrosService.param = editarPedido;
+     // this.router.navigate(['details-pedido'])
+  
+      const modal = await this.modalController.create({
+        component: DetailsPedidoPage,
+        id:'detail-pedido'      
+      });
+      modal.onDidDismiss()
+      .then((retorno) => {
+
+      })
+  
+      
+      await modal.present();    
+  
+    }
 }

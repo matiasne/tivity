@@ -28,6 +28,7 @@ export class Comercio {
         comandas: true,
         cocinas:true,
         mesas:true,
+        impresion:false,
         clientes:true,
         woocommerce:true,
         afip:true,
@@ -67,6 +68,13 @@ export class Comercio {
 
     public keywords = [];
 
+    public dataTicketAfip = {
+        tipoDoc:"",
+        nroDoc:"",
+        personaJuridica:"",
+        ptoVenta:"",  
+    }
+     
 	public constructor() {
        this.direccion = new Localizacion()
     }

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Reembolsar</ion-title>
+    <ion-title  size="small">Reembolsar</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -23,9 +23,7 @@
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].credito" [value]="'credito'">Crédito</ion-select-option>
       <ion-select-option *ngIf="ctasCorrientes.length > 0" [value]="'ctaCorriente'">Cta. Corriente</ion-select-option>
     </ion-select>    
-  </ion-item>
-
-  
+  </ion-item>  
 
   <ion-item class="item-card" *ngIf="metodoPagoSeleccionado == 'ctaCorriente'">
     <ion-label position="floating" >Cuenta Corriente:</ion-label>
@@ -36,7 +34,52 @@
 
   <ion-item class="item-card" *ngIf="pedido.afipFactura">
     <ion-checkbox color="primary" slot="start" [(ngModel)]="facturar" (ionChange)="updateFacturar($event)"></ion-checkbox>
-    <ion-label> <img style="padding:14px" src="../../assets/img/logo_afip.png" alt=""> Generar Factura Afip</ion-label>
+    <ion-label> <img style="padding:14px" src="../../assets/img/logo_afip.png" alt=""> <p>Generar Nota Crédito Afip</p></ion-label>
+  </ion-item>
+
+  <p>Selecciona los elementos a reembolsar:</p>
+  <ion-item *ngFor="let item of pedido.productos" class="remove_inner_bottom">
+    <div slot="start" *ngIf="item.imagenes">
+      <img class="producto-preview" *ngIf="item.imagenes[0]" src="{{item.imagenes[0].url}}" >
+      <ion-icon name="cube-outline" *ngIf="!item.imagenes[0]"></ion-icon>
+    </div>      
+    <ion-label style="color:black">                
+      <h2><b>{{item.nombre}}</b> 
+        <span *ngIf="item.suspendido == 1"> <b style="color: red;"> Suspendido</b></span>
+      </h2>
+      <p>
+        <span *ngIf="item.valorPor && (item.valorPor * item.cantidad)==1 && item.unidad == 'unidades'">
+          {{item.valorPor * item.cantidad}} unidad
+        </span>
+  
+        <span *ngIf="item.valorPor && (item.valorPor * item.cantidad)==1 && item.unidad != 'unidades'">
+          {{item.valorPor * item.cantidad}}  {{item.unidad}}
+        </span>
+  
+        <span *ngIf="item.valorPor && (item.valorPor * item.cantidad)!=1">
+          <span *ngIf="item.valorPor">
+            {{item.valorPor * item.cantidad}}
+          </span>        
+          <span *ngIf="item.unidad">
+            {{item.unidad}}
+          </span> 
+        </span> 
+       
+        <b>{{item.precio * item.cantidad | currency}} </b>    <br> 
+        
+              
+       
+      </p>
+     
+  
+      <div *ngFor="let opcion of item.opcionesSeleccionadas">
+        <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="color-text-green">{{opcion.cantidad}}X </span>{{opcion.nombreGrupo}} {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion | currency}}</span></h3>
+      </div> 
+        
+      
+  
+    </ion-label>  
+    <ion-checkbox slot="end" [(ngModel)]="item.reembolsar" (ionChange)="calcularReembolso()"></ion-checkbox>
   </ion-item>
 
   
@@ -44,7 +87,7 @@
 </ion-content>
 <ion-footer class="ion-no-border ion-padding">
   <ion-toolbar>
-    <ion-button class="button-rounded" slot="end" (click)="reembolsar()">Reembolsar</ion-button>      
+    <ion-button class="button-rounded" slot="end" (click)="reembolsar()">Reembolsar ${{totalReembolso}}</ion-button>      
     <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
   </ion-toolbar>  
  </ion-footer>

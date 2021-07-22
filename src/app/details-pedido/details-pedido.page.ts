@@ -22,7 +22,8 @@ import { Localizacion } from '../models/localizacion';
 import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
-import { EnumEstadoCocina, EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumEstadoCocina } from 'src/app/models/producto';
 import { Producto } from '../models/producto';
 import { EnumTipoRecargo, Recargo } from '../models/recargo';
 import { variacionStock } from '../models/variacionStock';
@@ -39,7 +40,7 @@ import { ComerciosService } from '../Services/comercios.service';
 import { CtaCorrientesService } from '../Services/cta-corrientes.service';
 import { CarritoService } from '../Services/global/carrito.service';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
-import { ImpresoraService } from '../Services/impresora.service';
+import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { MesasService } from '../Services/mesas.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { MovimientosService } from '../Services/movimientos.service';
@@ -59,13 +60,12 @@ export class DetailsPedidoPage implements OnInit {
 
   private enumTipoMovimientoCaja = EnumTipoMovimientoCaja
   public pedido:Pedido;
-  public subPedidos = [];
   public comercio:Comercio;
   
   public cajas = []
   public cajaSeleccionadaIndex=0;
   public cajaSeleccionada:Caja;
-  public metodoPagoSeleccionado ="";
+  public metodoPagoSeleccionado =[];
   public cantidadMetodos=0;
 
   public ctasCorrientes =[];
@@ -80,8 +80,9 @@ export class DetailsPedidoPage implements OnInit {
   public comentarios = [];
 
   public cEstado = EnumEstadoCobro
-
   public enumTipo = EnumTipoDescuento
+
+  public afipQR = "";
 
   
   constructor(
@@ -108,39 +109,9 @@ export class DetailsPedidoPage implements OnInit {
     this.mesa = new Mesa();
     this.pedido = new Pedido()
     this.pedido = new Pedido()
-    this.subPedidos = [];
     this.comercio.asignarValores(this.comerciosService.getSelectedCommerceValue());
 
-    if(Array.isArray(this.navParamService.param)){ //si es un array de pedidos porque viene de cierre de mesa
-      console.log("ARRAY")
-      if(this.navParamService.param[0] instanceof Pedido){        
-        console.log("Pedido")
-       
-        this.pedido.productos = [];
-        this.pedido.mesaId = this.navParamService.param[0].mesaId
-        this.pedido.mesaNombre = this.navParamService.param[0].mesaNombre
-        this.pedido.clienteId = this.navParamService.param[0].clienteId
-        this.pedido.clienteNombre = this.navParamService.param[0].clienteNombre
-        
-        this.navParamService.param.forEach(pedido => {
-          this.subPedidos.push(pedido);
-          pedido.productos.forEach(element => {          
-            this.pedido.productos.push(element);
-          }); 
-
-          pedido.descuentos.forEach(element => {          
-            this.pedido.descuentos.push(element);
-          }); 
-
-          pedido.recargos.forEach(element => {          
-            this.pedido.recargos.push(element);
-          });            
-        }); 
-        this.getTotal();
-        console.log(this.pedido)
-      }
-    }
-    else if(this.navParamService.param instanceof Pedido){   //si es un solo pedido 
+    if(this.navParamService.param instanceof Pedido){   //si es un solo pedido 
       this.pedido.asignarValores(this.navParamService.param);
       console.log(this.pedido)
       this.getTotal();
@@ -162,6 +133,10 @@ export class DetailsPedidoPage implements OnInit {
         obs.unsubscribe();
       })
     }  
+
+    if(this.pedido.afipFactura.voucherNumber){
+      this.afipQR = this.afipService.getURLforQR(this.pedido)
+    }
 
   }
 
@@ -348,14 +323,14 @@ export class DetailsPedidoPage implements OnInit {
   async devolverPedido(){
     const modal = await this.modalController.create({
       component: FormDevolverPedidoPage,  
-      componentProps:{pedido:this.pedido,subPedidos:this.subPedidos,comercio:this.comercio},   
+      componentProps:{pedido:this.pedido, comercio:this.comercio},   
       cssClass:'modal-custom-wrapper' 
     });    
 
     modal.onDidDismiss()
     .then((retorno) => {
       if(retorno.data == "cobrado"){
-        this.navCtrl.back() 
+        this.modalController.dismiss() 
       }
      
     });
@@ -383,7 +358,7 @@ export class DetailsPedidoPage implements OnInit {
             this.pedido.statusCobro = this.cEstado.suspendido
             this.modalNotificacion.trash("Suspendido","El pedido ahora se encuentra en estado suspendido.")
             this.actualizarPedido()   
-            this.navCtrl.back()         
+            this.modalController.dismiss()         
           }
         }
       ]
@@ -409,7 +384,7 @@ export class DetailsPedidoPage implements OnInit {
             this.modalNotificacion.success("Reanudado","El pedido ahora se encuentra en estado pendiente.")       
             this.pedido.statusCobro = this.cEstado.pendiente
             this.actualizarPedido()             
-            this.navCtrl.back()
+            this.modalController.dismiss()
           }
         }
       ]
@@ -418,16 +393,20 @@ export class DetailsPedidoPage implements OnInit {
   }
 
   async cobrar(){
+    
     const modal = await this.modalController.create({
       component: FormCobrarPedidoPage,  
-      componentProps:{pedido:this.pedido,subPedidos:this.subPedidos,comercio:this.comercio},   
+      componentProps:{pedido:this.pedido,comercio:this.comercio},   
       cssClass:'modal-custom-wrapper' 
     });    
 
     modal.onDidDismiss()
     .then((retorno) => {
       if(retorno.data == "cobrado"){
-        this.navCtrl.back() 
+       
+        this.modalController.dismiss(null,null,'detail-pedido') 
+       
+        
       }
      
     });
@@ -494,7 +473,7 @@ export class DetailsPedidoPage implements OnInit {
 
   suspenderProducto(producto,index){
     producto.suspendido = 1
-    producto.estadoComanda = "Listo"
+    producto.estadoComanda = this.pEstado.suspendido
     console.log(producto)
     
     if(this.pedido.id != ""){
@@ -512,9 +491,6 @@ export class DetailsPedidoPage implements OnInit {
     this.actualizarPedido()
   } 
 
-  async imprimir(){
-    await this.impresoraService.impresionTicket(this.pedido);    
-  }
 
   async chat(){
     const modal = await this.modalController.create({
@@ -534,35 +510,11 @@ export class DetailsPedidoPage implements OnInit {
     
   }
 
-  async preguntarVaciar(){
-    const alert = await this.alertController.create({
-      header: 'Está seguro que desea eliminar el pedido?',
-      message: '',
-      buttons: [
-        { 
-          text: 'No',
-          handler: (blah) => {
-            
-          }
-        }, {
-          text: 'Si',
-          handler: () => {           
-            this.carritoService.vaciar() 
 
-            if(this.pedido.id){
-              this.pedidosService.delete(this.pedido.id).then(data=>{
-                console.log("Eliminado")
-              })  
-              this.modalNotificacion.trash("Eliminado","El pedido se ha eliminado por completo")
-            }
-            
-            this.navCtrl.back()
-          }
-        }
-      ]
-    });
-    await alert.present();   
+  imprimir(){
+    this.impresoraService.impresionTicket(this.pedido)
   }
+  
 
   facturar(){
     
@@ -607,6 +559,12 @@ export class DetailsPedidoPage implements OnInit {
 
     })
   }
+
+  cerrar(){
+    this.modalController.dismiss()
+  }
+
+  
 
 }
   

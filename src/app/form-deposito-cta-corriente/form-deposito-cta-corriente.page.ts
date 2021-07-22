@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from '../models/cliente';
-import { ListClientesPage } from '../list-clientes/list-clientes.page';
 import { ModalController, NavController } from '@ionic/angular';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../Services/authentication.service';
-import { CtaCorrientesService } from '../Services/cta-corrientes.service';
 import { Subscription } from 'rxjs';
 import { CarritoService } from '../Services/global/carrito.service';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -24,15 +22,15 @@ import { SelectClientePage } from '../select-cliente/select-cliente.page';
 })
 export class FormDepositoCtaCorrientePage implements OnInit {
 
-  private enumTipoMovimientoCaja = EnumTipoMovimientoCaja
   
+  
+  public motivo = "";
   public monto = 0;
   private deposito:MovimientoCtaCorriente;
   public cliente:Cliente;
   public cajas=[];
   public caja:Caja;
   public cajaSeleccionada:any;
-  datosForm: FormGroup; 
   public submitted = false;
 
   public ctaSubs:Subscription;
@@ -41,25 +39,26 @@ export class FormDepositoCtaCorrientePage implements OnInit {
   public updating:boolean = false;
   public titulo = "Nuevo Cta. Corriente";
 
-  public metodoPagoSeleccionado="";
+  public metodoPagoSeleccionado=[];
+
+  public depositoId = "";
+  public ctaCorrienteId ="";
+
+  public montoPagoEfectivo =  0;
+  public montoPagoDebito = 0;
+  public montoPagoCredito = 0;
+  public montoPagoCtaCorriente = 0;
 
   constructor(
     private modalController:ModalController,
-    private navCtrl:NavController,
-    private formBuilder: FormBuilder,
-    private authenticationService:AuthenticationService,
-    private carritoService:CarritoService,
-    private firestore:AngularFirestore,
-    private ctaCorrienteService:CtaCorrientesService,
+    private navCtrl:NavController,    
     private cajasService:CajasService,
     public route:ActivatedRoute,
     private movimientosService:MovimientosService,
-    private toastServices:ToastService
-  ) { 
-
-    this.deposito = new MovimientoCtaCorriente(this.authenticationService.getUID(),this.authenticationService.getNombre());
-    this.deposito.id = this.firestore.createId();
-    this.deposito.ctaCorrienteId = this.route.snapshot.params.id;
+    protected afs: AngularFirestore
+  ) {    
+   
+    this.ctaCorrienteId = this.route.snapshot.params.id;
 
     this.cliente = new Cliente();
     this.caja = new Caja();
@@ -67,15 +66,6 @@ export class FormDepositoCtaCorrientePage implements OnInit {
 
   ngOnInit() {
 
-    this.datosForm = this.formBuilder.group({
-      monto: ['', Validators.required],          
-      clienteId:['', Validators.required],
-      cajaId:['', Validators.required],
-      metodoPago:['',Validators.required],
-      motivo:['']   
-    });
-
-    
     this.cajasService.list().subscribe((cajas:any)=>{                 
       this.cajas =cajas;
       
@@ -88,21 +78,8 @@ export class FormDepositoCtaCorrientePage implements OnInit {
   }
 
   setearCliente(cliente){
-    this.cliente = cliente;
-    this.datosForm.patchValue({
-      clienteId:cliente.id
-    });
-    this.carritoService.setearCliente(cliente);
+    this.cliente = cliente;   
   }
-
-  setearMetodoPago(){
-    console.log(this.metodoPagoSeleccionado)
-    this.deposito.metodoPago = this.metodoPagoSeleccionado;
-    this.datosForm.patchValue({
-      metodoPago:this.metodoPagoSeleccionado
-    });
-  }
-
 
   async seleccionarCliente(){
     const modal = await this.modalController.create({
@@ -120,56 +97,38 @@ export class FormDepositoCtaCorrientePage implements OnInit {
 
   seleccionarCaja(){
     this.caja.asignarValores(this.cajaSeleccionada);
-    this.datosForm.patchValue({
-      cajaId:this.caja.id
-    });
+    console.log(this.caja)
   }
 
-  obtenerDatos(){
-
-    let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId');
-    this.cajasService.get(this.datosForm.controls.cajaId.value).subscribe(caja=>{      
-      this.caja = caja;
-    })
-  }
-
-  get f() { return this.datosForm.controls; }
 
   guardar(){   
 
-    this.submitted = true;
-    console.log(this.datosForm.controls.motivo.value+"!!!!!!!!!!!!!!!!!")
-    if (this.datosForm.invalid) {
-      this.toastServices.alert('Por favor completar todos los campos marcados con * antes de continuar',"");
-      return;
-    } 
+   
 
-    this.deposito.asignarValores(this.datosForm.value);
+    this.metodoPagoSeleccionado.forEach(metodo =>{     
 
+      let monto = 0;
+      if(metodo === "efectivo"){
+        monto = this.montoPagoEfectivo;
+      }
+      if(metodo === "debito"){
+        monto = this.montoPagoDebito;
+      }
+      if(metodo === "credito"){
+        monto = this.montoPagoCredito;
+      }
 
-    var pago = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getNombre());      
-    pago.id = this.firestore.createId();
-    pago.tipo = this.enumTipoMovimientoCaja.pago;
-    pago.clienteId = this.cliente.id;
-    pago.cajaId = this.caja.id;
-    pago.metodoPago = this.metodoPagoSeleccionado;
-    pago.ctaCorrienteId = this.deposito.ctaCorrienteId;
-    pago.depositoId = this.deposito.id;
-    pago.monto = this.deposito.monto;
-    pago.motivo = this.datosForm.controls.motivo.value;
-    pago.motivo="Depostio de cuenta corriente, cliente:"+this.cliente.nombre;   
-    this.movimientosService.add(pago).then((data:any)=>{
-      this.deposito.cajaId =this.caja.id;
-      this.deposito.pagoId = data.id;
-      this.deposito.motivo = pago.motivo;
-      this.deposito.ctaCorrienteId = this.deposito.ctaCorrienteId;
-      this.movimientosService.crearMovimientoCtaCorriente(this.deposito);   
+      this.movimientosService.agregarMovimientoEnCtaCorriente(
+        this.ctaCorrienteId,
+        this.cliente.id,
+        this.cliente.nombre,
+        this.caja.id,
+        metodo,
+        monto,
+        this.motivo
+      )
+
     })
-
-    //this.carritoService.setearCaja(this.datosForm.controls.cajaId.value); 
-
-    
-
     this.navCtrl.back();
   }
 

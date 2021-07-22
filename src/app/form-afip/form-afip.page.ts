@@ -14,6 +14,7 @@ export class FormAfipPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    
   }
 
   cancelar(){

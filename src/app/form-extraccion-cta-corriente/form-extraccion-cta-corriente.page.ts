@@ -25,12 +25,11 @@ export class FormExtraccionCtaCorrientePage implements OnInit {
   private enumTipoMovimientoCaja = EnumTipoMovimientoCaja
   
   public monto = 0;
-  private extraccion:MovimientoCtaCorriente;
+  public motivo=""
   public cliente:Cliente;
   public cajas=[];
   public caja:Caja;
   public cajaSeleccionada:any;
-  datosForm: FormGroup; 
   public submitted = false;
 
   public ctaSubs:Subscription;
@@ -39,7 +38,15 @@ export class FormExtraccionCtaCorrientePage implements OnInit {
   public updating:boolean = false;
   public titulo = "Nuevo Cta. Corriente";
 
-  public metodoPagoSeleccionado="";
+  public metodoPagoSeleccionado=[];
+
+  public extraccionId ="";
+  public ctaCorrienteId ="";
+
+  public montoPagoEfectivo =  0;
+  public montoPagoDebito = 0;
+  public montoPagoCredito = 0;
+  public montoPagoCtaCorriente = 0;
 
   constructor(
     private modalController:ModalController,
@@ -54,9 +61,9 @@ export class FormExtraccionCtaCorrientePage implements OnInit {
     private toastServices:ToastService
   ) { 
 
-    this.extraccion = new MovimientoCtaCorriente(this.authenticationService.getUID(),this.authenticationService.getNombre());
-    this.extraccion.id = this.firestore.createId();
-    this.extraccion.ctaCorrienteId = this.route.snapshot.params.id;
+    
+    this.extraccionId = this.firestore.createId();
+    this.ctaCorrienteId = this.route.snapshot.params.id;
 
     this.cliente = new Cliente();
     this.caja = new Caja();
@@ -64,13 +71,6 @@ export class FormExtraccionCtaCorrientePage implements OnInit {
 
   ngOnInit() {
 
-    this.datosForm = this.formBuilder.group({
-      monto: ['', Validators.required],          
-      clienteId:['', Validators.required],
-      cajaId:['', Validators.required],
-      metodoPago:['',Validators.required],
-      motivo:['']   
-    });
 
     
     this.cajasService.list().subscribe((cajas:any)=>{                 
@@ -86,18 +86,10 @@ export class FormExtraccionCtaCorrientePage implements OnInit {
 
   setearCliente(cliente){
     this.cliente = cliente;
-    this.datosForm.patchValue({
-      clienteId:cliente.id
-    });
-    this.carritoService.setearCliente(cliente);
   }
 
   setearMetodoPago(){
     console.log(this.metodoPagoSeleccionado)
-    this.extraccion.metodoPago = this.metodoPagoSeleccionado;
-    this.datosForm.patchValue({
-      metodoPago:this.metodoPagoSeleccionado
-    });
   }
 
 
@@ -117,55 +109,34 @@ export class FormExtraccionCtaCorrientePage implements OnInit {
 
   seleccionarCaja(){
     this.caja.asignarValores(this.cajaSeleccionada);
-    this.datosForm.patchValue({
-      cajaId:this.caja.id
-    });
   }
-
-  obtenerDatos(){
-
-    let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId');
-    this.cajasService.get(this.datosForm.controls.cajaId.value).subscribe(caja=>{      
-      this.caja = caja;
-    })
-  }
-
-  get f() { return this.datosForm.controls; }
 
   guardar(){   
 
-    console.log(this.datosForm.controls.motivo.value+"!!!!!!!!!!!!!!!!!")
-    this.submitted = true;
+    this.metodoPagoSeleccionado.forEach(metodo =>{     
 
-    if (this.datosForm.invalid) {
-      this.toastServices.alert('Por favor completar todos los campos marcados con * antes de continuar',"");
-      return;
-    } 
+      let monto = 0;
+      if(metodo === "efectivo"){
+        monto = this.montoPagoEfectivo;
+      }
+      if(metodo === "debito"){
+        monto = this.montoPagoDebito;
+      }
+      if(metodo === "credito"){
+        monto = this.montoPagoCredito;
+      }
 
-    this.extraccion.asignarValores(this.datosForm.value);
+      this.movimientosService.agregarMovimientoEnCtaCorriente(
+        this.ctaCorrienteId,
+        this.cliente.id,
+        this.cliente.nombre,
+        this.caja.id,
+        metodo,
+        - monto,
+        this.motivo
+      )
 
-
-    var pago = new MovimientoCaja(this.authenticationService.getUID(), this.authenticationService.getNombre());      
-    pago.id = this.firestore.createId();
-    pago.tipo = this.enumTipoMovimientoCaja.pago;
-    pago.clienteId = this.cliente.id;
-    pago.cajaId = this.caja.id;
-    pago.metodoPago = this.metodoPagoSeleccionado;
-    pago.ctaCorrienteId = this.extraccion.ctaCorrienteId;
-    pago.extraccionId = this.extraccion.id;
-    pago.monto = -this.extraccion.monto;
-    pago.motivo="Extraccion de cuenta corriente, cliente:"+this.cliente.nombre;   
-    this.movimientosService.add(pago).then((data:any)=>{
-      this.extraccion.cajaId =this.caja.id;
-      this.extraccion.pagoId = data.id;
-      this.extraccion.monto = - this.extraccion.monto;
-      this.extraccion.motivo = pago.motivo;     
-      this.movimientosService.crearMovimientoCtaCorriente(this.extraccion);   
     })
-
-    //this.carritoService.setearCaja(this.datosForm.controls.cajaId.value); 
-
- 
 
     this.navCtrl.back();
   }

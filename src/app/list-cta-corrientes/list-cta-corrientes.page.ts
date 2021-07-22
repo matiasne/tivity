@@ -41,8 +41,8 @@ export class ListCtaCorrientesPage implements OnInit {
           item.coTitularesId.forEach(async clienteId => {
             console.log(clienteId);
             if(clienteId)
-              await this.clientesServices.get(clienteId).subscribe(snap =>{
-                item.clientes.push(snap.payload.data());
+              await this.clientesServices.get(clienteId).subscribe(cliente =>{
+                item.clientes.push(cliente);
               })
           });
 

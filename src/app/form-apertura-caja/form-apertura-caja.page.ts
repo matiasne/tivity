@@ -63,29 +63,47 @@ export class FormAperturaCajaPage implements OnInit {
 
     this.caja.estado = "abierta";
 
-    var aperturaEfectivo = new MovimientoCaja(this.authenticationService.getUID(),this.authenticationService.getEmail());
-    aperturaEfectivo.tipo = this.enumTipoMovimientoCaja.apertura;
-    aperturaEfectivo.cajaId = this.caja.id;
-    aperturaEfectivo.isApertura = true;
-    aperturaEfectivo.metodoPago = "efectivo";
-    aperturaEfectivo.monto = Number(this.efectivo);
+    var aperturaEfectivo = new MovimientoCaja(
+      "",
+      this.enumTipoMovimientoCaja.apertura,
+      "local",
+      this.caja.id,
+      "efectivo",
+      Number(this.efectivo),
+      "Apertura De Caja Efectivo",
+      this.authenticationService.getUID(),
+      this.authenticationService.getEmail());
+      
     this.movimientosService.add(aperturaEfectivo);
 
-    var aperturaDebito = new MovimientoCaja(this.authenticationService.getUID(),this.authenticationService.getEmail());
-    aperturaDebito.tipo = this.enumTipoMovimientoCaja.apertura;
-    aperturaDebito.cajaId = this.caja.id;
-    aperturaDebito.isApertura = true;
-    aperturaDebito.metodoPago = "debito";
-    aperturaDebito.monto = Number(this.debito);
+
+    var aperturaDebito = new MovimientoCaja(
+      "",
+      this.enumTipoMovimientoCaja.apertura,
+      "local",
+      this.caja.id,
+      "debito",
+      Number(this.debito),
+      "Apertura De Caja Débito",
+      this.authenticationService.getUID(),
+      this.authenticationService.getEmail());
+      
     this.movimientosService.add(aperturaDebito);
 
-    var aperturaCredito = new MovimientoCaja(this.authenticationService.getUID(),this.authenticationService.getEmail());
-    aperturaCredito.tipo = this.enumTipoMovimientoCaja.apertura;
-    aperturaCredito.metodoPago = "credito";
-    aperturaCredito.cajaId = this.caja.id;
-    aperturaCredito.isApertura = true;    
-    aperturaCredito.monto = Number(this.credito);
+
+    var aperturaCredito = new MovimientoCaja(
+      "",
+      this.enumTipoMovimientoCaja.apertura,
+      "local",
+      this.caja.id,
+      "credito",
+      Number(this.credito),
+      "Apertura De Caja Crédito",
+      this.authenticationService.getUID(),
+      this.authenticationService.getEmail());
+      
     this.movimientosService.add(aperturaCredito);
+
 
     this.caja.estado = "abierta";
 
