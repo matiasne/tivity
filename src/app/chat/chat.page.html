@@ -10,17 +10,32 @@
 <ion-content>
 <ion-grid>
   <ion-row *ngFor="let mensaje of mensajes">
-    <ion-col size="9" *ngIf="user.email !== mensaje.senderEmail" class="message other-message">
-      <span class="email">{{mensaje.senderEmail}}</span><br>
-      <span>{{mensaje.text}}</span><br>
-      <ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}
-    </ion-col>    
+   
+      <ion-col size="9" *ngIf="user.email !== mensaje.senderEmail" >
+        
+        <span class="email">{{mensaje.senderEmail}}</span><br>
+        <span>{{mensaje.text}}</span><br>
+        <ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}
+        
+      
+      </ion-col>    
+  
+      <ion-col offset="3" size="9" *ngIf="user.email === mensaje.senderEmail" >
+        <ion-item-sliding class="message my-message">
+          <ion-item class="remove_inner_bottom">
+            <span>{{mensaje.senderEmail}}</span><br>
+            <span>{{mensaje.text}}</span><br>
+            <span class="time"><ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}</span>
+          </ion-item>
+          
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="eliminar(mensaje)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+        
+      </ion-col>
 
-    <ion-col offset="3" size="9" *ngIf="user.email === mensaje.senderEmail" class="message my-message">
-      <span>{{mensaje.senderEmail}}</span><br>
-      <span>{{mensaje.text}}</span><br>
-      <span class="time"><ion-icon name="time-outline"></ion-icon> {{mensaje.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}</span>
-    </ion-col>
+     
 
   </ion-row>
 </ion-grid>

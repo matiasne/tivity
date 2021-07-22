@@ -19,8 +19,10 @@ export class Comercio {
     public rolComandatarios = [];
     public rolCadetes = [];
     public rolEncargados = [];
-
     public plan = "FREE";
+
+    public countPedidoDia = 0;
+    public ultimoPedidoFecha:any;
     
     public config  = {
         productos:true,

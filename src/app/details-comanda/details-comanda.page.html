@@ -1,9 +1,116 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title  size="small">details-comanda</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title  size="small">Detalle Comanda</ion-title>    
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">   
+  
+  <span class="pedido-item" *ngIf="comercio.config.comandas">
+    <img style="width:18px;" src="../../../assets/img/chef_hat_icon.fw.png" alt=""> 
+    <span *ngIf="pedido.comanda.estado == cEstado.rechazado" style="color: red;">Rechazado</span>
+    <span *ngIf="pedido.comanda.estado == cEstado.tomado" style="color: blue;">En Curso</span>
+    <span *ngIf="pedido.comanda.estado == cEstado.solicitado" style="color: blue;"> Solicitado</span>
+    <span *ngIf="pedido.comanda.estado == cEstado.completo" style="color: green;"> Listo</span>
+  </span>    
+    <div  class="form-card" *ngIf="pedido.productos.length > 0">
+      <div class="pedido-item"> 
+        <ion-icon name="cube-outline"></ion-icon> Productos:
+      </div>  
+      <ion-list> 
+        <span *ngFor="let producto of pedido.productos; let i = index">           
+          <app-card-producto
+            [item]="producto"  
+            [showStock]="false" 
+            [showImage]="false"
+            [showEnCarrito]="false"
+            [multiplicador]="1" 
+          ></app-card-producto>             
+        </span> 
+      </ion-list>
+    </div>
 
-</ion-content>
+    <ion-item-sliding class="item-card" *ngIf="pedido.clienteNombre">     
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{pedido.clienteNombre}}</h2>
+          <p *ngIf="pedido.clienteDoc">{{pedido.clienteDocTipo}}: {{pedido.clienteDoc}}</p>
+          <p *ngIf="pedido.clientePersonaJuridica == '1'">Responsable Inscripto</p>
+          <p *ngIf="pedido.clientePersonaJuridica == '2'">Monotributista</p>
+          <p *ngIf="pedido.clientePersonaJuridica == '3'">Iva Exento</p>
+        </ion-label>  
+      </ion-item>
+      <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+        <ion-item-option color="danger" (click)="eliminarCliente()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding class="item-card" *ngIf="pedido.mesaId">
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-icon name="grid-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{pedido.mesaNombre}}</h2>
+        </ion-label>      
+      </ion-item>
+
+      <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+        <ion-item-option color="danger" (click)="eliminarMesa()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding class="item-card" *ngIf="pedido.direccion.street_name">  
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-icon name="location-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{pedido.direccion.street_name}} {{pedido.direccion.street_number}},{{pedido.direccion.locality}},{{pedido.direccion.state}}. <br>
+            <span *ngIf="pedido.direccion.piso"> Piso: {{pedido.direccion.piso}}</span>
+            <span *ngIf="pedido.direccion.puerta"> Puerta: {{pedido.direccion.puerta}}</span>
+            {{pedido.direccion.distanciaDelComercio}} Km.
+          </h2>
+        </ion-label>      
+      </ion-item>
+  
+      <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+        <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" >     
+      <ion-fab-button *ngIf="pedido.id != ''" (click)="chat()">
+        <ion-icon name="chatbubble-outline"></ion-icon> {{pedido.countMensajes}}
+      </ion-fab-button>
+      <br>
+      <ion-fab-button (click)="imprimir()">
+        <ion-icon name="print-outline"></ion-icon>
+      </ion-fab-button>
+      <br>
+    </ion-fab>   
+</ion-content> 
+
+<ion-footer class="ion-no-border ion-padding">  
+  <ion-toolbar *ngIf="pedido.comanda.estado == cEstado.tomado">   
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora == 10"  color="primary" (click)="demora(10)">10 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora != 10" color="light" (click)="demora(10)">10 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora == 20" color="primary" (click)="demora(20)">20 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora != 20" color="light" (click)="demora(20)">20 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora == 30" color="primary" (click)="demora(30)">30 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora != 30" color="light" (click)="demora(30)">30 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora == 40" color="primary" (click)="demora(40)">40 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora != 40" color="light" (click)="demora(40)">40 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora == 50" color="primary" (click)="demora(50)">50 minutos</ion-button>
+    <ion-button  class="button-rounded" *ngIf="pedido.comanda.demora != 50" color="light" (click)="demora(50)">50 minutos</ion-button>
+  </ion-toolbar> 
+</ion-footer>

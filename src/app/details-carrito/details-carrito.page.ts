@@ -123,8 +123,7 @@ export class DetailsCarritoPage implements OnInit {
   crearPedido(){
     this.imprimir()   
     this.carritoService.crearPedido()
-   
-    this.atras()
+    this.modalController.dismiss("vacio")
   }  
 
   imprimir(){

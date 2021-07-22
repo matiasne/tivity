@@ -239,7 +239,8 @@ export class ListPedidosPage implements OnInit {
         "clienteNombre",
         "mesaNombre",
         "personalEmail",
-        "personalNombre"
+        "personalNombre",
+        "comanda.numero"
       ]
     };
     

@@ -56,25 +56,25 @@
     
     <ion-list lines="none" *ngIf="seccionActiva == 'pendientes'">     
       <div *ngFor="let item of itemsPendientes">   
-        <app-card-comanda-v2 [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+        <app-card-comanda-v2 [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
       </div>
     </ion-list>
 
     <ion-list lines="none" *ngIf="seccionActiva == 'proceso'">     
       <div *ngFor="let item of itemsProceso">   
-        <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+        <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
       </div>
     </ion-list> 
 
     <ion-list lines="none" *ngIf="seccionActiva == 'listas'">     
       <div *ngFor="let item of itemsListas">   
-        <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+        <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
       </div>
     </ion-list>
 
     <ion-list lines="none" *ngIf="seccionActiva == 'rechazados'">     
       <div *ngFor="let item of itemsRechazados">   
-        <app-card-comanda-v2 [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+        <app-card-comanda-v2 [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
       </div>
     </ion-list>
 
@@ -87,7 +87,7 @@
           <ion-list lines="none">   
             <h5>Pendientes ({{itemsPendientes.length}})</h5>  
             <div *ngFor="let item of itemsPendientes">   
-              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
             </div>
           </ion-list> 
         </ion-col>
@@ -95,7 +95,7 @@
           <ion-list lines="none">  
             <h5>En Proceso ({{itemsProceso.length}})</h5>    
             <div *ngFor="let item of itemsProceso">   
-              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
             </div>
           </ion-list> 
         </ion-col>
@@ -103,7 +103,7 @@
           <ion-list lines="none">  
             <h5>Listas  ({{itemsListas.length}})</h5>     
             <div *ngFor="let item of itemsListas">   
-              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
             </div>
           </ion-list> 
         </ion-col>
@@ -111,7 +111,7 @@
           <ion-list lines="none">   
             <h5>Suspendidos ({{itemsRechazados.length}})</h5>  
             <div *ngFor="let item of itemsRechazados">   
-              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro"></app-card-comanda-v2>
+              <app-card-comanda-v2  [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
             </div>
           </ion-list> 
         </ion-col>

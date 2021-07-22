@@ -5,8 +5,12 @@ import { LoadingService } from '../Services/loading.service';
 import { PedidoService } from '../Services/pedido.service';
 import { EnumEstadoCocina } from 'src/app/models/producto';
 import { CocinasService } from '../Services/cocinas.service';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { Pedido } from '../models/pedido';
+import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
+import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
+import { DetailsComandaPage } from '../details-comanda/details-comanda.page';
 
 @Component({
   selector: 'app-list-comandas-v2',
@@ -49,6 +53,8 @@ export class ListComandasV2Page implements OnInit {
     private alertController:AlertController,
     private router:Router,  
     private platform:Platform,
+    private modalController:ModalController,
+    private navParametrosService:NavegacionParametrosService
   ) { 
     this.devWidth = this.platform.width();
     this.fechaDesde.setDate(this.fechaDesde.getDate() - 1);
@@ -176,16 +182,16 @@ export class ListComandasV2Page implements OnInit {
       if(encontrado){ 
         console.log(true)
 
-        if(item.estadoComanda == EnumEstadoCocina.rechazado){
+        if(item.comanda.estado == EnumEstadoCocina.rechazado){
           this.itemsRechazados.push(item);
         }
-        if(item.estadoComanda == EnumEstadoCocina.solicitado){
+        if(item.comanda.estado == EnumEstadoCocina.solicitado){
           this.itemsPendientes.push(item);
         }
-        if(item.estadoComanda == EnumEstadoCocina.tomado){
+        if(item.comanda.estado == EnumEstadoCocina.tomado){
           this.itemsProceso.push(item);
         }
-        if(item.estadoComanda == EnumEstadoCocina.completo){
+        if(item.comanda.estado == EnumEstadoCocina.completo){
           this.itemsListas.push(item);
         }
       }
@@ -195,6 +201,27 @@ export class ListComandasV2Page implements OnInit {
 
   nuevoPedido(){
     this.router.navigate(['list-productos-servicios'])
+  }
+
+  async abrir(item){
+    console.log(item)
+    let editarPedido = new Pedido();
+    editarPedido.asignarValores(item);
+    
+    this.navParametrosService.param = editarPedido;
+   // this.router.navigate(['details-pedido'])
+
+    const modal = await this.modalController.create({
+      component: DetailsComandaPage, 
+      id:'detail-comanda'      
+    });
+    modal.onDidDismiss()
+    .then((retorno) => {
+      this.refrescar()
+    })
+
+    
+    await modal.present();
   }
 
 }

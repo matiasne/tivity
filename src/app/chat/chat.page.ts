@@ -31,6 +31,7 @@ export class ChatPage implements OnInit {
     this.user = this.authService.getActualUser();
     this.user.id = this.authService.getUID();
     console.log(this.navParams.get('objeto')+" "+this.navParams.get('id'));
+
     this.comentariosService.setearPath(this.navParams.get('objeto'),this.navParams.get('id'));   
       this.obs = this.comentariosService.obtener().subscribe(data =>{
         data.forEach((item:any) =>{
@@ -58,9 +59,16 @@ export class ChatPage implements OnInit {
     this.comentario.senderEmail = this.user.email;
     this.comentario.senderId = this.user.id;
     this.comentariosService.add(this.comentario).then(data=>{
-      console.log(data);     
+      console.log(data);
+      this.comentariosService.incrementarNumeroMensajes(this.navParams.get('objeto'),this.navParams.get('id'))     
     })
     
+  }
+
+  eliminar(mensaje){
+    this.comentariosService.delete(mensaje.id).then(data=>{
+      this.comentariosService.decrementarNumeroMensajes(this.navParams.get('objeto'),this.navParams.get('id'))
+    })
   }
 
   cerrar(){

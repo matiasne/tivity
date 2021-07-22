@@ -1,55 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ModalController, NavController, NavParams } from '@ionic/angular';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { type } from 'os';
-import { AddProductoVentaPage } from '../add-producto-venta/add-producto-venta.page';
 import { ChatPage } from '../chat/chat.page';
-import { FormAfipPage } from '../form-afip/form-afip.page';
 import { FormClientePage } from '../form-cliente/form-cliente.page';
 import { FormCobrarPedidoPage } from '../form-cobrar-pedido/form-cobrar-pedido.page';
-import { FormComentarioPage } from '../form-comentario/form-comentario.page';
 import { FormConfiguracionAfipPage } from '../form-configuracion-afip/form-configuracion-afip.page';
 import { FormDevolverPedidoPage } from '../form-devolver-pedido/form-devolver-pedido.page';
 import { FormMesaPage } from '../form-mesa/form-mesa.page';
-import { TicketDetallePage } from '../impresiones/ticket-detalle/ticket-detalle.page';
 import { ModalInputDireccionPage } from '../modal-input-direccion/modal-input-direccion.page';
 import { Caja } from '../models/caja';
-import { Cliente } from '../models/cliente';
 import { Comercio } from '../models/comercio';
 import { Descuento, EnumTipoDescuento } from '../models/descuento';
 import { Localizacion } from '../models/localizacion';
 import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
-import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
 import { EnumEstadoCobro, Pedido } from '../models/pedido';
 import { EnumEstadoCocina } from 'src/app/models/producto';
 import { Producto } from '../models/producto';
-import { EnumTipoRecargo, Recargo } from '../models/recargo';
-import { variacionStock } from '../models/variacionStock';
-import { Venta } from '../models/venta';
+import { Recargo } from '../models/recargo';
 import { SelectClientePage } from '../select-cliente/select-cliente.page';
 import { SelectMesaPage } from '../select-mesa/select-mesa.page';
 import { SelectProductPage } from '../select-product/select-product.page';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
-import { AuthenticationService } from '../Services/authentication.service';
 import { CajasService } from '../Services/cajas.service';
-import { ClientesService } from '../Services/clientes.service';
 import { ComentariosService } from '../Services/comentarios.service';
 import { ComerciosService } from '../Services/comercios.service';
-import { CtaCorrientesService } from '../Services/cta-corrientes.service';
 import { CarritoService } from '../Services/global/carrito.service';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { MesasService } from '../Services/mesas.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
-import { MovimientosService } from '../Services/movimientos.service';
-import { NotificacionesService } from '../Services/notificaciones.service';
 import { PedidoService } from '../Services/pedido.service';
-import { ProductosService } from '../Services/productos.service';
-import { ToastService } from '../Services/toast.service';
-import { VariacionesStocksService } from '../Services/variaciones-stocks.service';
-import { VentasService } from '../Services/ventas.service';
 
 @Component({
   selector: 'app-details-pedido',
@@ -89,17 +69,12 @@ export class DetailsPedidoPage implements OnInit {
     public comerciosService:ComerciosService,
     public cajasService:CajasService,
     private modalController:ModalController,
-    private authenticationService:AuthenticationService,
-    private firestore: AngularFirestore,
-    private movimientosService:MovimientosService,
     private pedidosService:PedidoService,
-    private productosService:ProductosService,
     private impresoraService:ImpresoraService,
     private comentariosService:ComentariosService,
     private alertController:AlertController,
     private mesasServices:MesasService,
     private navParamService:NavegacionParametrosService,
-    private navCtrl:NavController,
     private carritoService:CarritoService,
     private modalNotificacion:ModalNotificacionService,
     private afipService:AfipServiceService
@@ -107,7 +82,6 @@ export class DetailsPedidoPage implements OnInit {
 
     this.comercio = new Comercio()
     this.mesa = new Mesa();
-    this.pedido = new Pedido()
     this.pedido = new Pedido()
     this.comercio.asignarValores(this.comerciosService.getSelectedCommerceValue());
 
@@ -473,7 +447,7 @@ export class DetailsPedidoPage implements OnInit {
 
   suspenderProducto(producto,index){
     producto.suspendido = 1
-    producto.estadoComanda = this.pEstado.suspendido
+    producto.comanda.estado = this.pEstado.suspendido
     console.log(producto)
     
     if(this.pedido.id != ""){
@@ -506,8 +480,7 @@ export class DetailsPedidoPage implements OnInit {
 
   public getTotal(){ 
     this.pedido.total =  this.pedidosService.getTotal(this.pedido) 
-    console.log(this.pedido.total)
-    
+    console.log(this.pedido.total)    
   }
 
 
@@ -562,6 +535,10 @@ export class DetailsPedidoPage implements OnInit {
 
   cerrar(){
     this.modalController.dismiss()
+  }
+
+  demora(minutos){
+
   }
 
   

@@ -23,6 +23,11 @@ export class Pedido{
 
     public statusCobro = EnumEstadoCobro.pendiente;    
 
+    public comanda ={ 
+        estado:2,
+        demora:0,
+        numero:0,
+    }
     public personalId = "";
     public personalEmail="";
     public personalNombre="";
@@ -65,6 +70,7 @@ export class Pedido{
     
 
     public primerMensaje ="";
+    public countMensajes = 0;
 
     public afipFactura = {
         emisorRazonSocial:"",

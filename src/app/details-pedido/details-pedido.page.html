@@ -14,10 +14,10 @@
   <ion-row>
   <span class="pedido-item" *ngIf="comercio.config.comandas">
     <img style="width:18px;" src="../../../assets/img/chef_hat_icon.fw.png" alt=""> 
-    <span *ngIf="pedido.estadoComanda == pEstado.rechazado" style="color: red;">Rechazado</span>
-    <span *ngIf="pedido.estadoComanda == pEstado.tomado" style="color: blue;">En Curso</span>
-    <span *ngIf="pedido.estadoComanda == pEstado.solicitado" style="color: blue;"> Solicitado</span>
-    <span *ngIf="pedido.estadoComanda == pEstado.completo" style="color: green;"> Listo</span>
+    <span *ngIf="pedido.comanda.estado == pEstado.rechazado" style="color: red;">Rechazado</span>
+    <span *ngIf="pedido.comanda.estado == pEstado.tomado" style="color: blue;">En Curso</span>
+    <span *ngIf="pedido.comanda.estado == pEstado.solicitado" style="color: blue;"> Solicitado</span>
+    <span *ngIf="pedido.comanda.estado == pEstado.completo" style="color: green;"> Listo</span>
   </span> 
    
   
@@ -188,7 +188,7 @@
     <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
      
       <ion-fab-button *ngIf="pedido.id != ''" (click)="chat()">
-        <ion-icon name="chatbubble-outline"></ion-icon>
+        <ion-icon name="chatbubble-outline"></ion-icon>{{pedido.countMensajes}}
       </ion-fab-button>
       <br>
       <ion-fab-button (click)="imprimir()">

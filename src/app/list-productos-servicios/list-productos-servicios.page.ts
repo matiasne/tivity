@@ -235,8 +235,7 @@ export class ListProductosServiciosPage implements OnInit {
   validarEnCarrito(){
     this.itemsProductos.forEach(element => {
       element.enCarrito = 0;
-      this.carrito.productos.forEach(prod => {        
-         
+      this.carrito.productos.forEach(prod => {          
           if(prod.id == element.id){
             element.enCarrito += prod.cantidad;
           }
@@ -553,7 +552,6 @@ export class ListProductosServiciosPage implements OnInit {
   }
 
   async verCarrito(){
-    console.log(this.route.snapshot.params.carritoIntended)
    // this.router.navigate(['details-carrito',{carritoIntended:this.route.snapshot.params.carritoIntended}])  
     const modal = await this.modalController.create({
       component: DetailsCarritoPage,
@@ -564,6 +562,11 @@ export class ListProductosServiciosPage implements OnInit {
       this.validarEnCarrito()
       if(this.route.snapshot.params.carritoIntended)
         this.router.navigate([this.route.snapshot.params.carritoIntended]);
+      if(retorno.data == "vacio"){
+        this.itemsProductos.forEach(element => {
+          element.enCarrito = 0;
+        }) 
+      }
     });
     return await modal.present();
   }
