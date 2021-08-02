@@ -18,7 +18,8 @@ export const environment = {
     appId: "1:902663639749:web:fe1ba6a8f6664050b5d6ac",
     measurementId: "G-X1Y7488PGP"
   },
-  afipUrl:"https://us-central1-tivity-socialup.cloudfunctions.net/api/afip"
+  afipUrl:"https://us-central1-tivity-socialup.cloudfunctions.net/api/afip",
+  mercadoPagoUrl:"https://us-central1-tivity-socialup.cloudfunctions.net/api/mercadopago"
 };
 
 /*

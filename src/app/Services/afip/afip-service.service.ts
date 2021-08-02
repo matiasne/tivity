@@ -17,13 +17,17 @@ export class AfipServiceService {
     private http:HttpClient,
     private comerciosService:ComerciosService,
     private toastService:ToastService
-  ) { }
+  ) {
 
 
-  guardarPasswordValidado(password){
-    localStorage.setItem('AfipPassword'+this.comerciosService.getSelectedCommerceValue().id,password)
-  }
+   }
 
+   getToken(){
+     return this.comerciosService.getSelectedCommerceValue().afip.token
+   }
+
+
+/*
   async login(){
     let pass = localStorage.getItem('AfipPassword'+this.comerciosService.getSelectedCommerceValue().id)
     console.log(pass)
@@ -49,36 +53,17 @@ export class AfipServiceService {
     },err=>{
       console.log(err)
     })  
-  }
+  }*/
 
   getTiposFactura(): Observable<any>{
     return this.vTypes.asObservable();
   }
 
-  async status(){
-    let httpHeaders = new HttpHeaders({
-      'Authorization' : 'Bearer '+localStorage.getItem('afipToken')
-    });      
-
-    let options = {
-      headers: httpHeaders
-    };          
-    
-    this.http.post(environment.afipUrl+"/status",{},options).subscribe((data:any)=>{
-      console.log(data)
-      
-     
-    },err=>{
-      console.log(err)
-      if(err.status == 403){
-        this.login()
-      }
-    })
-  }
+  
 
   async voucherTypes(){
     let httpHeaders = new HttpHeaders({
-      'Authorization' : 'Bearer '+localStorage.getItem('afipToken')
+      'Authorization' : 'Bearer '+this.getToken()
     });      
 
     let options = {
@@ -90,15 +75,12 @@ export class AfipServiceService {
       this.vTypes.next(data.voucherTypes);
     },err=>{
       console.log(err)
-      if(err.status == 403){
-        this.login()
-      }
     })
   }
 
   async facturarPedido(pedidoId){
     let httpHeaders = new HttpHeaders({
-      'Authorization' : 'Bearer '+localStorage.getItem('afipToken')
+      'Authorization' : 'Bearer '+this.getToken()
     });      
 
     let options = {
@@ -118,7 +100,7 @@ export class AfipServiceService {
 
   async notaCreditoPedido(pedidoId,montoReembolso){
     let httpHeaders = new HttpHeaders({
-      'Authorization' : 'Bearer '+localStorage.getItem('afipToken')
+      'Authorization' : 'Bearer '+this.getToken()
     });      
 
     let options = {

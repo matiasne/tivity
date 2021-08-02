@@ -1,25 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController, NavController, NavParams } from '@ionic/angular';
 import { ChatPage } from '../chat/chat.page';
-import { FormClientePage } from '../form-cliente/form-cliente.page';
-import { FormCobrarPedidoPage } from '../form-cobrar-pedido/form-cobrar-pedido.page';
-import { FormConfiguracionAfipPage } from '../form-configuracion-afip/form-configuracion-afip.page';
-import { FormDevolverPedidoPage } from '../form-devolver-pedido/form-devolver-pedido.page';
-import { FormMesaPage } from '../form-mesa/form-mesa.page';
-import { ModalInputDireccionPage } from '../modal-input-direccion/modal-input-direccion.page';
-import { Caja } from '../models/caja';
 import { Comercio } from '../models/comercio';
-import { Descuento, EnumTipoDescuento } from '../models/descuento';
-import { Localizacion } from '../models/localizacion';
 import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { EnumEstadoCobro, Pedido } from '../models/pedido';
-import { EnumEstadoCocina } from 'src/app/models/producto';
-import { Producto } from '../models/producto';
-import { Recargo } from '../models/recargo';
-import { SelectClientePage } from '../select-cliente/select-cliente.page';
-import { SelectMesaPage } from '../select-mesa/select-mesa.page';
-import { SelectProductPage } from '../select-product/select-product.page';
+import { EnumEstadoCocina } from 'src/app/models/item';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { CajasService } from '../Services/cajas.service';
 import { ComentariosService } from '../Services/comentarios.service';
@@ -129,6 +115,7 @@ export class DetailsComandaPage implements OnInit {
   demora(min){
     this.pedido.comanda.demora = min
     this.actualizarPedido()
+    this.modalController.dismiss()
   }
 
 

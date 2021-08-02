@@ -3,7 +3,6 @@ import { ModalController, LoadingController, AlertController, NavController, Pla
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductosService } from '../Services/productos.service';
 import { Subscription } from 'rxjs';
-import { ServiciosService } from '../Services/servicios.service';
 import { AddProductoVentaPage } from '../add-producto-venta/add-producto-venta.page';
 import { CarritoService } from '../Services/global/carrito.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
@@ -23,7 +22,7 @@ import { ComandaPage } from '../impresiones/comanda/comanda.page';
 import { CambiarPlanPage } from '../cambiar-plan/cambiar-plan.page';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 import { WordpressService } from '../Services/wordpress/wordpress.service';
-import { Producto } from '../models/producto';
+import { Item } from '../models/item';
 import { UsuariosService } from '../Services/usuarios.service';
 import { NotifificacionesAppService } from '../Services/notifificaciones-app.service';
 import { PedidoService } from '../Services/pedido.service';
@@ -104,7 +103,6 @@ export class ListProductosServiciosPage implements OnInit {
     private route: ActivatedRoute,
     public productosService:ProductosService,
     public variacionesStockService:VariacionesStocksService,
-    public serviciosService:ServiciosService,
     public modalCtrl: ModalController,
     public carritoService:CarritoService,
     private barcodeScanner: BarcodeScanner,
@@ -220,7 +218,7 @@ export class ListProductosServiciosPage implements OnInit {
     console.log("DidEnter")
     //this.marcarEnCarrito();
   //  this.wordpressService.obtainToken()
-    console.log(this.carrito.productos)
+    console.log(this.carrito.items)
     this.validarEnCarrito()
   }
 
@@ -235,7 +233,7 @@ export class ListProductosServiciosPage implements OnInit {
   validarEnCarrito(){
     this.itemsProductos.forEach(element => {
       element.enCarrito = 0;
-      this.carrito.productos.forEach(prod => {          
+      this.carrito.items.forEach(prod => {          
           if(prod.id == element.id){
             element.enCarrito += prod.cantidad;
           }
@@ -309,7 +307,7 @@ export class ListProductosServiciosPage implements OnInit {
       if(this.buscandoBarCode){
         this.buscandoBarCode = false;
         if(this.itemsProductos.length == 1){
-          this.agregarProducto(this.itemsProductos[0])
+          this.agregarItem(this.itemsProductos[0])
           this.toastServices.mensaje("Se seleccionó el producto: "+this.itemsProductos[0].nombre,"");
         }
       }
@@ -318,7 +316,7 @@ export class ListProductosServiciosPage implements OnInit {
       if(this.cargaPorVoz.reconociendoPorVoz){
         this.cargaPorVoz.reconociendoPorVoz = false;
         if(this.itemsProductos.length == 1){
-          this.agregarProducto(this.itemsProductos[0]);
+          this.agregarItem(this.itemsProductos[0]);
           this.toastServices.mensaje("Se seleccionó el producto: "+this.itemsProductos[0].nombre,"");
         }
       }           
@@ -418,7 +416,7 @@ export class ListProductosServiciosPage implements OnInit {
 
   agregarACarrito(producto){
     producto.precioTotal = producto.precio
-    this.carritoService.agregarProducto(producto);
+    this.carritoService.agregarItem(producto);
   }
 
 
@@ -427,7 +425,7 @@ export class ListProductosServiciosPage implements OnInit {
      
       this.dragAgregar = false
       producto.precioTotal = producto.precio
-      this.carritoService.agregarProducto(producto);
+      this.carritoService.agregarItem(producto);
       this.dragEvent.close().then(data=>{
            
           
@@ -474,7 +472,7 @@ export class ListProductosServiciosPage implements OnInit {
     this.router.navigate(['dashboard-productos']);
   }
 
-  async agregarProducto(producto:Producto){   
+  async agregarItem(item:Item){   
 
     
 
@@ -482,7 +480,7 @@ export class ListProductosServiciosPage implements OnInit {
       component: AddProductoVentaPage,     
       cssClass:'modal-custom-wrapper',
       componentProps:{
-        producto:producto
+        producto:item
       }
     });         
 
@@ -491,11 +489,10 @@ export class ListProductosServiciosPage implements OnInit {
     .then((retorno) => { 
 
       if(retorno.data){   
-        producto.enCarrito += retorno.data.cantidad;
-        delete retorno.data.keywords;
+        item.enCarrito += retorno.data.cantidad;
         //producto.cantidad = retorno.data.cantidad
         //producto.opcionesSeleccionadas = retorno.data.opcionesSeleccionadas
-        this.carritoService.agregarProducto(retorno.data);    
+        this.carritoService.agregarItem(retorno.data);    
         //this.marcarEnCarrito();         
       }else{
 

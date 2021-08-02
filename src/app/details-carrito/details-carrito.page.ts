@@ -110,7 +110,7 @@ export class DetailsCarritoPage implements OnInit {
 
   continuar(){ 
 
-    if(this.comercio.config.servicios && this.carrito.servicios.length == 0 && this.carrito.productos.length == 0){
+    if(this.carrito.items.length == 0){
       this.toastServices.alert("Debes ingresar al menos un producto o servicio","");      
       return;
     }        
@@ -142,7 +142,7 @@ export class DetailsCarritoPage implements OnInit {
 
   eliminarProducto(i){
     this.carritoService.eliminarProducto(i); 
-    if(this.carrito.productos.length == 0 && this.carrito.descuentos.length == 0 && this.carrito.recargos.length == 0){
+    if(this.carrito.items.length == 0 && this.carrito.descuentos.length == 0 && this.carrito.recargos.length == 0){
       this.navCtrl.back()
     }
     this.modalNotificacion.trash("Eliminado del pedido","El producto "+i.nombre+" ha sido eliminado del pedido") 

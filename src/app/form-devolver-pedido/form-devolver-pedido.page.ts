@@ -9,7 +9,7 @@ import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
 import { EnumEstadoCobro, Pedido } from '../models/pedido';
-import { EnumEstadoCocina } from 'src/app/models/producto';
+import { EnumEstadoCocina } from 'src/app/models/item';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { AuthenticationService } from '../Services/authentication.service';
 import { CajasService } from '../Services/cajas.service';
@@ -127,7 +127,7 @@ export class FormDevolverPedidoPage implements OnInit {
   async reembolsar(){
 
     let seleccionReembolsado = false;
-    this.pedido.productos.forEach(p =>{    
+    this.pedido.items.forEach(p =>{    
       if(p.reembolsar){
         seleccionReembolsado = true;
       }
@@ -168,11 +168,10 @@ export class FormDevolverPedidoPage implements OnInit {
       this.cajaSeleccionada = this.cajas[this.cajaSeleccionadaIndex];
       console.log(this.cajaSeleccionada)
 
-      if(this.pedido.productos.length > 0){
+      if(this.pedido.items.length > 0){
 
-        this.pedido.productos.forEach(p =>{    
-          if(p.reembolsar){
-            delete p.keywords;     
+        this.pedido.items.forEach(p =>{    
+          if(p.reembolsar){ 
             let deltaStock = 0;
             if(p.valorPor)
               deltaStock =  + (Number(p.cantidad) * Number(p.valorPor));
@@ -202,6 +201,9 @@ export class FormDevolverPedidoPage implements OnInit {
             }
             if(metodo === "credito"){
               monto = this.pedido.montoPagoCredito;
+            }
+            if(metodo === "mercadopago"){
+              monto = this.pedido.montoPagoMercadoPago;
             }
 
             if(metodo != "ctaCorriente"){
@@ -267,7 +269,7 @@ export class FormDevolverPedidoPage implements OnInit {
     }catch(err){
       console.log(err);
       this.mostrarError(err.error.message)
-      this.pedido.productos.forEach(p=>{
+      this.pedido.items.forEach(p=>{
         p.reembolsar = false;
       })
       this.loadingService.dismissLoading();
@@ -350,7 +352,7 @@ export class FormDevolverPedidoPage implements OnInit {
   }
 
   cancelar(){
-    this.pedido.productos.forEach(p =>{    
+    this.pedido.items.forEach(p =>{    
       p.reembolsar = false;   
     })
     this.modalController.dismiss();
@@ -358,7 +360,7 @@ export class FormDevolverPedidoPage implements OnInit {
 
   calcularReembolso(){
     this.totalReembolso = 0
-    this.pedido.productos.forEach(p =>{    
+    this.pedido.items.forEach(p =>{    
       if(p.reembolsar){
         this.totalReembolso += p.precioTotal   
       }      

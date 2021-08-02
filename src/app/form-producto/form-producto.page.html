@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title  size="small">{{titulo}} <p class="header-subtitulo">{{producto.nombre}}</p></ion-title>    
+    <ion-title  size="small">{{titulo}} <p class="header-subtitulo">{{item.nombre}}</p></ion-title>    
   </ion-toolbar>
 </ion-header>
 
@@ -11,6 +11,17 @@
 
   
   <form [formGroup]="datosForm">
+    <div class="form-card">
+      <ion-item>
+        <ion-label color="primary" position="floating">Tipo</ion-label>
+        <ion-select formControlName="tipo">
+          <ion-select-option [value]="1" selected>Producto</ion-select-option>
+          <ion-select-option [value]="2">Servicio</ion-select-option>
+        </ion-select>
+      </ion-item> 
+    </div>
+    
+
     <div class="form-card">        
       <ion-item [class.invalid]="submitted && !datosForm.controls.nombre.valid">
         <ion-label position="floating">Nombre *</ion-label>
@@ -32,7 +43,7 @@
     </div>
 
     <ion-slides pager="true" [options]="slideOpts">
-      <ion-slide *ngFor="let imagen of producto.imagenes;let i=index" (click)="verImagen(i,imagen)">
+      <ion-slide *ngFor="let imagen of item.imagenes;let i=index" (click)="verImagen(i,imagen)">
         <ion-card>
           <img src="{{imagen.url}}"/>
           <!--ion-card-content>
@@ -64,15 +75,13 @@
           
   
     <div class="form-card" *ngIf="comercio.config.stock">
-      <p>Stock actual: {{producto.stock}}</p>
+      <p>Stock actual: {{item.stock}}</p>
       <ion-button size="large" color="light"  expand="block" (click)="agregarStock()">Agregar Stock</ion-button>
     </div>  
     
     
     
-    <div class="form-card">
-      
-      
+    <div class="form-card">     
       <ion-grid>
         <ion-row>
           <ion-col>

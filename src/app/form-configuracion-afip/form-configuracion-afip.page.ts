@@ -28,14 +28,12 @@ export class FormConfiguracionAfipPage implements OnInit {
   ngOnInit() {
   }
 
-  cancelar(){
+  cerrar(){
     this.modalCtrl.dismiss();
   }
 
   async validar(){
-    try{
-      await this.afipService.status()
-      this.afipService.guardarPasswordValidado(this.password)
+    try{      
       this.modalCtrl.dismiss();
       this.toastService.mensaje("Conectado correctamente","")
     }catch(err){
@@ -47,6 +45,14 @@ export class FormConfiguracionAfipPage implements OnInit {
   update(){
 
     
+    this.comercioService.update(this.comercio);
+  }
+
+  desvincular(){
+    this.comercio.afip = {
+      token:"",
+      puntoVenta:""
+    }
     this.comercioService.update(this.comercio);
   }
 

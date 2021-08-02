@@ -8,6 +8,8 @@ import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { ComerciosService } from '../Services/comercios.service';
 import { LoadingService } from '../Services/loading.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
+import { ModalController } from '@ionic/angular';
+import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
 
 @Component({
   selector: 'app-dashboard-comercio',
@@ -17,13 +19,16 @@ import { ImpresoraService } from '../Services/impresora/impresora.service';
 export class DashboardComercioPage implements OnInit {
 
   public comercio:Comercio;
+
+  public link = "";
   constructor(
     public router:Router,
     private carritoService:CarritoService,
     private comerciosService:ComerciosService,
     private afipService:AfipServiceService,
     private loadingService:LoadingService,
-    private impresoraService:ImpresoraService
+    private impresoraService:ImpresoraService,
+    private modalCtrl:ModalController
   ) { 
     this.comercio = new Comercio()
   }
@@ -43,7 +48,7 @@ export class DashboardComercioPage implements OnInit {
       this.loadingService.dismissLoading();
       this.comercio = new Comercio();
       this.comercio.asignarValores(data)
-      this.afipService.login();
+      this.link = "https://auth.mercadopago.com.ar/authorization?client_id=6782463642048642&response_type=code&platform_id=mp&state=id="+this.comercio.id+"&redirect_uri=https://us-central1-tivity-socialup.cloudfunctions.net/api/mercadopago/marketplaceAuth"
     })
     
     
@@ -82,6 +87,14 @@ export class DashboardComercioPage implements OnInit {
   
   irEgresoCaja(){
     this.router.navigate(['form-egreso-caja']);
+  }
+
+  async tarjeta(){
+    
+    let modal = await this.modalCtrl.create({
+      component: FormCardPaymentPage,
+    });  
+    return await modal.present();
   }
 
 }

@@ -1,11 +1,26 @@
 import {NextFunction, Request, Response, Router } from 'express';
 import { AfipController} from './controllers/afip'
+import { MercadoPagoController } from './controllers/mercaopago';
 import { isAfipAuth,  } from './middleware/isAfipAuth';
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{  
   
   let afipController = new AfipController()  
+  let mercadoPagoController = new MercadoPagoController() 
+
+
+  app.post('/mercadopago/procesarPago', (req: Request, res: Response) => {
+    return mercadoPagoController.procesarPago(req,res,db);
+  });
+
+  app.get('/mercadopago/marketplaceAuth', (req: Request, res: Response) => {
+    return mercadoPagoController.marketplaceAuth(req,res,db);
+  });
+
+  app.post('/mercadopago/marketplaceOK', (req: Request, res: Response) => {
+    return mercadoPagoController.marketplaceOK(req,res,db);
+  });
 
   app.post('/afip/prueba', (req: Request, res: Response) => {
     console.log(req.body)

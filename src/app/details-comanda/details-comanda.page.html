@@ -19,19 +19,19 @@
     <span *ngIf="pedido.comanda.estado == cEstado.solicitado" style="color: blue;"> Solicitado</span>
     <span *ngIf="pedido.comanda.estado == cEstado.completo" style="color: green;"> Listo</span>
   </span>    
-    <div  class="form-card" *ngIf="pedido.productos.length > 0">
+    <div  class="form-card" *ngIf="pedido.items.length > 0">
       <div class="pedido-item"> 
         <ion-icon name="cube-outline"></ion-icon> Productos:
       </div>  
       <ion-list> 
-        <span *ngFor="let producto of pedido.productos; let i = index">           
-          <app-card-producto
+        <span *ngFor="let producto of pedido.items; let i = index">           
+          <app-card-item-pedido
             [item]="producto"  
             [showStock]="false" 
             [showImage]="false"
             [showEnCarrito]="false"
             [multiplicador]="1" 
-          ></app-card-producto>             
+          ></app-card-item-pedido>             
         </span> 
       </ion-list>
     </div>

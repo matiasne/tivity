@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
 import { map } from 'rxjs/operators';
-import { Producto } from '../models/producto';
+import { Item } from '../models/item';
 import { variacionStock } from '../models/variacionStock';
 import { BaseService } from './base.service';
 import { ComerciosService } from './comercios.service';

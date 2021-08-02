@@ -7,7 +7,7 @@ import { Caja } from '../models/caja';
 import { Comercio } from '../models/comercio';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { EnumEstadoCobro } from '../models/pedido';
-import { Producto } from '../models/producto';
+import { Item } from '../models/item';
 import { WCOrder } from '../models/woocommerce/order';
 import { AuthenticationService } from '../Services/authentication.service';
 import { CajasService } from '../Services/cajas.service';
@@ -252,7 +252,7 @@ export class DetailsPedidoWoocommercePage implements OnInit {
         let obs = this.productosService.getByName(item.name).subscribe((data:any)=>{
          obs.unsubscribe()
           console.log(data)
-          let prod= new Producto()
+          let prod= new Item()
           prod.asignarValores(data[0])          
 
           let deltaStock = 0;
@@ -275,7 +275,7 @@ export class DetailsPedidoWoocommercePage implements OnInit {
         let obs = this.productosService.getByName(item.name).subscribe((data:any)=>{
           obs.unsubscribe()
           console.log(data)
-          let prod= new Producto()
+          let prod= new Item()
           prod.asignarValores(data[0])
           let deltaStock = 0;
           if(prod.valorPor)

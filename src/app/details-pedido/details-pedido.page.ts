@@ -14,8 +14,8 @@ import { Localizacion } from '../models/localizacion';
 import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { EnumEstadoCobro, Pedido } from '../models/pedido';
-import { EnumEstadoCocina } from 'src/app/models/producto';
-import { Producto } from '../models/producto';
+import { EnumEstadoCocina } from 'src/app/models/item';
+import { Item } from '../models/item';
 import { Recargo } from '../models/recargo';
 import { SelectClientePage } from '../select-cliente/select-cliente.page';
 import { SelectMesaPage } from '../select-mesa/select-mesa.page';
@@ -155,8 +155,8 @@ export class DetailsPedidoPage implements OnInit {
         }, {
           text: 'Eliminar',
           handler: () => {           
-            this.pedido.productos.splice(i,1);
-            if(this.pedido.productos.length > 0){
+            this.pedido.items.splice(i,1);
+            if(this.pedido.items.length > 0){
               this.actualizarPedido() 
             }
             else{
@@ -369,6 +369,7 @@ export class DetailsPedidoPage implements OnInit {
   async cobrar(){
     
     const modal = await this.modalController.create({
+      id:'form-cobrar',
       component: FormCobrarPedidoPage,  
       componentProps:{pedido:this.pedido,comercio:this.comercio},   
       cssClass:'modal-custom-wrapper' 
@@ -398,10 +399,10 @@ export class DetailsPedidoPage implements OnInit {
     .then((retorno) => {
       if(retorno.data){
 
-        if(retorno.data instanceof  Producto){
+        if(retorno.data instanceof  Item){
           const p = JSON.parse(JSON.stringify(retorno.data));
 
-          this.pedido.productos.push(p); 
+          this.pedido.items.push(p); 
          
           this.actualizarPedido()
         }

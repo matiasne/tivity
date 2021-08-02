@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title  size="small">Datos Tarjeta Crédito</ion-title>    
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="logo">
+          <img class="brand" [src]="cardLogo">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="chip">
+          <img src="assets/img/chip.png">
+        </ion-col>
+      </ion-row>
+      <ion-row class="digits">
+        <ion-col class="number">
+          {{cardNumber}}
+        </ion-col>        
+      </ion-row>
+      <ion-row>
+        <ion-col class="date">
+          Expires: {{cardExpirationMonth}}/{{cardExpirationYear}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="holder">
+          {{cardholderName}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+   
+      <ion-item class="item-card">
+        <ion-label position="floating" color="primary">Email</ion-label>
+        <ion-input type="email" inputmode="email" [(ngModel)]="email" name="email"></ion-input>
+      </ion-item>
+
+      <div class="item-card">
+        <ion-item>
+          <ion-label position="floating" color="primary">Número de tarjeta</ion-label>
+          <ion-input type="text" (ionChange)="guessingPaymentMethod()" [(ngModel)]="cardNumber" name="cardNumber" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating" color="primary">Código de Seguridad</ion-label>
+          <ion-input type="number" [(ngModel)]="securityCode" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating" color="primary">Fecha de vencimiento</ion-label>
+          <ion-row>
+            <ion-col size="3">
+              <ion-input placeholder="MM" type="number" [(ngModel)]="cardExpirationMonth" required></ion-input>
+            </ion-col>
+            <ion-col size="3">
+              <ion-input placeholder="YY" type="number" [(ngModel)]="cardExpirationYear" required></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+        
+        <ion-item>
+          <ion-label position="floating" color="primary">Nombre propietario</ion-label>
+          <ion-input type="text" inputmode="text" [(ngModel)]="cardholderName" required></ion-input>
+        </ion-item>
+      </div>
+      
+      <ion-item  class="item-card">
+        <ion-label position="floating" color="primary">Número de documento</ion-label>
+        <ion-input type="number" [(ngModel)]="identificationNumber" required></ion-input>
+      </ion-item>
+
+      <ion-item class="item-card">
+        <ion-label position="floating" color="primary">Cantidad de cuotas</ion-label>
+        <ion-select  [(ngModel)]="selectedInstallments" required>
+          <ion-select-option [value]="-1">Elija cuotas</ion-select-option>
+          <ion-select-option *ngFor="let installment of installments" [value]="installment.installments">{{installment.recommended_message}}</ion-select-option>
+        </ion-select>   
+      </ion-item>
+
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-button class="button-rounded" slot="end" (click)="cobrar()">Cobrar</ion-button>      
+    <ion-button class="button-rounded" slot="start"  color="light" (click)="cerrar()">Cancelar</ion-button>
+  </ion-toolbar>  
+ </ion-footer>

@@ -3,11 +3,7 @@ import { ModalController, LoadingController, AlertController, NavController, Pla
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductosService } from '../Services/productos.service';
 import { Subscription } from 'rxjs';
-import { ServiciosService } from '../Services/servicios.service';
 import { AddProductoVentaPage } from '../add-producto-venta/add-producto-venta.page';
-import { AddServicioSubscripcionPage } from '../add-servicio-subscripcion/add-servicio-subscripcion.page';
-import { CarritoService } from '../Services/global/carrito.service';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { ComerciosService } from '../Services/comercios.service';
 import { LoadingService } from '../Services/loading.service';
 import { CargaPorVozService } from '../Services/carga-por-voz.service';

@@ -11,6 +11,7 @@ import { CtaCorriente } from '../models/ctacorriente';
 import { BaseService } from './base.service';
 import { ComerciosService } from './comercios.service';
 import { AuthenticationService } from './authentication.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ import { AuthenticationService } from './authentication.service';
 export class MovimientosService extends BaseService {
 
   private comercioId = "";
-
+  public memoriaDias = 0;
   private enumTipoMovimientoCaja = EnumTipoMovimientoCaja
   
   constructor(
@@ -33,13 +34,59 @@ export class MovimientosService extends BaseService {
       this.comerciosService.getSelectedCommerce().subscribe(data=>{
         // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
         if(data){
-          
+          this.memoriaDias = data.config.memoriaDias
           this.comercioId = data.id
            
          }
         
       })
   }
+
+  listMovimientos() {
+    console.log('[BaseService] list: '+this.path);    
+
+    return this.collection
+        .snapshotChanges()
+        .pipe(
+            map(changes => {
+                
+
+                return changes.map(a => {
+                    const data = a.payload.doc.data();
+                    data.id = a.payload.doc.id;
+                    data.fromCache = a.payload.doc.metadata.fromCache;
+
+                    //================= borra lo anterior a la fecha configurada de almacenamiento
+                   
+                    console.log(this.memoriaDias)
+                    if(this.memoriaDias > 0){
+
+                      var batch = this.afs.firestore.batch();
+
+                      let fechaDiasMemoria = new Date();
+                      
+                      fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+  
+                      let borrar = false;
+                      console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+                      if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
+                        borrar = true
+                        var pedidoRef:any = this.getRef(data.id)
+                        batch.delete(pedidoRef)
+                        console.log("borrando pedido id: "+data.id)
+                      }
+  
+                      if(borrar){
+                        batch.commit()
+                      }
+                    }
+                    
+
+                    return data;
+                });
+            })
+        );          
+  }    
 
 
   setearPath(cajaId){
@@ -64,7 +111,47 @@ export class MovimientosService extends BaseService {
 
  
   public getMovimientosCaja(cajaId,fechaDesde){
-    return this.afs.collection('comercios/'+this.comercioId+'/cajas/'+cajaId+'/movimientos',ref=>ref.where('createdAt', '>=', fechaDesde).orderBy('createdAt',"desc")).snapshotChanges();
+    return this.afs.collection('comercios/'+this.comercioId+'/cajas/'+cajaId+'/movimientos',ref=>ref.where('createdAt', '>=', fechaDesde).orderBy('createdAt',"desc")).snapshotChanges()
+    
+    .pipe(
+      map(changes => {
+          
+
+          return changes.map(a => {
+              const data:any = a.payload.doc.data();
+              data.id = a.payload.doc.id;
+              data.fromCache = a.payload.doc.metadata.fromCache;
+
+              //================= borra lo anterior a la fecha configurada de almacenamiento
+             
+              console.log(this.memoriaDias)
+              if(this.memoriaDias > 0){
+
+                var batch = this.afs.firestore.batch();
+
+                let fechaDiasMemoria = new Date();
+                
+                fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+
+                let borrar = false;
+                console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+                if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
+                  borrar = true
+                  var pedidoRef:any = this.getRef(data.id)
+                  batch.delete(pedidoRef)
+                  console.log("borrando pedido id: "+data.id)
+                }
+
+                if(borrar){
+                  batch.commit()
+                }
+              }
+              
+
+              return data;
+          });
+      })
+  );
   }
 
 
@@ -114,7 +201,46 @@ export class MovimientosService extends BaseService {
     }
 
     public getMovimientosCtaCorriente(ctaCorrienteId){
-      return this.afs.collection('comercios/'+this.comercioId+'/ctascorrientes/'+ctaCorrienteId+'/movimientos/', ref=>ref.orderBy('createdAt',"desc").limit(10)).snapshotChanges();
+      return this.afs.collection('comercios/'+this.comercioId+'/ctascorrientes/'+ctaCorrienteId+'/movimientos/', ref=>ref.orderBy('createdAt',"desc").limit(10)).snapshotChanges()
+      .pipe(
+        map(changes => {
+            
+  
+            return changes.map(a => {
+                const data:any = a.payload.doc.data();
+                data.id = a.payload.doc.id;
+                data.fromCache = a.payload.doc.metadata.fromCache;
+  
+                //================= borra lo anterior a la fecha configurada de almacenamiento
+               
+                console.log(this.memoriaDias)
+                if(this.memoriaDias > 0){
+  
+                  var batch = this.afs.firestore.batch();
+  
+                  let fechaDiasMemoria = new Date();
+                  
+                  fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+  
+                  let borrar = false;
+                  console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+                  if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
+                    borrar = true
+                    var pedidoRef:any = this.getRef(data.id)
+                    batch.delete(pedidoRef)
+                    console.log("borrando pedido id: "+data.id)
+                  }
+  
+                  if(borrar){
+                    batch.commit()
+                  }
+                }
+                
+  
+                return data;
+            });
+        })
+    );
     }  
     
   

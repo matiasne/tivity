@@ -19,7 +19,7 @@
       <ion-row> 
         <ion-col size="6" center text-center>            
           <ion-icon name="person"></ion-icon> {{item.personalEmail}}
-        </ion-col>     
+        </ion-col>      
         <ion-col size="6" >
           <div class="encabezado-time">
             <ion-icon name="time-outline"></ion-icon>
@@ -36,46 +36,55 @@
         <span class="pedido-item" *ngIf="comercio.config.comandas">
           <img style="width:18px;" src="../../../assets/img/chef_hat_icon.fw.png" alt=""> 
           <span *ngIf="item.comanda.estado == pEstado.rechazado" style="color: red;">Rechazado</span>
-          <span *ngIf="item.comanda.estado == pEstado.tomado" style="color: blue;">En Curso</span>
+          <span *ngIf="item.comanda.estado == pEstado.tomado" style="color: blue;">En Curso</span>          
           <span *ngIf="item.comanda.estado == pEstado.solicitado" style="color: blue;"> Solicitado</span>
           <span *ngIf="item.comanda.estado == pEstado.completo" style="color: green;"> Listo</span>
+
+          <span *ngIf="item.comanda.demora" class="minutos-restantes" (click)="open()"> <ion-icon name="alarm-outline"></ion-icon> Tiempo restante: {{minutosRestantes}} min.</span>
         </span> 
+       
       </ion-row>    
        
       <ion-row>
-        <span class="pedido-item" *ngIf="item.statusCobro != cEstado.pendiente">
-        
-          <span *ngIf="item.statusCobro == cEstado.suspendido" style="color: red;">
-            <ion-icon name="hand-right-outline"></ion-icon>  Suspendido
-          </span>
-          <span *ngIf="item.statusCobro == cEstado.cobrado" style="color: green;">
-            Cobrado ({{item.metodoPago}})
-  
-            <span *ngIf="item.montoPagoEfectivo > 0">
-              <ion-icon name="cash-outline"></ion-icon> {{item.montoPagoEfectivo | currency}}
-            </span>
-            <span *ngIf="item.montoPagoDebito > 0">
-              <ion-icon name="card-outline"></ion-icon> {{item.montoPagoDebito | currency}}
-            </span>
-            <span *ngIf="item.montoPagoCredito > 0">
-              <ion-icon name="card-outline"></ion-icon> {{item.montoPagoCredito | currency}}
-            </span>
-            <span *ngIf="item.montoPagoCtaCorriente > 0">
-              <ion-icon name="person-outline"></ion-icon> {{item.montoPagoCtaCorriente | currency}}
-            </span>
-             
-          </span> 
-          <span *ngIf="item.statusCobro == cEstado.reembolsado" style="color: red;"> <ion-icon name="play-back-outline"></ion-icon> Reembolsado</span>
-           
+        <span class="pedido-item" *ngIf="item.statusCobro == cEstado.suspendido" style="color: red;">
+          <ion-icon name="hand-right-outline"></ion-icon>  Suspendido
         </span>
+
+        <span class="pedido-item" *ngIf="item.statusCobro == cEstado.cobrado" style="color: green;">           
+          <ion-icon name="cash-outline"></ion-icon> Cobrado
+        </span>
+  
+        <span class="pedido-item" *ngIf="item.statusCobro == cEstado.cobrado"> 
+          <span *ngIf="item.montoPagoEfectivo > 0">
+            Efectivo  {{item.montoPagoEfectivo | currency}}
+          </span>
+          <span *ngIf="item.montoPagoDebito > 0">
+            Débito {{item.montoPagoDebito | currency}}
+          </span>
+          <span *ngIf="item.montoPagoCredito > 0">
+            Crédito {{item.montoPagoCredito | currency}}
+          </span>
+          <span *ngIf="item.montoPagoMercadoPago > 0">
+            Mercado Pago {{item.montoPagoMercadoPago | currency}}
+          </span>
+          <span *ngIf="item.montoPagoCtaCorriente > 0">
+            Cta. Corriente  <ion-icon name="person-outline"></ion-icon> {{item.montoPagoCtaCorriente | currency}}
+          </span>
+             
+        </span> 
+      
+        <span *ngIf="item.statusCobro == cEstado.reembolsado" style="color: red;"> 
+          <ion-icon name="play-back-outline"></ion-icon> Reembolsado
+        </span>
+
         <span class="pedido-item" *ngIf="item.afipFactura.CAE != ''" >
           <img style="width:18px;" src="../../../assets/img/logo_afip.fw.png" alt=""> Factura: {{item.afipFactura.CbteLetra}}
         </span> 
        </ion-row>    
          
       <ion-row> 
-          <div class="pedido-item"> 
-            <ion-icon name="cube-outline"></ion-icon> {{item.productos.length}} 
+          <div class="pedido-item" *ngIf="item.items"> 
+            <ion-icon name="cube-outline"></ion-icon> {{item.items.length}} 
           </div>
           
           <span class="pedido-item" *ngIf="item.clienteNombre" >

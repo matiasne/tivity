@@ -21,6 +21,7 @@ import { CambiarPlanPage } from '../cambiar-plan/cambiar-plan.page';
 import { EnumPlanes, User } from '../models/user';
 import { EscPosService } from '../Services/impresora/esc-pos.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
+import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
 
 
 @Component({
@@ -68,6 +69,8 @@ export class HomePage implements OnInit {
     
 
   } 
+
+  
 
 
   ngOnInit() {

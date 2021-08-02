@@ -38,7 +38,7 @@
   </ion-item>
 
   <p>Selecciona los elementos a reembolsar:</p>
-  <ion-item *ngFor="let item of pedido.productos" class="remove_inner_bottom">
+  <ion-item *ngFor="let item of pedido.items" class="remove_inner_bottom">
     <div slot="start" *ngIf="item.imagenes">
       <img class="producto-preview" *ngIf="item.imagenes[0]" src="{{item.imagenes[0].url}}" >
       <ion-icon name="cube-outline" *ngIf="!item.imagenes[0]"></ion-icon>

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ModalNotificacionPage } from '../modal-notificacion/modal-notificacion.page';
 
+import Swal from 'sweetalert2'
+
 @Injectable({
   providedIn: 'root'
 })

@@ -1,14 +1,8 @@
-import { Producto } from './producto';
-import { Comercio } from './comercio';
-import { Servicio } from './servicio';
-import { MovimientoCtaCorriente } from './movimientoCtaCorriente';
-import { Pagare } from './pagare';
+
 import { Descuento } from './descuento';
 import { Recargo } from './recargo';
 import { Localizacion } from './localizacion';
-
-
-
+import { ItemPedido } from './itemPedido';
 
 export enum EnumEstadoCobro {
     pendiente = 1, 
@@ -28,6 +22,7 @@ export class Pedido{
         demora:0,
         numero:0,
     }
+
     public personalId = "";
     public personalEmail="";
     public personalNombre="";
@@ -42,12 +37,11 @@ export class Pedido{
     public mesaId = "";
     public mesaNombre = "";
   
-    public on=false;
+    public on = false;
  
     public descuentos:Descuento[] =[];
     public recargos:Recargo[]=[];
-    public productos:Producto[] = [];
-    public servicios:Servicio[] = [];
+    public items:ItemPedido[] = [];
 	 
     public cantidadComentarios = 0;
     public createdAt:any
@@ -63,6 +57,7 @@ export class Pedido{
     public montoPagoDebito = 0;
     public montoPagoCredito = 0;
     public montoPagoCtaCorriente = 0;
+    public montoPagoMercadoPago = 0;
 
     public direccion:Localizacion;
     public total = 0;
@@ -89,7 +84,6 @@ export class Pedido{
     
 	constructor(){
         this.direccion = new Localizacion();
-
     }
 
     public asignarValores(init?: Partial<Pedido>) {

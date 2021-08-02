@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ComentariosService } from '../Services/comentarios.service';
 import { LoadingService } from '../Services/loading.service';
 import { PedidoService } from '../Services/pedido.service';
-import { EnumEstadoCocina } from 'src/app/models/producto';
+import { EnumEstadoCocina } from 'src/app/models/item';
 import { CocinasService } from '../Services/cocinas.service';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -42,6 +42,7 @@ export class ListComandasV2Page implements OnInit {
   public obsPedidos:any
 
   public fechaDesde = new Date();
+  public fechaHasta = new Date();
 
   public buscando = true;
 
@@ -57,7 +58,8 @@ export class ListComandasV2Page implements OnInit {
     private navParametrosService:NavegacionParametrosService
   ) { 
     this.devWidth = this.platform.width();
-    this.fechaDesde.setDate(this.fechaDesde.getDate() - 1);
+    this.fechaDesde.setDate(this.fechaDesde.getDate() - 2);    
+    this.fechaHasta.setDate(this.fechaHasta.getDate() + 1); 
   }
 
   ngOnInit() {
@@ -79,7 +81,7 @@ export class ListComandasV2Page implements OnInit {
       this.obsPedidos.unsubscribe();
     } 
 
-    this.obsPedidos = this.pedidosService.listFechaDesde(this.fechaDesde,new Date()).subscribe((pedidos:any)=>{  
+    this.obsPedidos = this.pedidosService.listFecha(this.fechaDesde,this.fechaHasta).subscribe((pedidos:any)=>{  
       this.buscando = false;
       this.itemsPendientes = []; 
       this.itemsProceso = []; 
@@ -87,7 +89,8 @@ export class ListComandasV2Page implements OnInit {
       this.itemsRechazados = [];   
 
       this.loadingService.dismissLoading()               
-      this.pedidosAll = pedidos;    
+      this.pedidosAll = pedidos;   
+      console.log(this.pedidosAll) 
       this.filtrar(); 
     });
   }
@@ -141,13 +144,20 @@ export class ListComandasV2Page implements OnInit {
     this.pedidosAll.forEach(item => { 
             
       var encontrado = false;      
-      this.cocinaFiltro.forEach(cocina =>{             
-        item.productos.forEach(prod => {
-          if(prod.cocinaId == cocina){
-            encontrado = true;  
-          } 
-        });        
-      })
+      
+      if(this.cocinaFiltro.length > 0){
+        this.cocinaFiltro.forEach(cocina =>{             
+          item.items.forEach(prod => {
+            if(prod.cocinaId == cocina){
+              encontrado = true;  
+            } 
+          });        
+        })
+      }
+      else{
+        encontrado = true
+      }
+      
       
       if(encontrado){
        
@@ -200,7 +210,7 @@ export class ListComandasV2Page implements OnInit {
   }
 
   nuevoPedido(){
-    this.router.navigate(['list-productos-servicios'])
+    this.router.navigate(['list-productos-servicios',{carritoIntended:'list-comandas-v2'}])
   }
 
   async abrir(item){

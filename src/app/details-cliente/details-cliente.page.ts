@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubscripcionesService } from '../Services/subscripciones.service';
 import { ClientesService } from '../Services/clientes.service';
-import { ServiciosService } from '../Services/servicios.service';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Subscription } from 'rxjs';
@@ -51,7 +50,6 @@ export class DetailsClientePage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public clientesServices:ClientesService,
-    public serviciosServices:ServiciosService,
     public subscripcionesService:SubscripcionesService,
     public router:Router,
     private callNumber: CallNumber,
@@ -77,8 +75,7 @@ export class DetailsClientePage implements OnInit {
 
     this.subsCliente = this.clientesServices.get(this.route.snapshot.params.id).subscribe((resp:any)=>{
      
-      this.cliente.asignarValores(resp.payload.data());
-      this.cliente.id = resp.payload.id;
+      this.cliente.asignarValores(resp);
       console.log(this.cliente); 
       
       

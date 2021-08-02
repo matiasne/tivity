@@ -164,7 +164,7 @@ export class AfipController {
       } 
 
       
-      await bcrypt.hash(req.body.password, saltRounds, (err:any, hash:any) => {
+      await bcrypt.hash(req.body.password, saltRounds, async (err:any, hash:any) => {
         
         if(err)
           return  res.status(500).send(err);
@@ -173,13 +173,29 @@ export class AfipController {
         const afipRef = db.collection('afip');
         afipRef.doc(data.comercioId).set(data);
 
+        //crear el token y guardarlo en la colleccion comercio dentro de un parámetro llamado Afip
+
+        let token = jwt.sign({
+          razonSocial:req.body.razonSocial,
+          personaJuridica:req.body.personaJuridica,
+          ingresosBrutos:req.body.ingresosBrutos,
+          tipoDoc:req.body.tipoDoc,
+          nroDoc:req.body.nroDoc,
+          comercioId:req.body.comercioId,
+          ptoVenta:req.body.ptoVenta
+        }, "claveSecretaDelToken"); 
         
+        let afip ={
+          token:token,
+          puntoVenta:req.body.ptoVenta
+        }
+
+        await db.collection('comercios').doc(req.body.comercioId).set({afip:afip},{merge:true})
     
         return  res.status(200).send("Registrado!");
       },(err:any)=>{
         return  res.status(500).send(err);
-      })       
-         
+      })                
       return true;   
     }
 
@@ -534,8 +550,8 @@ export class AfipController {
 
         let impuesto = 0;
 
-        if(pedido.productos.length > 0){           
-          pedido.productos.forEach((item:any) => {
+        if(pedido.items.length > 0){           
+          pedido.items.forEach((item:any) => {
             impuesto = item.impuestoPorcentaje;
             console.log(item.nombre)
             impNeto += (Number(item.precioTotal) / (1+Number(item.impuestoPorcentaje))).toFixed(2)
@@ -582,11 +598,23 @@ export class AfipController {
         voucher.CbtesAsoc.push(voucherAsociado)
       }
 
-      if(pedido.productos.length > 0){
+      let tieneProd = false;
+      let tieneServ = false;
+
+      pedido.items.forEach((element:any) => {
+        if(element.tipo == 1){
+          tieneProd = true;
+        }
+        if(element.tipo == 2){
+          tieneServ = true
+        }
+      });
+
+      if(tieneProd){
         concepto = EnumAfipConceptos.productos;
       }
 
-      if(pedido.servicios.length > 0){
+      if(tieneServ){
         concepto = EnumAfipConceptos.servicios;
         voucher.FchServDesde 	= FchServDesde; // (Opcional) Fecha de inicio del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
         voucher.FchServHasta= FchServHasta; // (Opcional) Fecha de fin del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
@@ -594,7 +622,7 @@ export class AfipController {
       }
       
      
-      if(pedido.productos.length > 0 && pedido.servicios.length > 0){
+      if(tieneProd && tieneServ){
         concepto =  EnumAfipConceptos.productosServicios;
       }
                     

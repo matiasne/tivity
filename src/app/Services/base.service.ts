@@ -10,7 +10,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
 })
 export class BaseService {
     
-    private collection: AngularFirestoreCollection;
+    public collection: AngularFirestoreCollection;
 
     private orderBy = {
         campo:"",
@@ -114,9 +114,7 @@ export class BaseService {
 
         let time = new Date();
         const promise = new Promise((resolve, reject) => {
-            this.collection.add({...item, createdAt: time}).then((ref:any) => {
-                
-               
+            this.collection.add({...item, createdAt: time}).then((ref:any) => {           
                 
                 const newItem = {
                     id: ref.id,

@@ -46,7 +46,14 @@
                 <ion-label>Comandas</ion-label>
                 <ion-badge color="primary" *ngIf="cantComandas != 0" slot="end">{{cantComandas}}</ion-badge>
               </ion-item>
-            </span> 
+            </span>
+            
+            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cocinero'">
+              <ion-item *ngIf="comercioSeleccionado.config.reservas" [routerLink]="['/list-reservas']" lines="none" detail="false">
+                <ion-icon slot="start" name="calendar-outline"></ion-icon>
+                <ion-label>Reservas</ion-label>
+              </ion-item>
+            </span>
 
             <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
               <ion-item *ngIf="comercioSeleccionado.config.clientes" [routerLink]="['/list-clientes']" lines="none" detail="false">

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Producto } from 'src/app/models/producto';
+import { Item } from 'src/app/models/item';
 import { WCProduct } from 'src/app/models/woocommerce/product';
 import { WoocommerceSyncData } from 'src/app/models/woocommerceSyncData';
 import { CategoriasService } from '../categorias.service';
@@ -158,14 +158,14 @@ export class WoocommerceService {
     return this.http.delete(this.apiUrl,options); 
   }
 
-  updateStock(producto:Producto){
+  updateStock(item:Item){
 
-    if(producto.woocommerce.id){
+    if(item.woocommerce.id){
       let data = {
-        stock: producto.stock
+        stock: item.stock
       }  
       this.comercio = this.comerciosService.getSelectedCommerceValue()
-      this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"/"+producto.id+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+      this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"/"+item.id+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
 
       let httpHeaders = new HttpHeaders({
         'Content-Type' : 'application/json'
@@ -181,7 +181,7 @@ export class WoocommerceService {
   convertWCtoFirebase(productoWC){
     this.comercio = this.comerciosService.getSelectedCommerceValue()
 
-    let prod = new Producto()
+    let prod = new Item()
     prod.nombre = productoWC.name
     prod.precio = productoWC.regular_price
     prod.descripcion = productoWC.description
@@ -196,27 +196,27 @@ export class WoocommerceService {
     return prod;
   }
 
-  async convertFirebasetoWC(producto:Producto){
+  async convertFirebasetoWC(item:Item){
 
     this.comercio = this.comerciosService.getSelectedCommerceValue()
 
     let wcProducto = new WCProduct();   
-    wcProducto.name = producto.nombre;
-    wcProducto.regular_price = producto.precio.toString();
-    wcProducto.description = producto.descripcion;
-    wcProducto.price = producto.promocion.toString();
-    wcProducto.sku = producto.barcode;   
+    wcProducto.name = item.nombre;
+    wcProducto.regular_price = item.precio.toString();
+    wcProducto.description = item.descripcion;
+    wcProducto.price = item.promocion.toString();
+    wcProducto.sku = item.barcode;   
     
     if(this.comercio.config.stock)
       wcProducto.manage_stock = true;
     else
       wcProducto.manage_stock = false;
       
-    wcProducto.stock_quantity = producto.stock.toString();
+    wcProducto.stock_quantity = item.stock.toString();
     wcProducto.images = []; 
 
     wcProducto.categories = []
-    for(let cat of producto.categorias){
+    for(let cat of item.categorias){
                 
       if(cat.woocommerce && cat.woocommerce.id){
           let categorie = {
@@ -232,7 +232,7 @@ export class WoocommerceService {
         
     }
 
-    for(const img of producto.imagenes){
+    for(const img of item.imagenes){
         wcProducto.images.push({"src":img.url})
     }
     return wcProducto;
@@ -241,10 +241,10 @@ export class WoocommerceService {
 
 
   
-  async crearProductoInWC(p:Producto){  
+  async crearProductoInWC(p:Item){  
    
     
-      let producto = new Producto()
+      let producto = new Item()
       producto.asignarValores(p) //esto para que cargue las variables a los productos viejos aunque sea vacias
       console.log("creando en wc el producto id:"+producto.id)
       let wcProducto = await this.convertFirebasetoWC(producto);   
@@ -279,7 +279,7 @@ export class WoocommerceService {
       }   
   }
 
-  async actualizarProductoInWC(producto:Producto){
+  async actualizarProductoInWC(producto:Item){
     //busco el producto por id de woocommerce elimino todas las imágenes del mismo, elimino el producto. cargo el producto de nuevo
     
       this.incrementarEnvio();
@@ -345,7 +345,7 @@ export class WoocommerceService {
 
         for(let p of productos){        
         
-          let prod = new Producto()
+          let prod = new Item()
           prod.asignarValores(p) //esto para que cargue las variables a los productos viejos aunque sea vacias
 
           if(p.woocommerce.id == ""){       

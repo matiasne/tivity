@@ -6,7 +6,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
 import { FormFilterPedidosPage } from '../form-filter-pedidos/form-filter-pedidos.page';
 import { EnumEstadoCobro, Pedido } from '../models/pedido';
-import { EnumEstadoCocina } from 'src/app/models/producto';
+import { EnumEstadoCocina } from 'src/app/models/item';
 import { WCOrder } from '../models/woocommerce/order';
 import { AuthenticationService } from '../Services/authentication.service';
 import { ComentariosService } from '../Services/comentarios.service';
@@ -17,6 +17,14 @@ import { PedidosWoocommerceService } from '../Services/pedidos-woocommerce.servi
 import { UsuariosService } from '../Services/usuarios.service';
 import { OrdersService } from '../Services/woocommerce/orders.service';
 
+import {
+  CalendarModal,
+  CalendarModalOptions,
+  DayConfig,
+  CalendarResult
+} from 'ion2-calendar';
+import { ComerciosService } from '../Services/comercios.service';
+import { Comercio } from '../models/comercio';
 @Component({
   selector: 'app-list-pedidos',
   templateUrl: './list-pedidos.page.html',
@@ -48,7 +56,7 @@ export class ListPedidosPage implements OnInit {
   public obsPedidos
 
   public cEstado = EnumEstadoCobro;
-  public seccionActiva = this.cEstado.pendiente; 
+  public seccionActiva = 0; 
 
   public buscando = true;
 
@@ -57,6 +65,10 @@ export class ListPedidosPage implements OnInit {
   public connectionStatus = "offline"
 
   public showSearchBar = false;
+
+  private obsPedido:any;
+
+  private comercio:Comercio
 
   constructor(
     private pedidosService:PedidoService,
@@ -69,23 +81,36 @@ export class ListPedidosPage implements OnInit {
     public changeRef:ChangeDetectorRef,
     public navParametrosService:NavegacionParametrosService,
     public pedidosWoocommerceService:PedidosWoocommerceService,
-    private usuariosServices:UsuariosService
-  ) { }
+    private usuariosServices:UsuariosService,
+    private comercioService:ComerciosService
+  ) { 
+    this.comercio = new Comercio();
+  }
 
   ngOnInit() {
     this.authService.userRol.subscribe(rol =>{
       this.userRol = rol; 
     })
     this.fechaDesde.setDate(this.fechaDesde.getDate() - 2);    
-    
+    this.fechaHasta.setDate(this.fechaHasta.getDate() + 1); 
+
     this.usuariosServices.getConnectionStatus().subscribe(data=>{
       this.connectionStatus = data
+    })
+
+
+    this.obsPedidos = this.pedidosService.listPedidos().subscribe((pedidos:any)=>{
+      this.pedidosLocalesAll = pedidos; 
+      this.buscando = false;
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      this.buscar(); 
     })
 
   }
 
   ionViewDidEnter(){ 
-    this.seccionActiva = this.cEstado.pendiente
+    this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue())
+    this.seccionActiva = 0
     this.refrescar();
     this.changeRef.detectChanges()    
   }  
@@ -98,7 +123,16 @@ export class ListPedidosPage implements OnInit {
   onChangeAtras(event){
     this.fechaDesde = new Date();
     this.fechaDesde.setDate(this.fechaDesde.getDate() - Number(event.target.value));
-    this.refrescar()   
+    this.obsPedidos.unsubscribe()
+
+    let date = new Date(this.fechaDesde) 
+    let fechaHasta = new Date();
+
+    this.obsPedidos = this.pedidosService.listFecha(date,fechaHasta).subscribe((pedidos:any)=>{
+      this.pedidosLocalesAll = pedidos; 
+      this.buscando = false;
+      this.buscar(); 
+    })
   }
  
   reanudar(item){ 
@@ -222,17 +256,24 @@ export class ListPedidosPage implements OnInit {
           encontrado = true;
       } 
 
-      if(encontrado){          
-        
-        if(this.seccionActiva == this.pedidosLocalesAll[i].statusCobro){          
+      if(encontrado){
+        encontrado = false;
+        if(this.pedidosLocalesAll[i].createdAt.toDate().getTime() > this.fechaDesde.getTime() && this.pedidosLocalesAll[i].createdAt.toDate().getTime() < this.fechaHasta.getTime())
+          encontrado = true;
+      }
+      
+      if(encontrado){  
+        console.log(this.seccionActiva)
+        if(this.seccionActiva == 0){
+          this.pedidosLocales.push(this.pedidosLocalesAll[i])
+        }                
+        else if(this.seccionActiva == this.pedidosLocalesAll[i].statusCobro){          
           this.pedidosLocales.push(this.pedidosLocalesAll[i])
         }
+        
       }
-
-
     }
 
-    console.log(this.pedidosLocales)
 
     const options = {
       keys: [
@@ -251,16 +292,56 @@ export class ListPedidosPage implements OnInit {
     result.forEach(element => {
       this.pedidosLocales.push(element.item)
     }); 
-    console.log(this.pedidosLocales)
     
    
+  }
+
+  async abrirSelectorFechas(){
+    /*const modal = await this.modalController.create({
+      component: FormFechaRangoPage      
+    });
+    modal.onDidDismiss()
+    .then((retorno) => {
+      if(retorno.data){
+        this.fechaDesde = retorno.data.fechaDesde,
+        this.fechaHasta = retorno.data.fechaHasta
+        this.refrescar()
+      }       
+    });
+    return await modal.present();    */
+    let comienzo = new Date();
+    comienzo.setDate(comienzo.getDate() - this.comercio.config.memoriaDias);  
+    const options: CalendarModalOptions = {
+      title: '',
+      from:comienzo,
+      to:new Date(),
+      pickMode: 'range'
+    };
+ 
+    const myCalendar = await this.modalController.create({
+      component: CalendarModal,
+      componentProps: { options }
+    });
+
+    myCalendar.onDidDismiss()
+    .then((retorno) => {
+      console.log(retorno)
+      if(retorno.data){
+        this.fechaDesde = retorno.data.from.dateObj,
+        this.fechaHasta = retorno.data.to.dateObj
+        this.fechaHasta.setDate(this.fechaHasta.getDate() + 1); 
+        this.refrescar()
+      }       
+    });
+ 
+    myCalendar.present();
+
   }
 
   segmentChanged(event){
     console.log(event.target.value);
     this.seccionActiva = event.target.value;
-    this.pedidosLocalesAll = [];
-    this.refrescar();
+    this.buscar();
   } 
 
   async showFiltroAvanzado(){
@@ -282,17 +363,16 @@ export class ListPedidosPage implements OnInit {
  
   refrescar(){
   
-    let date = new Date(this.fechaDesde) 
-    let fechaHasta = new Date();
 
-    if(!this.obsPedidos)
+    this.buscar()
+   /* if(!this.obsPedidos)
     this.pedidosObs = this.pedidosService.listFechaDesde(date,fechaHasta).subscribe((pedidos:any)=>{
       this.pedidosLocalesAll = pedidos; 
       console.log(this.pedidosLocalesAll)
       this.buscando = false;
       this.buscar(); 
       this.pedidosObs.unsubscribe()
-    })  
+    })*/  
 
     this.pedidosWoocommerceService.list().subscribe((pedidos:any) =>{
       console.log(pedidos)

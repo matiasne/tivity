@@ -81,13 +81,13 @@
           <ion-col size="12" size-xs="12" size-sm="6" size-md="4" size-lg="3" *virtualItem="let producto">           
 
             <ion-item-sliding class="item-card fivePhasesFadeIn" (ionDrag)="onDrag($event,producto)"> 
-              <app-card-producto   
+              <app-card-item 
                 [item]="producto"
                 [multiplicador]="1" 
                 [showOpcionesSeleccionadas]="false"
                 [showcomanda.estado]="false"
-                (select)="agregarProducto(producto)"
-              ></app-card-producto>    
+                (select)="agregarItem(producto)"
+              ></app-card-item>    
             
               <ion-item-options side="end">
                 <ion-item-option  (click)="editarProducto(producto)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
@@ -159,7 +159,7 @@
 <ion-footer class="ion-no-border ion-padding" *ngIf="carrito.on" style="padding: 0px;"> 
   <ion-toolbar>
     <ion-button class="margin0 button-rounded" style="height: 60px;" color="success" (click)="siguiente()">
-      <ion-icon name="cart-outline"></ion-icon>{{carrito.productos.length}} = {{carritoService.getTotal() | currency}} <ion-icon name="arrow-forward"></ion-icon>
+      <ion-icon name="cart-outline"></ion-icon>{{carrito.items.length}} = {{carritoService.getTotal() | currency}} <ion-icon name="arrow-forward"></ion-icon>
     </ion-button>
   </ion-toolbar> 
 </ion-footer>

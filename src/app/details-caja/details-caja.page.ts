@@ -64,14 +64,9 @@ export class DetailsCajaPage implements OnInit {
     this.comercio = this.comercioService.getSelectedCommerceValue()
     if(this.comercio.config.movimientosCajas){
       this.movimientosService.setearPath(this.caja.id)
-      this.movimientosService.getMovimientosCaja(this.caja.id,this.fechaDesde).subscribe(snapshot =>{
+      this.movimientosService.getMovimientosCaja(this.caja.id,this.fechaDesde).subscribe(data =>{
       
-        this.items = [];
-        snapshot.forEach((snap: any) => {  
-          var mov = snap.payload.doc.data();
-          mov.id = snap.payload.doc.id;            
-          this.items.push(mov);  
-        });    
+        this.items = data;
         console.log(this.items)     
       }); 
     }

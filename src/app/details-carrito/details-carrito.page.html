@@ -12,21 +12,21 @@
 
 <ion-content class="ion-padding">   
    
-    <div  class="form-card" *ngIf="carrito.productos.length > 0">
+    <div  class="form-card" *ngIf="carrito.items.length > 0">
       <ion-text color="primary">
         <h4>Productos</h4>
       </ion-text> 
    
       
     <ion-list>                   
-      <span *ngFor="let producto of carrito.productos; let i = index">
+      <span *ngFor="let producto of carrito.items; let i = index">
         <ion-item-sliding>
-          <app-card-producto
+          <app-card-item-pedido
             [item]="producto"
             [showStock]="false"
             [showEnCarrito] = "false"
             [multiplicador]="1"
-          ></app-card-producto>  
+          ></app-card-item-pedido>  
           <ion-item-options side="end">
             <ion-item-option color="danger" (click)="eliminarProducto(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
           </ion-item-options>
@@ -104,7 +104,7 @@
     </ion-item-sliding>
 
 
-    <ion-button class="button-rounded" color="light"  *ngIf="!carrito.clienteId" (click)="seleccionarCliente()"><ion-icon name="add"></ion-icon><ion-icon name="person-outline"></ion-icon>  Cliente</ion-button>
+    <ion-button class="button-rounded" color="light"  *ngIf="!carrito.clienteId && comercio.config.clientes" (click)="seleccionarCliente()"><ion-icon name="add"></ion-icon><ion-icon name="person-outline"></ion-icon>  Cliente</ion-button>
     <ion-item-sliding class="item-card" *ngIf="carrito.clienteId && comercio.config.clientes">
       <ion-item>
         <ion-avatar slot="start" (click)="seleccionarCliente()">

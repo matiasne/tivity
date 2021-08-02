@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { WindowScrollController } from '@fullcalendar/common';
 import { Printer, PrintOptions } from '@ionic-native/printer/ngx';
 import { ModalController, NavController, NavParams, Platform } from '@ionic/angular';
 import { Comercio } from 'src/app/models/comercio';
-import { EnumTipoDescuento } from 'src/app/models/descuento';
 import { Pedido } from 'src/app/models/pedido';
-import { EnumTipoRecargo } from 'src/app/models/recargo';
 import { ComerciosService } from 'src/app/Services/comercios.service';
 
 @Component({

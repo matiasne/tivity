@@ -47,6 +47,7 @@ export class FormDepositoCtaCorrientePage implements OnInit {
   public montoPagoEfectivo =  0;
   public montoPagoDebito = 0;
   public montoPagoCredito = 0;
+  public montoPagoMercadoPago = 0;
   public montoPagoCtaCorriente = 0;
 
   constructor(

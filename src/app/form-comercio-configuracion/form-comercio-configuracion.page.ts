@@ -8,6 +8,7 @@ import { FormComercioPage } from '../form-comercio/form-comercio.page';
 import { AlertController, ModalController } from '@ionic/angular';
 import { RolesService } from '../Services/roles.service';
 import { FormConfiguracionAfipPage } from '../form-configuracion-afip/form-configuracion-afip.page';
+import { FormConfigMercadopagoPage } from '../form-config-mercadopago/form-config-mercadopago.page';
 
 @Component({
   selector: 'app-form-comercio-configuracion',
@@ -190,6 +191,17 @@ export class FormComercioConfiguracionPage implements OnInit {
   async openEditAfip(){
     const modal = await this.modalController.create({
       component: FormConfiguracionAfipPage,
+    });
+    
+    modal.present().then(()=>{
+    
+
+    })
+  }
+
+  async openEditMercadoPAgo(){
+    const modal = await this.modalController.create({
+      component: FormConfigMercadopagoPage,
     });
     
     modal.present().then(()=>{

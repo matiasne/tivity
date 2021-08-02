@@ -8,28 +8,28 @@
 
 <ion-content  class="ion-padding">     
   <div class="container-producto">       
-    <app-card-producto
-    [item]="producto"
-    [multiplicador]="producto.cantidad"
-    ></app-card-producto>        
+    <app-card-item-pedido
+    [item]="itemPedido"
+    [multiplicador]="itemPedido.cantidad"
+    ></app-card-item-pedido>        
   </div>  
   <ion-item class="form-card item-producto-cantidad" lines="none">
     <ion-button class="button-block" slot="start" (click)="restarCantidad()"><ion-icon name="remove"></ion-icon></ion-button>
     <b>
-      <span *ngIf="producto.valorPor && (producto.valorPor * producto.cantidad)==1 && producto.unidad == 'unidades'">
-        {{producto.valorPor * producto.cantidad}} unidad 
+      <span *ngIf="itemPedido.valorPor && (itemPedido.valorPor * itemPedido.cantidad)==1 && itemPedido.unidad == 'unidades'">
+        {{itemPedido.valorPor * itemPedido.cantidad}} unidad 
       </span>
 
-      <span *ngIf="producto.valorPor && (producto.valorPor * producto.cantidad)==1 && producto.unidad != 'unidades'">
-        {{producto.valorPor * producto.cantidad}}  {{producto.unidad}}
+      <span *ngIf="itemPedido.valorPor && (itemPedido.valorPor * itemPedido.cantidad)==1 && itemPedido.unidad != 'unidades'">
+        {{itemPedido.valorPor * itemPedido.cantidad}}  {{itemPedido.unidad}}
       </span>
 
-      <span *ngIf="producto.valorPor && (producto.valorPor * producto.cantidad)!=1">
-        <span *ngIf="producto.valorPor">
-          {{producto.valorPor * producto.cantidad}}
+      <span *ngIf="itemPedido.valorPor && (itemPedido.valorPor * itemPedido.cantidad)!=1">
+        <span *ngIf="itemPedido.valorPor">
+          {{itemPedido.valorPor * itemPedido.cantidad}}
         </span>
-        <span *ngIf="producto.unidad">
-          {{producto.unidad}}
+        <span *ngIf="itemPedido.unidad">
+          {{itemPedido.unidad}}
         </span> 
       </span>  
     </b> 
@@ -84,7 +84,7 @@
       <h4>Descripcion adicional</h4>
     </ion-text> 
     
-    <ion-textarea [(ngModel)]="producto.descripcion_venta"></ion-textarea>
+    <ion-textarea [(ngModel)]="itemPedido.descripcion_venta"></ion-textarea>
  
   </div>  
 

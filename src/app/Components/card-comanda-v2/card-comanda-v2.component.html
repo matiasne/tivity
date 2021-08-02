@@ -1,19 +1,53 @@
-<ion-card class="item-card ion-padding">    
-  <span *ngIf="pedido.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido!</b></span>
-  <span *ngIf="pedido.statusCobro == cEstado.cobrado"> <b style="color: green;"> Cobrado</b></span>
-  <span *ngIf="pedido.statusCobro == cEstado.reembolsado"> <b style="color: green;"> Reembolsado</b></span>
-  <span *ngIf="pedido.empleadoNombre">Realizado por: {{pedido.empleadoNombre}}</span><br>    
-  <b>realizado: {{pedido.createdAt.toDate() | date:'hh:mm aaa - dd/MM'}}</b>
+<ion-card class="item-card" [ngClass]="{
+  'tiempo-restante-1': restantesPorcentaje > 60, 
+  'tiempo-restante-2': restantesPorcentaje < 60 && restantesPorcentaje > 20, 
+  'tiempo-restante-3': restantesPorcentaje < 20,
+  'tiempo-restante-4': pedido.comanda.estado != pEstado.tomado
+}">  
+  <div *ngIf="pedido.mesaNombre" class="encabezado-card-mesa ion-padding">
+    <ion-row> 
+      <ion-col size="6" center text-center>            
+        <ion-icon name="person"></ion-icon> {{pedido.personalEmail}}
+      </ion-col>     
+      <ion-col size="6" >
+        <div class="encabezado-time">
+          <ion-icon name="time-outline"></ion-icon>
+          {{pedido.createdAt.toDate() | date:'hh:mm aaa dd/MM/yy'}}
+          <ion-icon name="receipt-outline"></ion-icon>
+          {{pedido.comanda.numero}}
+        </div>              
+      </ion-col>
+    </ion-row>
+  </div> 
   
+  <div *ngIf="!pedido.mesaNombre" class="encabezado-card-general">     
+    <ion-row> 
+      <ion-col size="6" center text-center>            
+        <ion-icon name="person"></ion-icon> {{pedido.personalEmail}}
+      </ion-col>      
+      <ion-col size="6" >
+        <div class="encabezado-time">
+          <ion-icon name="time-outline"></ion-icon>
+          {{pedido.createdAt.toDate() | date:'hh:mm aaa dd/MM/yy'}}
+          <ion-icon name="receipt-outline"></ion-icon>
+          {{pedido.comanda.numero}}
+        </div>              
+      </ion-col>
+    </ion-row>
+  </div>
+  <div class="ion-padding">
+    <span *ngIf="pedido.statusCobro == cEstado.suspendido"> <b style="color: red;"> Suspendido!</b></span>
+    <span *ngIf="pedido.statusCobro == cEstado.cobrado"> <b style="color: green;"> Cobrado</b></span>
+    <span *ngIf="pedido.statusCobro == cEstado.reembolsado"> <b style="color: green;"> Reembolsado</b></span>
+    
+    <span *ngIf="pedido.mesaId">Mesa: {{pedido.mesaNombre}}</span>
+    <span *ngIf="pedido.clienteId">Cliente: {{pedido.clienteNombre}}</span> 
+    <span *ngIf="pedido.comanda.demora" (click)="open()"> <ion-icon name="alarm-outline"></ion-icon> Tiempo restante: {{minutosRestantes}} min.</span>
+  </div>
   
-  <br>  
-  <span *ngIf="pedido.mesaId">Mesa: {{pedido.mesaNombre}}</span><br>
-  <span *ngIf="pedido.clienteId">Cliente: {{pedido.clienteNombre}}</span> 
-  <span *ngIf="pedido.comanda.numero" (click)="open()"><ion-icon name="receipt-outline"></ion-icon>{{pedido.comanda.numero}}</span>
-  <span *ngIf="pedido.comanda.demora" (click)="open()"> <ion-icon name="alarm-outline"></ion-icon> {{pedido.comanda.demora}}</span>
   <ion-item>                
     <ion-label>            
-      <span *ngFor="let item of pedido.productos; let i = index">
+      <span *ngFor="let item of pedido.items; let i = index">
         <ion-item *ngIf="cocinasFiltro.includes(item.cocinaId)">            
           <ion-label>                
             <h2><b>{{item.cantidad}} X {{item.nombre}}</b> 
@@ -23,7 +57,7 @@
               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="color-text-green">{{opcion.cantidad}}X </span>{{opcion.nombreGrupo}} {{opcion.nombre}} </p>
             </span>           
             <p>
-              {{item.descripcion_venta}}
+              {{item.descripcion_venta}} 
             </p>              
           </ion-label>  
           <ion-checkbox slot="end" [(ngModel)]="item.listoComanda"></ion-checkbox>

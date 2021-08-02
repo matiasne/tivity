@@ -1,20 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Comercio } from 'src/app/models/comercio';
 import { EnumEstadoCobro, Pedido } from 'src/app/models/pedido';
 import { ComerciosService } from 'src/app/Services/comercios.service';
 import { PedidoService } from 'src/app/Services/pedido.service';
-import { EnumEstadoCocina } from 'src/app/models/producto';
+import { EnumEstadoCocina } from 'src/app/models/item';
 import { AlertController, ModalController } from '@ionic/angular';
 import { FormComentarioPage } from 'src/app/form-comentario/form-comentario.page';
 import { ComentariosService } from 'src/app/Services/comentarios.service';
-import { Producto } from 'src/app/models/producto';
 
 @Component({
   selector: 'app-card-comanda-v2',
   templateUrl: './card-comanda-v2.component.html',
   styleUrls: ['./card-comanda-v2.component.scss'],
 })
-export class CardComandaV2Component implements OnInit {
+export class CardComandaV2Component implements OnInit, OnDestroy {
 
   @Input() public pedido:any;
   @Input() public cocinasFiltro:any;
@@ -27,7 +26,12 @@ export class CardComandaV2Component implements OnInit {
   public cEstado = EnumEstadoCobro;
 
   public submit = false;
-  
+
+  public vencimiento:any 
+  public minutosRestantes = 0;
+  public interval:any
+  public restantesPorcentaje = 100;
+
   constructor(
     private comercioService:ComerciosService,
     private pedidosService:PedidoService,
@@ -38,18 +42,65 @@ export class CardComandaV2Component implements OnInit {
     this.comercio = new Comercio();
     this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue());   
     this.submit = false;
+    
+    
+   
   }
 
   open(){
     this.ver.emit();
   }
 
+  setVencimiento(){ 
+    this.vencimiento = this.pedido.createdAt.toDate()
+    if(this.pedido.comanda){
+      if(this.pedido.comanda.demora > 0){
+        this.vencimiento.setMinutes(this.pedido.createdAt.toDate().getMinutes() + this.pedido.comanda.demora);
+
+        let fechaHoy = new Date()
+        this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+
+        if(this.minutosRestantes < 0){
+          this.minutosRestantes = 0;
+        }
+        
+        this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100        
+        console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+
+        this.interval = setInterval(()=>{
+          
+            
+            let fechaHoy = new Date()
+            this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+            
+            
+            
+
+            this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100
+
+            console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+          
+        },60000)
+      }
+    }
+    
+    
+  }
+
+  ngOnDestroy(){
+    console.log("destroy comanda")
+    clearInterval(this.interval);
+  }
+
   ngOnInit() {
     
-    this.pedido.productos.sort(function(a, b) {
+    if(this.pedido.comanda)
+      this.minutosRestantes = this.pedido.comanda.demora
+    this.pedido.items.sort(function(a, b) {
       return Number(a.cocinaId) - Number(b.cocinaId);
     });
     this.submit = false;
+    this.setVencimiento()
   }
 
   async rechazar(){

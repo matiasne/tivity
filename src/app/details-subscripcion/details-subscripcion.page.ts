@@ -3,7 +3,6 @@ import { SubscripcionesService } from '../Services/subscripciones.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscripcion } from '../models/subscripcion';
 import { Cliente } from '../models/cliente';
-import { Servicio } from '../models/servicio';
 import { PagaresService } from '../Services/pagares.service';
 
 @Component({
@@ -15,7 +14,6 @@ export class DetailsSubscripcionPage implements OnInit {
 
   public subscripcion:Subscripcion; 
   public cliente:Cliente;
-  public servicio:Servicio;
   public pagares = [];
   constructor(
     private route: ActivatedRoute,
@@ -24,7 +22,6 @@ export class DetailsSubscripcionPage implements OnInit {
   ) { 
     this.subscripcion = new Subscripcion("","");
     this.cliente = new Cliente();
-    this.servicio = new Servicio();
   }
 
   ngOnInit() {

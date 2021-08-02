@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title  size="small">Mercado Pago</ion-title>    
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+
+  <img class="mp-logo" src="../../assets/img/logo-mercadopago.png" alt="">
+
+  <ion-item *ngIf="comercio.mercadoPago.publicKey" class="item-card">
+    Conectado con cuenta: {{comercio.mercadoPago.nickname}}
+  </ion-item>
+  
+ 
+  <ion-item *ngIf="!comercio.mercadoPago.publicKey" class="form-card">
+    <ion-button class="button-rounded" color="light" [href]="link" (click)="cerrar()">Conectar Mercado Pago</ion-button>
+  </ion-item>
+
+  <ion-button *ngIf="comercio.mercadoPago.publicKey" class="button-rounded" color="danger" (click)="desvincular()">Desvincular Cuenta</ion-button>
+
+
+</ion-content>

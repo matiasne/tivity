@@ -23,6 +23,10 @@ import { RolesService } from './Services/roles.service';
 import { Environment } from '@ionic-native/google-maps';
 import { AfipServiceService } from './Services/afip/afip-service.service';
 import { BluetoothService } from './Services/bluetooth.service';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { HomePage } from './home/home.page';
+import { NFC, Ndef } from '@ionic-native/nfc/ngx';
+
 
 @Component({
   selector: 'app-root',
@@ -132,7 +136,10 @@ export class AppComponent implements OnInit {
     private bluetoothService:BluetoothService,
     private rolesService:RolesService,
     private afipService:AfipServiceService,
-    private impresoraService:ImpresoraService
+    private impresoraService:ImpresoraService,
+    private deeplinks: Deeplinks,
+    private nfc: NFC, 
+    private ndef: Ndef
   ) {
     this.comercioSeleccionado = new Comercio();
     
@@ -156,10 +163,26 @@ export class AppComponent implements OnInit {
       console.log("NgOnInit")
 
       this.statusBar.styleDefault();
-      
-      
-     
 
+      let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
+      this.nfc.readerMode(flags).subscribe(
+          tag => alert(JSON.stringify(tag)),
+          err => alert(err)
+      );
+      
+      this.deeplinks.route({
+        '/page': "page",
+      }).subscribe(match => {
+        // match.$route - the route we matched, which is the matched entry from the arguments to route()
+        // match.$args - the args passed in the link
+        // match.$link - the full link data
+        alert('Successfully matched route');
+      }, nomatch => {
+        // nomatch.$link - the full link data
+        alert("No match")
+        alert(JSON.stringify(nomatch));
+      });
+   
       /*this.notifiacionesDesktopService.requestPermission();
       this.notifiacionesDesktopService.init().then(data=>{
         console.log("OK")
@@ -260,7 +283,6 @@ export class AppComponent implements OnInit {
       console.log(data)  
       if(data){
         this.comercioSeleccionado.asignarValores(data);
-        this.afipService.login();
       }
       else{
         this.comercioSeleccionado = new Comercio();

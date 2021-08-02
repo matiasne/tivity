@@ -51,6 +51,15 @@
         </ion-item>
       </ion-col>
     </ion-row>
+
+    <ion-row *ngIf="metodoPagoSeleccionado.includes('mercadopago')">
+      <ion-col size="8">
+        <ion-item class="item-card">
+          <ion-label position="floating" >Monto a cobrar con Mercado Pago</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="montoPagoMercadoPago"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
   
     <ion-item class="item-card" *ngIf="metodoPagoSeleccionado.includes('ctaCorriente')">
       <ion-label position="floating" >Cuenta Corriente:</ion-label>

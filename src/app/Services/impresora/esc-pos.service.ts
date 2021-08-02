@@ -69,13 +69,13 @@ export class EscPosService {
     }
       
 
-    pedido.productos.sort(function(a, b) {
+    pedido.items.sort(function(a, b) {
       return Number(a.cocinaId) - Number(b.cocinaId);
     });
 
 
     let ultimaCocina = "";
-    pedido.productos.forEach(producto => { 
+    pedido.items.forEach(producto => { 
 
       let cocinaActual = producto.cocinaNombre;
 
@@ -137,13 +137,13 @@ export class EscPosService {
     }
       
 
-    pedido.productos.sort(function(a, b) {
+    pedido.items.sort(function(a, b) {
       return Number(a.cocinaId) - Number(b.cocinaId);
     });
 
 
     let ultimaCocina = "";
-    pedido.productos.forEach(producto => { 
+    pedido.items.forEach(producto => { 
 
       let cocinaActual = producto.cocinaNombre;
 
@@ -254,7 +254,7 @@ export class EscPosService {
       }
 
       cmds += "\n";
-      pedido.productos.forEach(producto => {       
+      pedido.items.forEach(producto => {       
         if(producto.suspendido == 0){         
 
           let cantidad = producto.cantidad+"x";

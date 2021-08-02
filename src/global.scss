@@ -177,6 +177,12 @@
   }
 }
 
+.swal2-container {
+
+  position: relative !important;
+  height: 100vh !important;
+}
+
 .header-md::after{
   background-image: none !important;
 }

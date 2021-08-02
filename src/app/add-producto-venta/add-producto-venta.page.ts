@@ -5,7 +5,7 @@ import { ProductosService } from '../Services/productos.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CargaPorVozService } from '../Services/carga-por-voz.service';
 import { ToastService } from '../Services/toast.service';
-import { EnumEstadoCocina, Producto } from '../models/producto';
+import { EnumEstadoCocina, Item } from '../models/item';
 import { GrupoOpciones } from '../models/grupoOpciones';
 import { Opcion } from '../models/opcion';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ import { LoadingService } from '../Services/loading.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { FormProductoPage } from '../form-producto/form-producto.page';
 import { EnumEstadoCobro } from '../models/pedido';
+import { ItemPedido } from '../models/itemPedido';
 
 @Component({
   selector: 'app-add-producto-venta',
@@ -27,7 +28,9 @@ export class AddProductoVentaPage implements OnInit {
   @ViewChild('cantidad',{static:false})  inputElement: IonInput;
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
-  producto:Producto;
+  item:Item;
+  itemPedido:ItemPedido;
+
   datosForm: FormGroup;
   submitted = false;
   private opcionesSubs:Subscription;
@@ -55,19 +58,23 @@ export class AddProductoVentaPage implements OnInit {
 
   ngOnInit() {
     console.log("!!!")
-    this.producto = new Producto();
-    console.log(this.producto)
-    this.producto.asignarValores(this.navParams.get('producto'));
-    this.producto.cantidad = 1;
-    this.producto.descripcion_venta = "";
-    this.producto.listoComanda = false;
+    this.item = new Item();
+    this.itemPedido = new ItemPedido();
+    console.log(this.item)
+    this.item.asignarValores(this.navParams.get('producto'));
+    this.itemPedido.asignarValores(this.navParams.get('producto'))
+    
+    this.itemPedido.cantidad = 1;
+    this.itemPedido.descripcion_venta = "";
+
+    this.itemPedido.listoComanda = false;
 
     this.gruposOpciones = [];  
     
-    if(this.producto.gruposOpcionesId.length > 0)
+    if(this.item.gruposOpcionesId.length > 0)
       this.loadingService.presentLoadingText("Cargando Opciones")
       
-    this.producto.gruposOpcionesId.forEach(id =>{
+    this.item.gruposOpcionesId.forEach(id =>{
       let sub = this.gruposOpcionesService.get(id).subscribe(data=>{
         data.opciones.forEach(opcion =>{
           opcion.cantidad = 0;
@@ -80,14 +87,14 @@ export class AddProductoVentaPage implements OnInit {
       })
     })
 
-    this.producto.opcionesSeleccionadas = [];
+    this.itemPedido.opcionesSeleccionadas = [];
 
     
 
 
-    console.log(this.producto)
+    console.log(this.item)
 
-    this.addToTotal(0,this.producto.precio,10);
+    this.addToTotal(0,this.item.precio,10);
 
     
 
@@ -95,12 +102,12 @@ export class AddProductoVentaPage implements OnInit {
 
   async editarProducto(){
     this.modalCtrl.dismiss()
-   // this.router.navigate(['form-producto',{id:this.producto.id}]);
+   // this.router.navigate(['form-producto',{id:this.item.id}]);
 
     let modal = await this.modalCtrl.create({
       component: FormProductoPage,
       componentProps: {
-        id:this.producto.id
+        id:this.item.id
       }
     });  
     return await modal.present();
@@ -109,22 +116,22 @@ export class AddProductoVentaPage implements OnInit {
 
   
   sumarCantidad(){
-    this.producto.cantidad +=1;
-    let precioViejo = this.producto.precioTotal;
-    this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,1500);
+    this.itemPedido.cantidad +=1;
+    let precioViejo = this.itemPedido.precioTotal;
+    this.itemPedido.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.itemPedido.precioTotal,1500);
   }
 
   restarCantidad(){ 
-    this.producto.cantidad-=1;
-    if(this.producto.cantidad < 1){
-      this.producto.cantidad = 1;
+    this.itemPedido.cantidad-=1;
+    if(this.itemPedido.cantidad < 1){
+      this.itemPedido.cantidad = 1;
       return;
     }   
     
-    let precioViejo = this.producto.precioTotal;
-    this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+    let precioViejo = this.itemPedido.precioTotal;
+    this.itemPedido.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.itemPedido.precioTotal,10);
   }
 
   ngAfterViewInit() {
@@ -143,7 +150,7 @@ export class AddProductoVentaPage implements OnInit {
     });
     opcion.seleccionada = true;
     opcion.cantidad = 1;
-    this.producto.precioTotal = this.valorTotal();
+    this.itemPedido.precioTotal = this.valorTotal();
   }
 
   seleccionarOpcionCheck(grupo:GrupoOpciones, opcion:Opcion){
@@ -160,7 +167,7 @@ export class AddProductoVentaPage implements OnInit {
      
     var isOk = false;
 
-    this.producto.opcionesSeleccionadas = [];
+    this.itemPedido.opcionesSeleccionadas = [];
     this.gruposOpciones.forEach(grupo =>{
       grupo.opciones.forEach(opcion => {
         if(opcion.cantidad > 0){               
@@ -171,7 +178,7 @@ export class AddProductoVentaPage implements OnInit {
             cantidad : opcion.cantidad,
           } 
          
-          this.producto.opcionesSeleccionadas.push(opcionSeleccionada);
+          this.itemPedido.opcionesSeleccionadas.push(opcionSeleccionada);
           opcion.cantidad = 0;
         }
       });
@@ -233,16 +240,16 @@ export class AddProductoVentaPage implements OnInit {
 
     console.log("!!!!!! isOK"+isOk)
     if(isOk){  
-      if(this.producto.cocinaId){
-        this.cocinasService.get(this.producto.cocinaId).subscribe(data=>{
-          this.producto.cocinaNombre = data.nombre;
+      if(this.item.cocinaId){
+        this.cocinasService.get(this.item.cocinaId).subscribe(data=>{
+          this.item.cocinaNombre = data.nombre;
         }) 
       }
       
-      console.log(this.producto)
-      this.modalCtrl.dismiss(this.producto); 
+      console.log(this.itemPedido)
+      this.modalCtrl.dismiss(this.itemPedido); 
       
-      //this.toastServices.mensaje('Agregado!', this.producto.cantidad+' '+this.producto.unidad+' de '+this.producto.nombre);     
+      //this.toastServices.mensaje('Agregado!', this.item.cantidad+' '+this.item.unidad+' de '+this.item.nombre);     
     }   
    
   }
@@ -318,9 +325,9 @@ export class AddProductoVentaPage implements OnInit {
       this.gruposOpciones[grupoIndex].opciones[i].seleccionada = false;
     
 
-    let precioViejo = this.producto.precioTotal;
-    this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+    let precioViejo = this.itemPedido.precioTotal;
+    this.itemPedido.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.itemPedido.precioTotal,10);
     
 
    
@@ -370,9 +377,9 @@ export class AddProductoVentaPage implements OnInit {
     }
 
 
-    let precioViejo = this.producto.precioTotal;
-    this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+    let precioViejo = this.itemPedido.precioTotal;
+    this.itemPedido.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.itemPedido.precioTotal,10);
 
     console.log(this.gruposOpciones[grupoIndex].maximo)
     console.log(this.gruposOpciones[grupoIndex].cantidadTotal)
@@ -380,9 +387,9 @@ export class AddProductoVentaPage implements OnInit {
   }
 
   valorTotal(){
-    let valorUno = this.producto.precio;
-    if(this.producto.promocion)
-      valorUno = this.producto.promocion
+    let valorUno = this.item.precio;
+    if(this.item.promocion)
+      valorUno = this.item.promocion
     
     this.gruposOpciones.forEach(grupos =>{
       grupos.opciones.forEach (opcion =>{
@@ -390,14 +397,14 @@ export class AddProductoVentaPage implements OnInit {
           valorUno += opcion.precioVariacion * opcion.cantidad;
       })
     });
-    console.log(this.producto.cantidad+" "+valorUno)
-    return this.producto.cantidad * valorUno;
+    console.log(this.itemPedido.cantidad+" "+valorUno)
+    return this.itemPedido.cantidad * valorUno;
   }
 
 
   addToTotal(start, end, duration) {
 
-    this.producto.precioTotal = end;
+    this.itemPedido.precioTotal = end;
 
     if(start == end){
       this.totalCambiando = false;

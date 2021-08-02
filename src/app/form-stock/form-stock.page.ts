@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Producto } from '../models/producto';
+import { Item } from '../models/item';
 import { variacionStock } from '../models/variacionStock';
 import { ProductosService } from '../Services/productos.service';
 import { VariacionesStocksService } from '../Services/variaciones-stocks.service';
@@ -13,7 +13,7 @@ import { WoocommerceService } from '../Services/woocommerce/woocommerce.service'
 })
 export class FormStockPage implements OnInit {
   
-  public producto:Producto;
+  public item:Item;
   public nuevoStock = 0;
 
   constructor(
@@ -23,8 +23,8 @@ export class FormStockPage implements OnInit {
     private variacionesStockService:VariacionesStocksService,
     private woocommerceService:WoocommerceService
   ) {
-    this.producto = new Producto()
-    this.producto.asignarValores(this.navParams.get('producto'));
+    this.item = new Item()
+    this.item.asignarValores(this.navParams.get('item'));
   }
 
   ngOnInit() {
@@ -36,19 +36,19 @@ export class FormStockPage implements OnInit {
   }
 
   guardar(){
-    this.producto.stock =  this.producto.stock + this.nuevoStock;
+    this.item.stock =  this.item.stock + this.nuevoStock;
     this.modalCtrl.dismiss();   
 
-    this.productosService.update(this.producto).then(data=>{
+    this.productosService.update(this.item).then(data=>{
       console.log(data);      
       this.woocommerceService.setPart("products")
-      this.woocommerceService.actualizarProductoInWC(this.producto)
+      this.woocommerceService.actualizarProductoInWC(this.item)
     });
 
     let vStock:variacionStock = new variacionStock();
-    vStock.productoId = this.producto.id;
-    vStock.stock = this.producto.stock;
-    this.variacionesStockService.setPathProducto(this.producto.id);
+    vStock.productoId = this.item.id;
+    vStock.stock = this.item.stock;
+    this.variacionesStockService.setPathProducto(this.item.id);
     
     this.variacionesStockService.add(vStock).then(resp =>{
       console.log("variacion Guardada");        

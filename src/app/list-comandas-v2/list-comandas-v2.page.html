@@ -54,7 +54,7 @@
 
   <span [hidden]="devWidth > 576">
     
-    <ion-list lines="none" *ngIf="seccionActiva == 'pendientes'">     
+    <ion-list class="item-card" lines="none" *ngIf="seccionActiva == 'pendientes'">     
       <div *ngFor="let item of itemsPendientes">   
         <app-card-comanda-v2 [pedido]="item" [cocinasFiltro]="cocinaFiltro" (ver)="abrir(item)"></app-card-comanda-v2>
       </div>

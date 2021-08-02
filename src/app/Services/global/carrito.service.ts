@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from '../authentication.service';
-import { Producto } from 'src/app/models/producto';
+import { Item } from 'src/app/models/item';
 import { Descuento, EnumTipoDescuento } from 'src/app/models/descuento';
 import { EnumTipoRecargo, Recargo } from 'src/app/models/recargo';
 import { PedidoService } from '../pedido.service';
@@ -14,6 +14,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Comentario } from 'src/app/models/comentario';
 import { ImpresoraService } from '../impresora/impresora.service';
 import { ComerciosService } from '../comercios.service';
+import { ItemPedido } from 'src/app/models/itemPedido';
 
 @Injectable({
   providedIn: 'root'
@@ -40,15 +41,17 @@ export class CarritoService {
     return this.actualCarritoSubject.asObservable();
   }
 
-  public agregarProducto(producto:Producto){         
-    producto.enCarrito += producto.cantidad;
-    const p = JSON.parse(JSON.stringify(producto));
+  public agregarItem(item:Item){
+    let itemCarrito = new ItemPedido()
+    itemCarrito.asignarValores(item)         
+    item.enCarrito += itemCarrito.cantidad;
+    const p = JSON.parse(JSON.stringify(item));
 
     p.gruposOpciones =[];
-    this.carrito.productos.push(p);
+    this.carrito.items.push(p);
     this.carrito.on = true;    
 
-    this.modalNotificacion.success("Agregado",producto.cantidad+' '+producto.unidad+' de '+producto.nombre)
+    this.modalNotificacion.success("Agregado",itemCarrito.cantidad+' '+itemCarrito.unidad+' de '+itemCarrito.nombre)
     this.actualCarritoSubject.next(this.carrito);    
   }
 
@@ -83,8 +86,8 @@ export class CarritoService {
   }
 
   public eliminarProducto(index){
-    this.carrito.productos.splice(index,1);
-    if(this.carrito.productos.length > 0 || this.carrito.servicios.length > 0)
+    this.carrito.items.splice(index,1);
+    if(this.carrito.items.length > 0)
       this.carrito.on = true;    
     else{
       this.carrito.on = false;
@@ -128,18 +131,24 @@ export class CarritoService {
   }
 
   async crearPedido(){
-    this.carrito.id = this.firestore.createId();
-    this.carrito.comanda.numero = await this.comerciosService.obtenerActualizarNumeroPedido()
-    this.carrito.personalId = this.authenticationService.getUID();
-    this.carrito.personalEmail = this.authenticationService.getEmail();
-    this.carrito.personalNombre = this.authenticationService.getNombre();
-    this.carrito.total = this.getTotal()
 
-    this.carrito.primerMensaje = this.comentario
+    let c:any = new Pedido()  //NO borrar!!! importante para cuando está en modo offline!!!
+    Object.assign(c, this.carrito);
+    this.vaciar(); 
+
+    this.modalNotificacion.success("Cargado","El pedido ha sido cargado a la lista.")
+    c.id = this.firestore.createId();
+    c.comanda.numero = await this.comerciosService.obtenerActualizarNumeroPedido()
+    c.personalId = this.authenticationService.getUID();
+    c.personalEmail = this.authenticationService.getEmail();
+    c.personalNombre = this.authenticationService.getNombre();
+    c.total = this.getTotal()
+
+    c.primerMensaje = this.comentario
     
 
     if(this.comentario != ""){ 
-      this.comentariosService.setearPath("pedidos",this.carrito.id);      
+      this.comentariosService.setearPath("pedidos",c.id);      
       let comentario = new Comentario();
       comentario.text =this.comentario;
       comentario.senderId=this.authenticationService.getUID();
@@ -150,9 +159,7 @@ export class CarritoService {
       this.comentario = "";
     }   
 
-    let c:any = new Pedido()  //NO borrar!!! importante para cuando está en modo offline!!!
-    Object.assign(c, this.carrito);
-    this.vaciar();  
+     
 
     c.direccion = JSON.parse(JSON.stringify(c.direccion));
     
@@ -160,7 +167,7 @@ export class CarritoService {
     this.pedidosService.set(c.id,c).then((data:any)=>{       
       console.log("!!!!!!"+data.fromCache)   
     });  
-    this.modalNotificacion.success("Cargado","El pedido ha sido cargado a la lista.")
+    
   }
 
   obtenerNumeroPedido(){

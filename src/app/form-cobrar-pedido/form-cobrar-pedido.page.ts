@@ -9,7 +9,7 @@ import { Mesa } from '../models/mesa';
 import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
 import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
 import { EnumEstadoCobro, Pedido } from '../models/pedido';
-import { EnumEstadoCocina } from 'src/app/models/producto';
+import { EnumEstadoCocina } from 'src/app/models/item';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { AuthenticationService } from '../Services/authentication.service';
 import { CajasService } from '../Services/cajas.service';
@@ -24,6 +24,7 @@ import { MovimientosService } from '../Services/movimientos.service';
 import { PedidoService } from '../Services/pedido.service';
 import { ProductosService } from '../Services/productos.service';
 import { ToastService } from '../Services/toast.service';
+import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
 
 @Component({
   selector: 'app-form-cobrar-pedido', 
@@ -56,6 +57,7 @@ export class FormCobrarPedidoPage implements OnInit {
  
   public comentarios = [];
 
+  public habilitadoFacturar = false;
   public facturar = false
 
   public total = 0;
@@ -84,10 +86,12 @@ export class FormCobrarPedidoPage implements OnInit {
 
   ngOnInit() {
 
-    if(this.comercio.config.afip && (localStorage.getItem('facturar') == "true"))
-      this.facturar = true
+    if(this.comercio.afip.token !=""){
+      this.habilitadoFacturar = true;
+      this.facturar = (localStorage.getItem('facturar') === "true")
+    }
     else{
-      this.facturar = false;
+      this.habilitadoFacturar = false;
     }
     console.log(this.facturar)
 
@@ -124,8 +128,7 @@ export class FormCobrarPedidoPage implements OnInit {
 
   updateFacturar(event){
     console.log(event.target.checked)
-    if(this.comercio.config.afip)
-      localStorage.setItem('facturar',event.target.checked)
+    localStorage.setItem('facturar',event.target.checked)
   }
 
 
@@ -143,11 +146,45 @@ export class FormCobrarPedidoPage implements OnInit {
     else if(this.metodoPagoSeleccionado.includes("ctaCorriente")){
       this.pedido.montoPagoCtaCorriente = this.getTotal();
     }
+    else if(this.metodoPagoSeleccionado.includes("mercadopago")){
+      this.pedido.montoPagoMercadoPago = this.getTotal();
+    }
   }
 
   setPagoTotal(){
-    this.pagoTotal = this.pedido.montoPagoEfectivo + this.pedido.montoPagoDebito + this.pedido.montoPagoCredito + this.pedido.montoPagoCtaCorriente
+    this.pagoTotal = this.pedido.montoPagoEfectivo + this.pedido.montoPagoDebito + this.pedido.montoPagoCredito + this.pedido.montoPagoCtaCorriente +this.pedido.montoPagoMercadoPago
     this.vuelto = this.getTotal() - this.pagoTotal;
+  }
+
+  async ValidarMercadoPago(){
+
+    if(this.metodoPagoSeleccionado.includes('mercadopago')){
+      let modal = await this.modalController.create({
+        id:'modal-mp',
+        component: FormCardPaymentPage,
+        componentProps: {
+          pedido:this.pedido,
+        }
+      });
+
+      modal.onDidDismiss()
+        .then((retorno) => {
+          if(retorno.data){
+           if(retorno.data == "approved"){
+             this.cobrar()
+           }
+          }
+                  
+      });
+      
+      return await modal.present();
+    }
+    else{
+      this.cobrar()
+    }
+  
+
+    
   }
  
   async cobrar(){
@@ -190,6 +227,11 @@ export class FormCobrarPedidoPage implements OnInit {
       return;
     }  
 
+    if(this.metodoPagoSeleccionado.includes("mercadopago") && this.pedido.montoPagoMercadoPago === 0 || this.pedido.montoPagoMercadoPago === null){
+      this.toastServices.alert("Por favor ingrese el monto a cobrar con Mercado Pago","");
+      return;
+    }  
+
     try{
 
       if(this.facturar){
@@ -203,9 +245,8 @@ export class FormCobrarPedidoPage implements OnInit {
       this.cajaSeleccionada = this.cajas[this.cajaSeleccionadaIndex];
       console.log(this.cajaSeleccionada)
 
-      if(this.pedido.productos.length > 0){      
-        this.pedido.productos.forEach(p =>{    
-          delete p.keywords;     
+      if(this.pedido.items.length > 0){      
+        this.pedido.items.forEach(p =>{    
           let deltaStock = 0;
           if(p.valorPor)
             deltaStock =  - (Number(p.cantidad) * Number(p.valorPor));
@@ -229,7 +270,9 @@ export class FormCobrarPedidoPage implements OnInit {
             if(metodo === "credito"){
               monto = this.pedido.montoPagoCredito;
             }
-
+            if(metodo === "mercadopago"){
+              monto = this.pedido.montoPagoMercadoPago;
+            }
             if(metodo != "ctaCorriente"){
 
               
@@ -284,6 +327,7 @@ export class FormCobrarPedidoPage implements OnInit {
           montoPagoEfectivo:this.pedido.montoPagoEfectivo,
           montoPagoDebito:this.pedido.montoPagoDebito,
           montoPagoCredito:this.pedido.montoPagoCredito,
+          montoPagoMercadoPago:this.pedido.montoPagoMercadoPago,
           montoPagoCtaCorriente:this.pedido.montoPagoCtaCorriente,
           cajaUtilizada : this.cajaSeleccionada.id,  
           total : this.getTotal()    
@@ -297,7 +341,7 @@ export class FormCobrarPedidoPage implements OnInit {
       this.imprimir()           
         
       this.modalNotificacion.success("Cobrado","El pedido ha sido cobrado.")
-      this.modalController.dismiss("cobrado")   
+      this.modalController.dismiss("cobrado",'','form-cobrar')   
       
     }catch(err){
       console.log(err);

@@ -85,7 +85,7 @@ export class TicketDetallePage implements OnInit {
       text += "Mesa: "+ this.pedido.mesaNombre; //text to print        
     }
 
-    this.pedido.productos.forEach(producto => {       
+    this.pedido.items.forEach(producto => {       
       if(producto.suspendido == 0){
         let cantidad = producto.cantidad+"x";
         let nombre = producto.nombre;

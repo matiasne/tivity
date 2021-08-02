@@ -21,6 +21,7 @@
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].efectivo" [value]="'efectivo'">Efectivo</ion-select-option>
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].debito" [value]="'debito'">Débito</ion-select-option>
       <ion-select-option *ngIf="cajas[cajaSeleccionadaIndex].credito" [value]="'credito'">Crédito</ion-select-option>
+      <ion-select-option *ngIf="comercio.mercadoPago.publicKey" [value]="'mercadopago'">Mercado Pago</ion-select-option>
       <ion-select-option *ngIf="ctasCorrientes.length > 0" [value]="'ctaCorriente'">Cta. Corriente</ion-select-option>
     </ion-select>    
   </ion-item>
@@ -52,6 +53,15 @@
     </ion-col>
   </ion-row>
 
+  <ion-row *ngIf="metodoPagoSeleccionado.includes('mercadopago')">
+    <ion-col size="8">
+      <ion-item class="item-card">
+        <ion-label position="floating" >Monto a cobrar con Mercado Pago</ion-label>
+        <ion-input type="number" min="0" [(ngModel)]="pedido.montoPagoMercadoPago" (ionChange)="setPagoTotal()"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
   <ion-item class="item-card" *ngIf="metodoPagoSeleccionado.includes('ctaCorriente')">
     <ion-label position="floating" >Cuenta Corriente:</ion-label>
     <ion-select  [(ngModel)]="ctaCorrienteSelecccionadaId">
@@ -67,16 +77,14 @@
   </ion-col>
   
   <ion-item class="item-card">
-    <ion-checkbox color="primary" slot="start" [(ngModel)]="facturar" (ionChange)="updateFacturar($event)"  [disabled]="!comercio.config.afip"></ion-checkbox>
-    <ion-label> <img style="padding:14px" src="../../assets/img/logo_afip.png" alt=""> Generar Factura Afip</ion-label>
+    <ion-checkbox color="primary" slot="start" [(ngModel)]="facturar" (ionChange)="updateFacturar($event)"  [disabled]="!habilitadoFacturar"></ion-checkbox>
+    <ion-label> <img class="afip-logo" src="../../assets/img/logo_afip.png" alt=""> Generar Factura Afip</ion-label>
   </ion-item>
-
-  
 
 </ion-content>
 <ion-footer class="ion-no-border ion-padding">
   <ion-toolbar>
-    <ion-button class="button-rounded" slot="end" (click)="cobrar()">Cobrar</ion-button>      
+    <ion-button class="button-rounded" slot="end" (click)="ValidarMercadoPago()">Cobrar</ion-button>      
     <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
   </ion-toolbar>  
  </ion-footer>

@@ -29,11 +29,11 @@ export class Comercio {
         servicios:true,
         comandas: true,
         cocinas:true,
+        reservas:true,
         mesas:true,
         impresion:false,
         clientes:true,
         woocommerce:true,
-        afip:true,
         cobrarDirectamente: false,
         movimientosCajas:true,
         ctasCorrientes:true,
@@ -45,7 +45,8 @@ export class Comercio {
         productosMaxLength:40,
         serviciosMaxLength:40,
         clientesMaxLength:100,
-        cajasMaxLength:2
+        cajasMaxLength:2,
+        memoriaDias:1
     }
 
     public colores = {
@@ -75,6 +76,17 @@ export class Comercio {
         nroDoc:"",
         personaJuridica:"",
         ptoVenta:"",  
+    }
+
+    public mercadoPago = {
+        publicKey:"",
+        nickname: "",
+        permalink:"",
+    }
+
+    public afip = {
+        token:"",
+        puntoVenta:""
     }
      
 	public constructor() {

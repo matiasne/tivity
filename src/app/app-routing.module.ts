@@ -31,24 +31,12 @@ const routes: Routes = [
     loadChildren: () => import('./form-cliente/form-cliente.module').then( m => m.FormClientePageModule)
   },
   {
-    path: 'form-servicio',
-    loadChildren: () => import('./form-servicio/form-servicio.module').then( m => m.FormServicioPageModule)
-  },
-  {
     path: 'form-plan',
     loadChildren: () => import('./form-plan/form-plan.module').then( m => m.FormPlanPageModule)
   },
   {
     path: 'form-categoria',
     loadChildren: () => import('./form-categoria/form-categoria.module').then( m => m.FormCategoriaPageModule)
-  },
-  {
-    path: 'form-subscripcion',
-    loadChildren: () => import('./form-subscripcion/form-subscripcion.module').then( m => m.FormSubscripcionPageModule)
-  },
-  {
-    path: 'list-servicios',
-    loadChildren: () => import('./list-servicios/list-servicios.module').then( m => m.ListServiciosPageModule)
   },
   {
     path: 'list-clientes',
@@ -61,10 +49,6 @@ const routes: Routes = [
   {
     path: 'details-cliente',
     loadChildren: () => import('./details-cliente/details-cliente.module').then( m => m.DetailsClientePageModule)
-  },
-  {
-    path: 'details-servicio',
-    loadChildren: () => import('./details-servicio/details-servicio.module').then( m => m.DetailsServicioPageModule)
   },
   {
     path: 'details-subscripcion',
@@ -115,10 +99,6 @@ const routes: Routes = [
     loadChildren: () => import('./dashboard-productos/dashboard-productos.module').then( m => m.DashboardProductosPageModule)
   },
   {
-    path: 'dashboard-servicios',
-    loadChildren: () => import('./dashboard-servicios/dashboard-servicios.module').then( m => m.DashboardServiciosPageModule)
-  },
-  {
     path: 'form-producto',
     loadChildren: () => import('./form-producto/form-producto.module').then( m => m.FormProductoPageModule)
   },
@@ -133,10 +113,6 @@ const routes: Routes = [
   {
     path: 'add-producto-venta',
     loadChildren: () => import('./add-producto-venta/add-producto-venta.module').then( m => m.AddProductoVentaPageModule)
-  },
-  {
-    path: 'add-servicio-subscripcion',
-    loadChildren: () => import('./add-servicio-subscripcion/add-servicio-subscripcion.module').then( m => m.AddServicioSubscripcionPageModule)
   },
   {
     path: 'list-productos-servicios',
@@ -262,10 +238,6 @@ const routes: Routes = [
   {
     path: 'form-calendario',
     loadChildren: () => import('./form-calendario/form-calendario.module').then( m => m.FormCalendarioPageModule)
-  },
-  {
-    path: 'list-calendarios',
-    loadChildren: () => import('./list-calendarios/list-calendarios.module').then( m => m.ListCalendariosPageModule)
   },
   {
     path: 'list-personal',
@@ -437,6 +409,22 @@ const routes: Routes = [
   {
     path: 'form-impresora',
     loadChildren: () => import('./form-impresora/form-impresora.module').then( m => m.FormImpresoraPageModule)
+  },
+  {
+    path: 'dashboard-reservas',
+    loadChildren: () => import('./dashboard-reservas/dashboard-reservas.module').then( m => m.DashboardReservasPageModule)
+  },
+  {
+    path: 'list-reservas',
+    loadChildren: () => import('./list-reservas/list-reservas.module').then( m => m.ListReservasPageModule)
+  },
+  {
+    path: 'form-card-payment',
+    loadChildren: () => import('./form-card-payment/form-card-payment.module').then( m => m.FormCardPaymentPageModule)
+  },
+  {
+    path: 'form-config-mercadopago',
+    loadChildren: () => import('./form-config-mercadopago/form-config-mercadopago.module').then( m => m.FormConfigMercadopagoPageModule)
   }
  
 ];

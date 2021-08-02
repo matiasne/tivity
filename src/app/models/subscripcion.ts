@@ -1,5 +1,3 @@
-import { Servicio } from './servicio';
-import { Cliente } from './cliente';
 import { DocumentReference } from 'angularfire2/firestore';
 export class Subscripcion{
     public id ="";

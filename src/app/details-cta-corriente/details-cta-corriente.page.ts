@@ -77,13 +77,11 @@ export class DetailsCtaCorrientePage implements OnInit {
 
   refrescar(){
     this.loadingService.presentLoading();
-    this.movSubs = this.movimientosService.getMovimientosCtaCorriente(this.route.snapshot.params.id).subscribe(snapshot=>{
+    this.movSubs = this.movimientosService.getMovimientosCtaCorriente(this.route.snapshot.params.id).subscribe(data=>{
                 
       this.loadingService.dismissLoading();
       this.items =[];
-      snapshot.forEach((snap: any) => {           
-        var item = snap.payload.doc.data();
-        item.id = snap.payload.doc.id;  
+      data.forEach((item: any) => {
         if(item.monto < 0)       
           item.extraccion = "true";
         else

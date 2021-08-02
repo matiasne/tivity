@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { ClientesService } from './clientes.service';
-import { ServiciosService } from './servicios.service';
-import * as firebase from 'firebase';
 import { BaseService } from './base.service';
-import { map } from 'rxjs/operators';
 import { ComerciosService } from './comercios.service';
 
 @Injectable({
@@ -18,20 +14,33 @@ export class SubscripcionesService extends BaseService{
     private comerciosService:ComerciosService
     ) {     
       super(afs); 
-      this.comerciosService.getSelectedCommerce().subscribe(data=>{
-        if(data){
-          
-          this.setPath('comercios/'+data.id+'/subscripciones')   
-         }        
-      })
+     
   }
 
-  getByServicioId(id){
-    return this.firestore.collection(this.path, ref => ref.where('servicioId', '==', id)).get(/*{ source: 'server' }*/)
-    
-    
+  setPath(clienteId){
+    let comercioId = this.comerciosService.getSelectedCommerceId()
+    this.path = 'comercios/'+comercioId+'/clientes/'+clienteId+'/subscripciones'
   }
 
+  addSubscripcion(clienteId,subscripcion){
+    this.setPath(clienteId)
+    return super.add(subscripcion)    
+  }
+
+  listSubscripciones(clienteId){
+    this.setPath(clienteId)
+    return super.list()    
+  }
+
+  getSubscripciones(clienteId,subscripcionId){
+    this.setPath(clienteId)
+    return super.get(subscripcionId)    
+  }
+
+  deleteSubscripciones(clienteId,subscripcionId){
+    this.setPath(clienteId)
+    return super.delete(subscripcionId)    
+  }
   
 
 
