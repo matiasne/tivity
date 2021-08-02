@@ -36,6 +36,8 @@ xmlns:amazon="http://schemas.amazon.com/apk/res/android">
 <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+<uses-permission android:name="android.permission.NFC"/>
+<uses-feature android:name="android.hardware.nfc" android:required="false"/>
 <uses-permission android:name="android.permission.CAMERA"/>
 <uses-permission android:name="android.permission.FLASHLIGHT"/>
 <uses-feature android:name="android.hardware.camera" android:required="true"/>
