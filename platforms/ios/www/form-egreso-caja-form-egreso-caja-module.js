@@ -9,7 +9,186 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Egreso de caja</ion-title>    \n  </ion-toolbar>\n</ion-header>\n \n<ion-content  class=\"ion-padding\">\n\n  <ion-item class=\"item-card\">\n    <ion-label position=\"floating\">Método</ion-label>\n    <ion-select [(ngModel)]=\"metodoPagoSeleccionado\">\n      <ion-select-option [value]=\"'efectivo'\">Efectivo</ion-select-option>\n      <ion-select-option [value]=\"'debito'\">Débito</ion-select-option>\n      <ion-select-option [value]=\"'credito'\">Crédito</ion-select-option>\n      <ion-select-option [value]=\"'ctaCorriente'\">Cta. Corriente</ion-select-option>\n    </ion-select>    \n  </ion-item>\n\n  <ion-item *ngIf=\"metodoPagoSeleccionado == 'efectivo'\" class=\"item-card\">\n    <ion-label position=\"floating\">Caja</ion-label>\n    <ion-select [(ngModel)]=\"cajaSeleccionadaIndex\" (ionChange)=\"setearCaja()\">\n      <span *ngFor=\"let caja of cajas;let i=index\">\n        <ion-select-option [value]=\"i\">{{caja.nombre}}</ion-select-option>\n      </span>          \n    </ion-select> \n  </ion-item>\n\n  \n\n  <form [formGroup]=\"datosForm\">  \n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <p *ngIf=\"metodoPagoSeleccionado == 'efectivo'\">Total Efectivo {{totalActual | currency}}</p>\n        <h4>Monto *</h4> \n      </ion-text> \n              \n      <ion-item [class.invalid]=\"submitted && !datosForm.controls.monto.valid\">\n        <ion-input name=\"monto\" type=\"number\" formControlName=\"monto\" required></ion-input>\n      </ion-item>\n      <div *ngIf=\"submitted && f.monto.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.monto.errors.required\"><h5>Ingresa un monto</h5></div>\n      </div>  \n    </div>\n            \n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Motivo</h4>    \n      </ion-text> \n      <ion-item [class.invalid]=\"submitted && !datosForm.controls.motivo.valid\">\n        <ion-textarea formControlName=\"motivo\" required></ion-textarea>\n      </ion-item>\n      <div *ngIf=\"submitted && f.motivo.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.motivo.errors.required\"><h5>Ingresa un motivo</h5></div>\n      </div> \n    </div>\n    \n   \n   \n  </form>  \n\n\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"guardar()\">Guardar</ion-button>\n    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Egreso de caja</ion-title>    \n  </ion-toolbar>\n</ion-header>\n \n<ion-content  class=\"ion-padding\">\n\n  <ion-item class=\"item-card\">\n    <ion-label position=\"floating\">Caja</ion-label>\n    <ion-select [(ngModel)]=\"cajaSeleccionadaIndex\" (ionChange)=\"setearCaja()\">\n      <span *ngFor=\"let caja of cajas;let i=index\">\n        <ion-select-option [value]=\"i\">{{caja.nombre}}</ion-select-option>\n      </span>          \n    </ion-select> \n  </ion-item>\n\n  \n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <p>Total Efectivo {{totalActual | currency}}</p>\n    </ion-text> \n                \n    <ion-item>\n      <ion-label position=\"floating\">Monto *</ion-label>\n      <ion-input name=\"monto\" type=\"number\" [(ngModel)]=\"monto\" required></ion-input>\n    </ion-item>\n  </div>\n            \n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Motivo</h4>    \n    </ion-text> \n    <ion-item >\n      <ion-textarea [(ngModel)]=\"motivo\" required></ion-textarea>\n    </ion-item>     \n  </div>  \n\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"guardar()\">Guardar</ion-button>\n    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n\n</ion-content>\n");
+
+/***/ }),
+
+/***/ "./src/app/Services/clientes.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/Services/clientes.service.ts ***!
+  \**********************************************/
+/*! exports provided: ClientesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClientesService", function() { return ClientesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _keyword_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./keyword.service */ "./src/app/Services/keyword.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+
+
+
+
+
+
+
+
+let ClientesService = class ClientesService extends _base_service__WEBPACK_IMPORTED_MODULE_7__["BaseService"] {
+    constructor(afs, keywordService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.keywordService = keywordService;
+        this.comerciosService = comerciosService;
+        this.comerciosService.getSelectedCommerce().subscribe(data => {
+            // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
+            if (data) {
+                console.log(data.id);
+                this.setPath('comercios/' + data.id + '/clientes');
+            }
+        });
+        this.collectionGroup = '/clientes';
+    }
+    create(data) {
+        this.keywordService.agregarKeywords(data, [data.nombre, data.email]);
+        const param = JSON.parse(JSON.stringify(data));
+        return this.afs.collection(this.path).doc(data.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    getByEmail(email) {
+        return this.afs.collection(this.path, ref => ref.where('email', '==', email)).valueChanges();
+    }
+    getByNombre(nombre) {
+        return this.afs.collection(this.path, ref => ref.where('nombre', '==', nombre)).valueChanges();
+    }
+    getRef(id) {
+        return this.afs.collection(this.path).doc(id).ref;
+    }
+    getAll() {
+        return this.afs.collection(this.path).snapshotChanges();
+    }
+    update(cliente) {
+        this.keywordService.agregarKeywords(cliente, [cliente.nombre, cliente.email]);
+        console.log(cliente);
+        const param = JSON.parse(JSON.stringify(cliente));
+        return this.afs.collection(this.path).doc(cliente.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    delete(data) {
+        //Debo eliminar primero cada subscripción
+        if (data.subscripciones) {
+            data.subscripciones.forEach(subscripcion => {
+                this.afs.doc(subscripcion).delete();
+            });
+        }
+        return this.afs.collection(this.path).doc(data.id).delete();
+    }
+    addCtaCorriente(clienteId, ctaCorrienteId) {
+        let param = {
+            ctaId: ctaCorrienteId
+        };
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).set(param);
+    }
+    deleteCtaCorriente(clienteId, ctaCorrienteId) {
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).delete();
+    }
+    search(limit, orderBy, palabra, ultimo) {
+        if (ultimo == "") {
+            console.log("!!!!!! primero");
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .limit(limit)).snapshotChanges();
+        }
+        else {
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .startAfter(ultimo)
+                .limit(limit)).snapshotChanges();
+        }
+    }
+    //Esto para ver todos los beneficios o cuestiones del cliente particular en todo el entorno
+    getAllClientesbyEmail(email) {
+        return this.afs.collectionGroup(this.collectionGroup, ref => ref.where('email', '==', email)).get( /*{ source: 'server' }*/)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(actions => {
+            const data = [];
+            actions.forEach(a => {
+                const item = a.data();
+                item.id = a.id;
+                data.push(item);
+            });
+            return data;
+        }));
+    }
+};
+ClientesService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _keyword_service__WEBPACK_IMPORTED_MODULE_5__["KeywordService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_6__["ComerciosService"] }
+];
+ClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ClientesService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/keyword.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/keyword.service.ts ***!
+  \*********************************************/
+/*! exports provided: KeywordService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeywordService", function() { return KeywordService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let KeywordService = class KeywordService {
+    constructor() { }
+    agregarKeywords(objeto, palabras) {
+        objeto.keywords.push('');
+        objeto.keywords.push(' ');
+        console.log(palabras);
+        palabras.forEach(palabra => {
+            objeto.keywords.push(palabra);
+            let p = palabra.toLowerCase().split(" ");
+            p.forEach(element => {
+                objeto.keywords = objeto.keywords.concat(this.createKeywords(element));
+            });
+        });
+    }
+    createKeywords(name) {
+        const arrName = [];
+        let curName = '';
+        name.split('').forEach(letter => {
+            curName += letter;
+            arrName.push(curName);
+        });
+        return arrName;
+    }
+};
+KeywordService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], KeywordService);
+
+
 
 /***/ }),
 
@@ -162,15 +341,11 @@ let FormEgresoCajaPage = class FormEgresoCajaPage {
         this.totalActual = 0;
         this.cajas = [];
         this.cajaSeleccionadaIndex = -1;
+        this.monto = 0;
+        this.motivo = 0;
         this.metodoPagoSeleccionado = "efectivo";
         this.comercio = new _models_comercio__WEBPACK_IMPORTED_MODULE_12__["Comercio"]();
         this.caja = new _models_caja__WEBPACK_IMPORTED_MODULE_10__["Caja"]();
-        this.egreso = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        this.egreso.id = this.firestore.createId();
-        this.datosForm = this.formBuilder.group({
-            monto: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            motivo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
-        });
     }
     get f() { return this.datosForm.controls; }
     ngOnInit() {
@@ -209,45 +384,19 @@ let FormEgresoCajaPage = class FormEgresoCajaPage {
     }
     guardar() {
         this.submitted = true;
-        if (this.datosForm.invalid) {
-            this.toastServices.alert('Por favor completar todos los campos marcados con * antes de continuar', "");
-            return;
-        }
         if (this.metodoPagoSeleccionado == "efectivo" && this.caja.id == "") {
             this.toastServices.alert('Por favor seleccione una caja antes de continuar', "");
             return;
         }
-        if (this.metodoPagoSeleccionado == "efectivo" && this.datosForm.controls.monto.value > this.totalActual) {
+        if (this.metodoPagoSeleccionado == "efectivo" && this.monto > this.totalActual) {
             this.toastServices.alert("El monto de egreso no puede ser mayor al monto total de efectivo en caja", "");
             return;
         }
-        this.actualizarMontosCaja();
-        if (this.comercio.config.movimientosCajas) {
-            this.egreso.cajaId = this.caja.id;
-            this.egreso.tipo = this.enumTipoMovimientoCaja.egreso;
-            this.egreso.asignarValores(this.datosForm.value);
-            this.egreso.metodoPago = this.metodoPagoSeleccionado;
-            this.egreso.monto = -Number(this.datosForm.controls.monto.value);
-            this.egreso.motivo = this.datosForm.controls.motivo.value;
-            this.movimientosService.add(this.egreso);
-        }
+        this.movimientosService.agregarMovimientoCaja(this.caja.id, "", this.enumTipoMovimientoCaja.egreso, "", "efectivo", -this.monto, this.motivo);
         this.navCtrl.back();
     }
     cancelar() {
         this.navCtrl.back();
-    }
-    actualizarMontosCaja() {
-        if (this.metodoPagoSeleccionado == "efectivo") {
-            this.caja.totalEfectivo = Number(this.caja.totalEfectivo) - Number(this.datosForm.controls.monto.value);
-        }
-        if (this.metodoPagoSeleccionado == "credito") {
-            this.caja.totalCredito = Number(this.caja.totalCredito) - Number(this.datosForm.controls.monto.value);
-        }
-        if (this.metodoPagoSeleccionado == "debito") {
-            this.caja.totalDebito = Number(this.caja.totalDebito) - Number(this.datosForm.controls.monto.value);
-        }
-        const param1 = JSON.parse(JSON.stringify(this.caja));
-        this.cajasService.update(param1);
     }
 };
 FormEgresoCajaPage.ctorParameters = () => [

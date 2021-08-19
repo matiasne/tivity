@@ -1,6 +1,7 @@
 import { GrupoOpciones } from './grupoOpciones';
 import { Opcion } from './opcion';
 import { OpcionSeleccionada } from './opcionSeleccionada';
+import { User } from './user';
 
 export enum EnumEstadoCocina {
     rechazado = 1, 
@@ -22,6 +23,10 @@ export class Item {
 
     public id="";
     public suspendido = 0;
+
+    public creadorId = "";
+    public creadorEmail="";
+    public creadorNombre="";
     
     public nombre = "";
     public barcode="";
@@ -59,13 +64,18 @@ export class Item {
         lastUpdate:undefined
     }
     
-    
-
-	public constructor() {
+    constructor(){
         this.woocommerce["lastUpdate"] = new Date()
         this.gruposOpciones = [];
-     //   this.opcionesSeleccionadas =[];
     }
+
+    public setCreador(usuario:User){
+        this.creadorId = usuario.uid;
+        this.creadorEmail = usuario.email;
+        this.creadorNombre = usuario.displayName;
+    }
+    
+
 
     public asignarValores(init?: Partial<Item>) {
         Object.assign(this, init);

@@ -78,9 +78,7 @@ export class FormCardPaymentPage implements OnInit {
 
   public comercio:Comercio
 
-
   constructor(
-    private mercadoPagoService:MercadopagoService,
     private modalCtrl:ModalController,
     private comerciosService:ComerciosService,
     private loadingService:LoadingService,
@@ -137,14 +135,10 @@ export class FormCardPaymentPage implements OnInit {
       return;
     }
 
-    if(response.status==400){
-        this.presentAlert("Error al realizar pago")
-    }
     const data={
         issuer:this.issuerId,
         installments: this.selectedInstallments,
-        trnascationAmount: this.amount,
-        pedidoId: this.pedido.id,
+        transactionAmount: this.amount,
         paymentMethodId:this.paymentMethodId,
         token:response.id,
         comercioId:this.comerciosService.getSelectedCommerceId(),
@@ -152,33 +146,12 @@ export class FormCardPaymentPage implements OnInit {
         docType:this.docType,
         docNumber:this.identificationNumber
     }
-    this.mercadoPagoService.procesarPago(data).then(data=>{
-        console.log(data)
-        const response:any = data
-        if(response.status == "approved"){      
-            this.alertRealizado()            
-        }
-        else{
-            this.alertRechazado()
-            this.presentAlert("El pago no pudo realizarse, por favor verifique los datos")
-        }
-        this.modalCtrl.dismiss(response.status,'','modal-mp');
-    },err=>{
-      console.log(err)
-    })
+
+    this.modalCtrl.dismiss(data,'','modal-mp')
+
+   
 }
 
-async presentAlert(mensaje) {
-   alert(mensaje)
-}
-
-async alertRealizado(){
-    alert("Pago Realizado")
-}
-
-async alertRechazado(){
-  alert("Pago Rechazado")
-}
 
 
 getBin () {   

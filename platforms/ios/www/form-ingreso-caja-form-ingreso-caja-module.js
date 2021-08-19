@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Ingreso de caja</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content  class=\"ion-padding\">\n\n  <form [formGroup]=\"datosForm\">\n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Monto *</h4> \n      </ion-text> \n              \n      <ion-item [class.invalid]=\"submitted && !datosForm.controls.monto.valid\">\n        <ion-input name=\"monto\" type=\"number\" formControlName=\"monto\" required></ion-input>\n      </ion-item>\n      <div *ngIf=\"submitted && f.monto.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.monto.errors.required\"><h5>Ingresa un monto</h5></div>\n      </div>  \n    </div>\n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Motivo</h4>    \n      </ion-text> \n\n      <ion-item [class.invalid]=\"submitted && !datosForm.controls.motivo.valid\">\n        <ion-textarea formControlName=\"motivo\" required></ion-textarea>\n      </ion-item>\n      <div *ngIf=\"submitted && f.motivo.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.motivo.errors.required\"><h5>Ingresa un motivo</h5></div>\n      </div> \n    </div>  \n   \n   \n  </form>  \n\n  <ion-item class=\"item-card\">\n    <ion-label position=\"floating\">Método de Pago</ion-label>\n      <ion-select [(ngModel)]=\"metodoPagoSeleccionado\">\n        <ion-select-option  [value]=\"'efectivo'\">Efectivo</ion-select-option>\n        <ion-select-option  [value]=\"'debito'\">Débito</ion-select-option>\n        <ion-select-option  [value]=\"'credito'\">Crédito</ion-select-option>\n      </ion-select>    \n  </ion-item>\n\n  \n\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"guardar()\">Guardar</ion-button>\n    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n\n</ion-content>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Ingreso de caja</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content  class=\"ion-padding\">\n\n  <form [formGroup]=\"datosForm\">\n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Monto *</h4> \n      </ion-text> \n              \n      <ion-item [class.invalid]=\"submitted && !datosForm.controls.monto.valid\">\n        <ion-input name=\"monto\" type=\"number\" formControlName=\"monto\" required></ion-input>\n      </ion-item>\n      <div *ngIf=\"submitted && f.monto.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.monto.errors.required\"><h5>Ingresa un monto</h5></div>\n      </div>  \n    </div>\n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Motivo</h4>    \n      </ion-text> \n\n      <ion-item [class.invalid]=\"submitted && !datosForm.controls.motivo.valid\">\n        <ion-textarea formControlName=\"motivo\" required></ion-textarea>\n      </ion-item>\n      <div *ngIf=\"submitted && f.motivo.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.motivo.errors.required\"><h5>Ingresa un motivo</h5></div>\n      </div> \n    </div>  \n   \n   \n  </form>  \n\n  <ion-item class=\"item-card\">\n    <ion-label position=\"floating\">Método de Pago</ion-label>\n      <ion-select [(ngModel)]=\"metodoPagoSeleccionado\">\n        <ion-select-option  [value]=\"'efectivo'\">Efectivo</ion-select-option>\n        <ion-select-option  [value]=\"'debito'\">Débito</ion-select-option>\n        <ion-select-option  [value]=\"'credito'\">Crédito</ion-select-option>\n      </ion-select>    \n  </ion-item>\n\n  \n\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"guardar()\">Guardar</ion-button>\n    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n\n</ion-content>");
 
 /***/ }),
 
@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>    \n    <ion-title>Seleccionar Clientes</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content style=\"margin-top: 50px;\" class=\"ion-padding\">  \n  <ion-searchbar animated #search\n    placeholder=\"Buscar nombre\"\n    animated=\"true\"\n    showCancelButton=\"never\" \n    color=\"light\" \n    autocomplete=\"on\"\n    enterkeyhint=\"send\"\n    inputmode=\"text\"\n    type=\"text\"\n    debounce=\"300\"\n    value=\"{{palabraFiltro}}\"\n    (ionChange)=\"onChange($event)\">\n  </ion-searchbar>\n\n  <ion-list lines=\"none\">   \n    \n    <ion-item-sliding *ngFor=\"let item of clientes\" class=\"item-card\" >    \n\n        <ion-item (click)=\"seleccionar(item)\" >\n          <div slot=\"start\">\n            <img src=\"{{item.foto}}\" *ngIf=\"item.foto\">\n            <ion-icon name=\"person-outline\" *ngIf=\"!item.foto\"></ion-icon>\n          </div>      \n          <ion-label text-wrap>\n            <h2><b>{{item.nombre}}</b> </h2>   \n            <p>{{item.email}}</p>         \n          </ion-label>  \n        </ion-item>\n      \n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"editar(item)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n        </ion-item-options>\n  \n      </ion-item-sliding>\n\n \n  </ion-list>\n\n  <span *ngIf=\"clientes.length == 0\">\n    \n      No exite ningún cliente con ese Nombre o Email.\n      <ion-button color=\"primary\" (click)=\"nuevo()\">Crear Uno Nuevo!</ion-button>\n \n  </span>\n\n  <!-- fab placed to the bottom end -->\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevo()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n  <ion-infinite-scroll threshold=\"100px\" (ionInfinite)=\"verMas()\">\n    <ion-infinite-scroll-content\n      loadingSpinner=\"bubbles\"\n      loadingText=\"Cargando más trabajos...\">\n    </ion-infinite-scroll-content>\n  </ion-infinite-scroll>\n  \n</ion-content>\n<ion-footer class=\"ion-no-border ion-padding\">\n  <ion-toolbar>    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n</ion-footer>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>    \n    <ion-title  size=\"small\">Seleccionar Clientes</ion-title>  \n    <ion-button fill=\"clear\" (click)=\"cerrar()\" color=\"primary\" slot=\"end\">\n      <ion-icon name=\"close-outline\"></ion-icon>\n    </ion-button>  \n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content style=\"margin-top: 50px;\" class=\"ion-padding\">  \n  <ion-searchbar animated #search\n    placeholder=\"Buscar nombre\"\n    animated=\"true\"\n    showCancelButton=\"never\" \n    color=\"light\" \n    autocomplete=\"on\"\n    enterkeyhint=\"send\"\n    inputmode=\"text\"\n    type=\"text\"\n    debounce=\"300\"\n    value=\"{{palabraFiltro}}\"\n    (ionChange)=\"onChange($event)\">\n  </ion-searchbar>\n\n  <ion-list lines=\"none\">   \n    \n    <ion-item-sliding *ngFor=\"let item of clientes\" class=\"item-card\" >    \n\n      <ion-item (click)=\"seleccionar(item)\" >\n        <div slot=\"start\">\n          <img src=\"{{item.foto}}\" *ngIf=\"item.foto\">\n          <ion-icon name=\"person-outline\" *ngIf=\"!item.foto\"></ion-icon>\n        </div>      \n        <ion-label text-wrap>\n          <h2><b>{{item.nombre}}</b> </h2>   \n          <p>{{item.email}}</p>        \n          <p>{{item.documentoTipo}}: {{item.documento}}</p> \n          <p *ngIf=\"item.personaJuridica == 1\">Responsable Inscripto</p>\n          <p *ngIf=\"item.personaJuridica == 2\">Monotributista</p>\n          <p *ngIf=\"item.personaJuridica == 3\">Iva Exento</p>\n        </ion-label>  \n      </ion-item> \n      \n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"editar(item)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n        </ion-item-options>\n  \n      </ion-item-sliding>\n\n \n  </ion-list>\n\n  <span *ngIf=\"clientes.length == 0\">\n    \n      No exite ningún cliente con ese Nombre o Email.\n      <ion-button color=\"primary\" (click)=\"nuevo()\">Crear Uno Nuevo!</ion-button>\n \n  </span>\n\n  <!-- fab placed to the bottom end -->\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevo()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n  <ion-infinite-scroll threshold=\"100px\" (ionInfinite)=\"verMas()\">\n    <ion-infinite-scroll-content\n      loadingSpinner=\"bubbles\"\n      loadingText=\"Cargando más trabajos...\">\n    </ion-infinite-scroll-content>\n  </ion-infinite-scroll>\n  \n</ion-content>");
 
 /***/ }),
 
@@ -219,17 +219,7 @@ let FormIngresoCajaPage = class FormIngresoCajaPage {
             alert("El monto de egreso no puede ser mayor al monto total de efectivo en caja");
             return;
         }
-        this.actualizarMontosCaja();
-        if (this.comercio.config.movimientosCajas) {
-            var ingreso = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_10__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-            ingreso.tipo = this.enumTipoMovimientoCaja.ingreso;
-            ingreso.cajaId = this.caja.id;
-            ingreso.metodoPago = this.metodoPagoSeleccionado;
-            ingreso.monto = this.datosForm.controls.monto.value;
-            ingreso.motivo = this.datosForm.controls.motivo.value;
-            console.log(this.caja.id);
-            this.movimientosService.add(ingreso);
-        }
+        this.movimientosService.agregarMovimientoCaja(this.caja.id, "", this.enumTipoMovimientoCaja.ingreso, "", "efectivo", this.datosForm.controls.monto.value, this.datosForm.controls.motivo.value);
         this.navCtrl.back();
     }
     seleccionarCliente() {
@@ -266,19 +256,6 @@ let FormIngresoCajaPage = class FormIngresoCajaPage {
     }
     cancelar() {
         this.navCtrl.back();
-    }
-    actualizarMontosCaja() {
-        if (this.metodoPagoSeleccionado == "efectivo") {
-            this.caja.totalEfectivo = Number(this.caja.totalEfectivo) + Number(this.datosForm.controls.monto.value);
-        }
-        if (this.metodoPagoSeleccionado == "credito") {
-            this.caja.totalCredito = Number(this.caja.totalCredito) + Number(this.datosForm.controls.monto.value);
-        }
-        if (this.metodoPagoSeleccionado == "debito") {
-            this.caja.totalDebito = Number(this.caja.totalDebito) + Number(this.datosForm.controls.monto.value);
-        }
-        const param1 = JSON.parse(JSON.stringify(this.caja));
-        this.cajasService.update(param1);
     }
 };
 FormIngresoCajaPage.ctorParameters = () => [
@@ -437,7 +414,7 @@ let SelectClientePage = class SelectClientePage {
             return yield modal.present();
         });
     }
-    cancelar() {
+    cerrar() {
         this.modalCtrl.dismiss();
     }
 };

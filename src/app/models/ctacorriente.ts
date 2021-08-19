@@ -1,8 +1,14 @@
 
 import { MovimientoCtaCorriente } from './movimientoCtaCorriente';
+import { User } from './user';
 
 export class CtaCorriente{
     public id ="";
+
+    public creadorId = "";
+    public creadorEmail="";
+    public creadorNombre="";
+    
     public comercioId= localStorage.getItem('comercio_seleccionadoId');   
     public nombre="";
     public coTitularesId=[];
@@ -13,10 +19,13 @@ export class CtaCorriente{
     public clientes =[];
 
 
-	constructor(
-        public vendedorId:"", 
-        public vendedorNombre:""
-		){
+	constructor(){
+    }
+
+    public setCreador(usuario:User){
+        this.creadorId = usuario.uid;
+        this.creadorEmail = usuario.email;
+        this.creadorNombre = usuario.displayName;
     }
     
     public asignarValores(init?: Partial<CtaCorriente>) {

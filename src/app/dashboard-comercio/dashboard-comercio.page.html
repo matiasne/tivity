@@ -8,8 +8,14 @@
 </ion-header> 
 
 <ion-content class="ion-padding">
-  <ion-button class="button-rounded" size="large" (click)="irServiciosProductos()">Venta</ion-button>
-  <ion-button class="button-rounded" size="large" (click)="irEgresoCaja()">Egreso</ion-button>   
-  <ion-button class="button-rounded" color="light" (click)="tarjeta()">Form Tarjeta</ion-button>
+
+  <div >
+    Hola! Administrador
+  </div>
+
+
+  <ion-button  *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Visible'}" class="button-rounded" size="large" (click)="irServiciosProductos()">Venta</ion-button>
+  <ion-button  *appCheckUsuarioPermisos="{feature:'cajas',permiso:'Visible'}" class="button-rounded" size="large" (click)="irEgresoCaja()">Egreso</ion-button>   
+  <ion-button class="button-rounded" color="light" (click)="connectUSB()">Conectar USB</ion-button>
   <ion-button class="button-rounded" color="light" [href]="link">Marketplace</ion-button>
 </ion-content>  

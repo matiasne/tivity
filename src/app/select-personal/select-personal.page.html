@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>    
+    <ion-title  size="small">Seleccionar Personal</ion-title>  
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>  
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content style="margin-top: 50px;" class="ion-padding">  
+  
+  <ion-row>    
+    <ion-input placeholder="Buscar" style="border:1px solid rgb(206, 206, 206); border-radius: 5px;"
+    [(ngModel)]="palabraFiltro" (ionChange)="buscar()"
+    ></ion-input>
+  </ion-row>
+
+  <div *ngIf="buscando" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/buscando.fw.png" alt="">
+    <p>Cargando comandas, aguarde unos segundos por favor</p>
+  </div>
+
+  <div *ngIf="!buscando && items.length == 0" class="mensaje FadeOut FadeIn">
+    <img src="../../assets/img/ctasCorrientes.fw.png" alt="">
+    <p>Aún no tienes empleados.</p>
+  </div>
+
+  <ion-list lines="none">
+    
+    
+      <ion-item *ngFor="let item of items" class="item-card" (click)="seleccionar(item)">
+        <div slot="start">
+          <img src="{{item.foto}}" *ngIf="item.foto">
+          <ion-icon name="person-outline" *ngIf="!item.foto"></ion-icon>
+        </div>      
+        <ion-label text-wrap>
+          <h2><b>{{item.userEmail}}</b> </h2>
+        </ion-label>  
+      </ion-item>
+   
+  </ion-list>
+
+  
+</ion-content>

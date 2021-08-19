@@ -19,82 +19,99 @@
 
           <ion-menu-toggle auto-hide="false">
 
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero' || rolActual=='Mesero'">
-              <ion-item [routerLink]="['/list-productos-servicios']" lines="none" detail="false">
-                <ion-icon slot="start" name="cart-outline"></ion-icon>
-                <ion-label>Catálogo</ion-label>
-              </ion-item>
-            </span>  
-
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero' || rolActual=='Mesero'">
-              <ion-item  [routerLink]="['/list-pedidos']" lines="none" detail="false">
-                <ion-icon slot="start" name="archive-outline"></ion-icon>
-                <ion-label>Pedidos</ion-label> 
-              </ion-item> 
-            </span>
-
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
-              <ion-item *ngIf="comercioSeleccionado.config.mesas" [routerLink]="['/list-mesas']" lines="none" detail="false">
-                <ion-icon slot="start" name="grid-outline"></ion-icon>
-                <ion-label>Mesas</ion-label>               
-              </ion-item>
-            </span> 
-
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cocinero'">
-              <ion-item *ngIf="comercioSeleccionado.config.comandas" [routerLink]="['/list-comandas-v2']" lines="none" detail="false">
-                <ion-icon slot="start" name="receipt-outline"></ion-icon>
-                <ion-label>Comandas</ion-label>
-                <ion-badge color="primary" *ngIf="cantComandas != 0" slot="end">{{cantComandas}}</ion-badge>
-              </ion-item>
+            <span *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Visible'}">
+              <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero' || rolActual=='Mesero'">
+                <ion-item [routerLink]="['/list-productos-servicios']" lines="none" detail="false">
+                  <ion-icon slot="start" name="cart-outline"></ion-icon>
+                  <ion-label>Catálogo</ion-label>
+                </ion-item>
+              </span>  
             </span>
             
+            <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Visible'}">
+              <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero' || rolActual=='Mesero'">
+                <ion-item  [routerLink]="['/list-pedidos']" lines="none" detail="false">
+                  <ion-icon slot="start" name="archive-outline"></ion-icon>
+                  <ion-label>Pedidos</ion-label> 
+                </ion-item> 
+              </span>
+            </span>
+            
+            <span *appCheckUsuarioPermisos="{feature:'mesas',permiso:'Visible'}">
+              <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
+                <ion-item *appCheckComercioConfig="'mesas'" [routerLink]="['/list-mesas']" lines="none" detail="false">
+                  <ion-icon slot="start" name="grid-outline"></ion-icon>
+                  <ion-label>Mesas</ion-label>               
+                </ion-item>
+              </span>
+            </span>
+             
+            <span *appCheckUsuarioPermisos="{feature:'comandas',permiso:'Visible'}">
+              <span *ngIf="rolActual == 'Administrador' || rolActual=='Cocinero'">
+                <ion-item *appCheckComercioConfig="'comandas'" [routerLink]="['/list-comandas-v2']" lines="none" detail="false">
+                  <ion-icon slot="start" name="receipt-outline"></ion-icon>
+                  <ion-label>Comandas</ion-label>
+                  <ion-badge color="primary" *ngIf="cantComandas != 0" slot="end">{{cantComandas}}</ion-badge>
+                </ion-item>
+              </span>
+            </span>
+
+           
+            <span *appCheckUsuarioPermisos="{feature:'reservas',permiso:'Visible'}">
             <span *ngIf="rolActual == 'Administrador' || rolActual=='Cocinero'">
-              <ion-item *ngIf="comercioSeleccionado.config.reservas" [routerLink]="['/list-reservas']" lines="none" detail="false">
+              <ion-item *appCheckComercioConfig="'reservas'" [routerLink]="['/list-reservas']" lines="none" detail="false">
                 <ion-icon slot="start" name="calendar-outline"></ion-icon>
                 <ion-label>Reservas</ion-label>
               </ion-item>
             </span>
+            </span>
 
+            <span *appCheckUsuarioPermisos="{feature:'clientes',permiso:'Visible'}">
+              <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
+                <ion-item *appCheckComercioConfig="'clientes'" [routerLink]="['/list-clientes']" lines="none" detail="false">
+                  <ion-icon slot="start" name="people-outline"></ion-icon>
+                  <ion-label>Clientes</ion-label>
+                </ion-item>
+              </span>  
+
+            </span>
+                     
+            <span *appCheckUsuarioPermisos="{feature:'ctasCorrientes',permiso:'Visible'}">
             <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
-              <ion-item *ngIf="comercioSeleccionado.config.clientes" [routerLink]="['/list-clientes']" lines="none" detail="false">
-                <ion-icon slot="start" name="people-outline"></ion-icon>
-                <ion-label>Clientes</ion-label>
-              </ion-item>
-            </span>           
-      
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
-              <ion-item *ngIf="comercioSeleccionado.config.clientes" [routerLink]="['/list-cta-corrientes']" lines="none" detail="false">
+              <ion-item *appCheckComercioConfig="'clientes'" [routerLink]="['/list-cta-corrientes']" lines="none" detail="false">
                 <ion-icon slot="start" name="wallet-outline"></ion-icon>
                 <ion-label>Ctas. Corrientes</ion-label>
               </ion-item>
-            </span>         
+            </span>  
+            </span>       
 
-            <!--ion-item [routerLink]="['/list-calendarios']" lines="none" detail="false">
-              <ion-icon slot="start" name="calendar-outline"></ion-icon>
-              <ion-label>Calendarios</ion-label>
-            </ion-item-->
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
-              <ion-item [routerLink]="['/list-cajas']" lines="none" detail="false">
-                <ion-icon slot="start" name="file-tray-full-outline"></ion-icon>
-                <ion-label>Cajas</ion-label> 
-              </ion-item> 
+
+            <span *appCheckUsuarioPermisos="{feature:'cajas',permiso:'Visible'}">
+              <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
+                <ion-item [routerLink]="['/list-cajas']" lines="none" detail="false">
+                  <ion-icon slot="start" name="file-tray-full-outline"></ion-icon>
+                  <ion-label>Cajas</ion-label> 
+                </ion-item> 
+              </span>
             </span>
-          
+            
+            <span *appCheckUsuarioPermisos="{feature:'subscripciones',permiso:'Visible'}">
             <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
-              <ion-item *ngIf="comercioSeleccionado.config.servicios" [routerLink]="['/list-subscripciones']" lines="none" detail="false">
+              <ion-item *appCheckComercioConfig="'servicios'" [routerLink]="['/list-subscripciones']" lines="none" detail="false">
                 <ion-icon slot="start" name="clipboard-outline"></ion-icon>
                 <ion-label>Subscripciones</ion-label>
               </ion-item>
             </span>
+            </span>
 
-            <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
-              <ion-item *ngIf="comercioSeleccionado.config.mesas" [routerLink]="['/list-personal']" lines="none" detail="false">
-                <ion-icon slot="start" name="people-outline"></ion-icon>
+            <span *ngIf="rolActual == 'Administrador'">
+              <ion-item [routerLink]="['/list-personal']" lines="none" detail="false">
+                <ion-icon slot="start" name="people"></ion-icon>
                 <ion-label>Personal</ion-label>               
               </ion-item>
             </span> 
             
-            <span>
+            <span *ngIf="rolActual == 'Administrador'">
               <ion-item [routerLink]="['/form-comercio-configuracion']" lines="none" detail="false">
                 <ion-icon slot="start" name="cog-outline"></ion-icon>
                 <ion-label>Configuración</ion-label>

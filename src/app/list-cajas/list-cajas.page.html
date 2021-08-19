@@ -37,10 +37,12 @@
           </ion-item>  
     
           
-    
-          <ion-item-options side="end">
-            <ion-item-option (click)="openEditCaja(caja)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
-          </ion-item-options>
+          <span *appCheckUsuarioPermisos="{feature:'cajas',permiso:'Editor'}">
+            <ion-item-options side="end">
+              <ion-item-option (click)="openEditCaja(caja)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
+            </ion-item-options>
+          </span>
+         
     
         </ion-item-sliding>
       </ion-col>
@@ -51,11 +53,13 @@
       
     
   </ion-list>
-
+<span *appCheckUsuarioPermisos="{feature:'cajas',permiso:'Editor'}">
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="openAddCaja()">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+</span>
+  
 
 </ion-content>

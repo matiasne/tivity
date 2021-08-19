@@ -8,11 +8,13 @@ import { ListSubscripcionesPageRoutingModule } from './list-subscripciones-routi
 
 import { ListSubscripcionesPage } from './list-subscripciones.page';
 import { ComponentsModule } from '../Components/components.module';
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ComponentsModule,
+    DirectivesModule,
     FormsModule,
     IonicModule,
     ListSubscripcionesPageRoutingModule

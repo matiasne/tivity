@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Agregar Recargo</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n\n  <ion-item class=\"form-select\"> \n    <ion-label position=\"floating\">Tipo</ion-label>\n    <ion-select multiple=\"false\" [(ngModel)]=\"recargo.tipo\">\n      <ion-select-option  [value]=\"enumTipo.monto\" selected>Monto</ion-select-option>\n      <ion-select-option  [value]=\"enumTipo.porcentaje\">Porcentaje</ion-select-option> \n    </ion-select>       \n  </ion-item> \n\n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Monto *</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"monto\" type=\"number\" [(ngModel)]=\"recargo.monto\" required></ion-input>\n    </ion-item>   \n  </div>\n\n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Motivo *</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"motivo\" type=\"text\" [(ngModel)]=\"recargo.motivo\" required></ion-input>\n    </ion-item>   \n  </div>\n\n</ion-content>\n\n<ion-footer class=\"ion-no-border ion-padding\">\n  <ion-toolbar>  \n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"agregar()\">Agregar</ion-button>  \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n</ion-footer> ");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Agregar Recargo</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n\n  <ion-item class=\"form-select\"> \n    <ion-label position=\"floating\">Tipo</ion-label>\n    <ion-select multiple=false [(ngModel)]=\"recargo.tipo\">\n      <ion-select-option  [value]=\"enumTipo.monto\" selected>Monto</ion-select-option>\n      <ion-select-option  [value]=\"enumTipo.porcentaje\">Porcentaje</ion-select-option> \n    </ion-select>       \n  </ion-item> \n\n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Monto *</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"monto\" type=\"number\" [(ngModel)]=\"recargo.monto\" required></ion-input>\n    </ion-item>   \n  </div>\n\n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Motivo *</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"motivo\" type=\"text\" [(ngModel)]=\"recargo.motivo\" required></ion-input>\n    </ion-item>   \n  </div>\n\n</ion-content>\n\n<ion-footer class=\"ion-no-border ion-padding\">\n  <ion-toolbar>  \n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"agregar()\">Agregar</ion-button>  \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n</ion-footer> ");
 
 /***/ }),
 
@@ -34,7 +34,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
 /* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var src_app_models_comentario__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/app/models/comentario */ "./src/app/models/comentario.ts");
-/* harmony import */ var _impresora_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../impresora.service */ "./src/app/Services/impresora.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var src_app_models_itemPedido__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/app/models/itemPedido */ "./src/app/models/itemPedido.ts");
+
 
 
 
@@ -47,13 +49,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let CarritoService = class CarritoService {
-    constructor(authenticationService, pedidosService, modalNotificacion, comentariosService, firestore, impresoraService) {
+    constructor(authenticationService, pedidosService, modalNotificacion, comentariosService, firestore, comerciosService) {
         this.authenticationService = authenticationService;
         this.pedidosService = pedidosService;
         this.modalNotificacion = modalNotificacion;
         this.comentariosService = comentariosService;
         this.firestore = firestore;
-        this.impresoraService = impresoraService;
+        this.comerciosService = comerciosService;
         this.comentario = "";
         this.actualCarritoSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]("");
         this.carrito = new src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["Pedido"]();
@@ -62,13 +64,15 @@ let CarritoService = class CarritoService {
     getActualCarritoSubs() {
         return this.actualCarritoSubject.asObservable();
     }
-    agregarProducto(producto) {
-        producto.enCarrito += producto.cantidad;
-        const p = JSON.parse(JSON.stringify(producto));
+    agregarItem(item) {
+        let itemCarrito = new src_app_models_itemPedido__WEBPACK_IMPORTED_MODULE_11__["ItemPedido"]();
+        itemCarrito.asignarValores(item);
+        item.enCarrito += itemCarrito.cantidad;
+        const p = JSON.parse(JSON.stringify(item));
         p.gruposOpciones = [];
-        this.carrito.productos.push(p);
+        this.carrito.items.push(p);
         this.carrito.on = true;
-        this.modalNotificacion.success("Agregado", producto.cantidad + ' ' + producto.unidad + ' de ' + producto.nombre);
+        this.modalNotificacion.success("Agregado", itemCarrito.cantidad + ' ' + itemCarrito.unidad + ' de ' + itemCarrito.nombre);
         this.actualCarritoSubject.next(this.carrito);
     }
     agregarDescuento(descuento) {
@@ -94,8 +98,8 @@ let CarritoService = class CarritoService {
         this.actualCarritoSubject.next(this.carrito);
     }
     eliminarProducto(index) {
-        this.carrito.productos.splice(index, 1);
-        if (this.carrito.productos.length > 0 || this.carrito.servicios.length > 0)
+        this.carrito.items.splice(index, 1);
+        if (this.carrito.items.length > 0)
             this.carrito.on = true;
         else {
             this.carrito.on = false;
@@ -103,11 +107,12 @@ let CarritoService = class CarritoService {
         this.actualCarritoSubject.next(this.carrito);
     }
     setearCliente(cliente) {
-        this.carrito.cliente = cliente;
         this.carrito.clienteId = cliente.id;
         this.carrito.clienteNombre = cliente.nombre;
         this.carrito.clienteEmail = cliente.email;
-        console.log(this.carrito.cliente);
+        this.carrito.clienteDocTipo = cliente.documentoTipo;
+        this.carrito.clienteDoc = cliente.documento;
+        this.carrito.clientePersonaJuridica = cliente.personaJuridica;
         this.carrito.on = true;
         this.actualCarritoSubject.next(this.carrito);
     }
@@ -127,29 +132,36 @@ let CarritoService = class CarritoService {
         return this.pedidosService.getTotal(this.carrito);
     }
     crearPedido() {
-        this.carrito.id = this.firestore.createId();
-        this.carrito.personalId = this.authenticationService.getUID();
-        this.carrito.personalEmail = this.authenticationService.getEmail();
-        this.carrito.personalNombre = this.authenticationService.getNombre();
-        this.impresoraService.impresionComanda(this.carrito);
-        if (this.comentario != "") {
-            this.comentariosService.setearPath("pedidos", this.carrito.id);
-            let comentario = new src_app_models_comentario__WEBPACK_IMPORTED_MODULE_9__["Comentario"]();
-            comentario.text = this.comentario;
-            comentario.senderId = this.authenticationService.getUID();
-            comentario.senderEmail = this.authenticationService.getEmail();
-            this.comentariosService.add(comentario).then(data => {
-                console.log("comentario agregado");
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            let c = new src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["Pedido"](); //NO borrar!!! importante para cuando está en modo offline!!!
+            Object.assign(c, this.carrito);
+            this.vaciar();
+            this.modalNotificacion.success("Cargado", "El pedido ha sido cargado a la lista.");
+            c.id = this.firestore.createId();
+            c.comanda.numero = yield this.comerciosService.obtenerActualizarNumeroPedido();
+            c.personalId = this.authenticationService.getUID();
+            c.personalEmail = this.authenticationService.getEmail();
+            c.personalNombre = this.authenticationService.getNombre();
+            c.total = this.getTotal();
+            c.primerMensaje = this.comentario;
+            if (this.comentario != "") {
+                this.comentariosService.setearPath("pedidos", c.id);
+                let comentario = new src_app_models_comentario__WEBPACK_IMPORTED_MODULE_9__["Comentario"]();
+                comentario.text = this.comentario;
+                comentario.senderId = this.authenticationService.getUID();
+                comentario.senderEmail = this.authenticationService.getEmail();
+                this.comentariosService.add(comentario).then(data => {
+                    console.log("comentario agregado");
+                });
+                this.comentario = "";
+            }
+            c.direccion = JSON.parse(JSON.stringify(c.direccion));
+            this.pedidosService.set(c.id, c).then((data) => {
+                console.log("!!!!!!" + data.fromCache);
             });
-        }
-        let c = new src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["Pedido"](); //NO borrar!!! importante para cuando está en modo offline!!!
-        Object.assign(c, this.carrito);
-        this.vaciar();
-        c.direccion = JSON.parse(JSON.stringify(c.direccion));
-        this.pedidosService.add(c).then((data) => {
-            console.log("!!!!!!" + data.fromCache);
         });
-        this.modalNotificacion.success("Cargado", "El pedido ha sido cargado a la lista.");
+    }
+    obtenerNumeroPedido() {
     }
 };
 CarritoService.ctorParameters = () => [
@@ -158,7 +170,7 @@ CarritoService.ctorParameters = () => [
     { type: _modal_notificacion_service__WEBPACK_IMPORTED_MODULE_6__["ModalNotificacionService"] },
     { type: _comentarios_service__WEBPACK_IMPORTED_MODULE_7__["ComentariosService"] },
     { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_8__["AngularFirestore"] },
-    { type: _impresora_service__WEBPACK_IMPORTED_MODULE_10__["ImpresoraService"] }
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_10__["ComerciosService"] }
 ];
 CarritoService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
@@ -342,15 +354,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
 /* harmony import */ var _models_recargo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../models/recargo */ "./src/app/models/recargo.ts");
 /* harmony import */ var _Services_global_carrito_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Services/global/carrito.service */ "./src/app/Services/global/carrito.service.ts");
+/* harmony import */ var _Services_toast_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Services/toast.service */ "./src/app/Services/toast.service.ts");
+
 
 
 
 
 
 let FormRecargoPage = class FormRecargoPage {
-    constructor(modalCtrl, carritoService) {
+    constructor(modalCtrl, carritoService, toastService) {
         this.modalCtrl = modalCtrl;
         this.carritoService = carritoService;
+        this.toastService = toastService;
         this.enumTipo = _models_recargo__WEBPACK_IMPORTED_MODULE_3__["EnumTipoRecargo"];
         this.recargo = new _models_recargo__WEBPACK_IMPORTED_MODULE_3__["Recargo"]();
     }
@@ -360,6 +375,14 @@ let FormRecargoPage = class FormRecargoPage {
         this.modalCtrl.dismiss();
     }
     agregar() {
+        if (this.recargo.monto == "") {
+            this.toastService.alert("Faltan datos", "Por favor agregue un monto");
+            return;
+        }
+        if (this.recargo.motivo == "") {
+            this.toastService.alert("Faltan datos", "Por favor agregue un motivo");
+            return;
+        }
         if (this.recargo.monto) {
             this.modalCtrl.dismiss(this.recargo);
         }
@@ -370,7 +393,8 @@ let FormRecargoPage = class FormRecargoPage {
 };
 FormRecargoPage.ctorParameters = () => [
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"] },
-    { type: _Services_global_carrito_service__WEBPACK_IMPORTED_MODULE_4__["CarritoService"] }
+    { type: _Services_global_carrito_service__WEBPACK_IMPORTED_MODULE_4__["CarritoService"] },
+    { type: _Services_toast_service__WEBPACK_IMPORTED_MODULE_5__["ToastService"] }
 ];
 FormRecargoPage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

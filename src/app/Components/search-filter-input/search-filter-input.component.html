@@ -1,3 +1,27 @@
-<p>
-  search-filter-input works!
-</p>
+
+
+<ion-row>
+  <ion-col size="10">
+    <ion-searchbar animated  class="FadeOut FadeIn" #ionsearchbar
+      placeholder="{{placeholder}}"
+      animated="true"
+      showCancelButton="never" 
+      color="light" 
+      autocomplete="on"
+      enterkeyhint="send"
+      inputmode="text"
+      type="text"
+      debounce="50"
+      value="{{palabraFiltro}}"
+      (ionChange)="buscar($event.target.value)">
+    </ion-searchbar> 
+  </ion-col>
+  <ion-col size="2">
+    <ion-button fill="clear" color="primary"  (click)="reconocimientoPorVoz()">
+        <ion-icon name="mic-outline"></ion-icon>
+    </ion-button>
+  </ion-col>
+</ion-row>
+
+
+

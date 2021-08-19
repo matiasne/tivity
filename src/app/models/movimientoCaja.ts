@@ -28,8 +28,8 @@ export class MovimientoCaja{
         public metodoPago:string,
         public monto:number,
         public motivo:string,
-		public vendedorId:"", 
-        public vendedorNombre:""
+		public creadorId:"", 
+        public creadorNombre:""
 		){
     }
     

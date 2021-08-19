@@ -40,9 +40,6 @@ export class ModalInputDireccionPage implements OnInit {
 
     this.comercio = new Comercio()
     this.comercio.asignarValores(this.comerciosService.getSelectedCommerceValue())
-
-    
-
     this.localizacion = new Localizacion()
   }
 

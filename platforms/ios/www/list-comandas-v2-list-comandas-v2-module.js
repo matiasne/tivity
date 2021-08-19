@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title>Comandas</ion-title>    \n  </ion-toolbar>\n</ion-header>\n<ion-toolbar [hidden]=\"devWidth > 576\">\n  <ion-segment (ionChange)=\"segmentChanged($event)\">\n    <ion-segment-button value=\"rechazados\">Rechazados ({{itemsRechazados.length}})</ion-segment-button>\n    <ion-segment-button value=\"pendientes\">Pendientes ({{itemsPendientes.length}})</ion-segment-button>\n    <ion-segment-button value=\"proceso\">En proceso ({{itemsProceso.length}})</ion-segment-button>\n    <ion-segment-button value=\"listas\">Listas ({{itemsListas.length}})</ion-segment-button>\n  </ion-segment>\n</ion-toolbar>\n\n<ion-content class=\"ion-padding\" style=\"margin-top: 50px;\">  \n  <ion-item class=\"form-select\"> \n    <ion-label position=\"floating\">Desde</ion-label>\n    <ion-select multiple=\"false\" (ionChange)=\"onChangeAtras($event)\">\n      <ion-select-option  [value]=\"1\" selected>Ayer</ion-select-option>\n      <ion-select-option  [value]=\"2\">2 días atras</ion-select-option>\n      <ion-select-option  [value]=\"7\">Una semana atrás</ion-select-option>\n    </ion-select>       \n  </ion-item> \n  <ion-row>\n    <ion-col size=\"8\"> \n      <ion-searchbar animated \n        placeholder=\"Buscar por cliente o mesa\"\n        animated=\"true\"\n        showCancelButton=\"never\" \n        color=\"light\" \n        autocomplete=\"on\"\n        enterkeyhint=\"send\"\n        inputmode=\"text\"\n        type=\"text\"\n        debounce=\"300\"\n        value=\"{{palabraFiltro}}\"\n        (ionChange)=\"onChange($event)\">\n      </ion-searchbar>\n    </ion-col>    \n    <ion-col size=\"4\">\n      <ion-item class=\"form-select\"> \n        <ion-label position=\"floating\">Cocina</ion-label>\n        <ion-select multiple=\"true\" (ionChange)=\"onChangeCocina($event)\" [(ngModel)]=\"cocinaFiltro\">\n          <ion-select-option *ngFor=\"let cocina of cocinas\" [value]=\"cocina.id\" selected>{{cocina.nombre}}</ion-select-option>\n        </ion-select>       \n      </ion-item>  \n    </ion-col>\n  </ion-row>\n  \n\n\n  <span [hidden]=\"devWidth > 576\">\n    \n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'pendientes'\">     \n      <div *ngFor=\"let item of itemsPendientes\">   \n        <app-card-comanda-v2 [pedido]=\"item\"></app-card-comanda-v2>\n      </div>\n    </ion-list>\n\n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'proceso'\">     \n      <div *ngFor=\"let item of itemsProceso\">   \n        <app-card-comanda-v2  [pedido]=\"item\"></app-card-comanda-v2>\n      </div>\n    </ion-list> \n\n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'listas'\">     \n      <div *ngFor=\"let item of itemsListas\">   \n        <app-card-comanda-v2  [pedido]=\"item\"></app-card-comanda-v2>\n      </div>\n    </ion-list>\n\n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'rechazados'\">     \n      <div *ngFor=\"let item of itemsRechazados\">   \n        <app-card-comanda-v2 [pedido]=\"item\"></app-card-comanda-v2>\n      </div>\n    </ion-list>\n\n  </span>\n\n  <span [hidden]=\"devWidth < 576\">\n    <ion-grid>\n      <ion-row>\n        \n        <ion-col>\n          <ion-list lines=\"none\">   \n            <h5>Pendientes ({{itemsPendientes.length}})</h5>  \n            <div *ngFor=\"let item of itemsPendientes\">   \n              <app-card-comanda-v2  [pedido]=\"item\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n        <ion-col>\n          <ion-list lines=\"none\">  \n            <h5>En Proceso ({{itemsProceso.length}})</h5>    \n            <div *ngFor=\"let item of itemsProceso\">   \n              <app-card-comanda-v2  [pedido]=\"item\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n        <ion-col> \n          <ion-list lines=\"none\">  \n            <h5>Listas  ({{itemsListas.length}})</h5>     \n            <div *ngFor=\"let item of itemsListas\">   \n              <app-card-comanda-v2  [pedido]=\"item\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n        <ion-col>\n          <ion-list lines=\"none\">   \n            <h5>Suspendidos ({{itemsRechazados.length}})</h5>  \n            <div *ngFor=\"let item of itemsRechazados\">   \n              <app-card-comanda-v2  [pedido]=\"item\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </span>\n \n  \n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comandas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && pedidosAll.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/comandas.fw.png\" alt=\"\">\n    <p>Aún no tienes comandas</p>\n  </div>\n  \n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" >\n    <ion-fab-button (click)=\"nuevoPedido()\">\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Comandas</ion-title>    \n  </ion-toolbar>\n</ion-header>\n<ion-toolbar [hidden]=\"devWidth > 576\">\n  <ion-segment (ionChange)=\"segmentChanged($event)\">\n    <ion-segment-button value=\"rechazados\">Rechazados ({{itemsRechazados.length}})</ion-segment-button>\n    <ion-segment-button value=\"pendientes\">Pendientes ({{itemsPendientes.length}})</ion-segment-button>\n    <ion-segment-button value=\"proceso\">En proceso ({{itemsProceso.length}})</ion-segment-button>\n    <ion-segment-button value=\"listas\">Listas ({{itemsListas.length}})</ion-segment-button>\n  </ion-segment>\n</ion-toolbar>\n\n<ion-content class=\"ion-padding\" style=\"margin-top: 50px;\">  \n  <ion-item class=\"form-select\"> \n    <ion-label position=\"floating\">Desde</ion-label>\n    <ion-select multiple=false (ionChange)=\"onChangeAtras($event)\">\n      <ion-select-option  [value]=\"1\" selected>Ayer</ion-select-option>\n      <ion-select-option  [value]=\"2\">2 días atras</ion-select-option>\n      <ion-select-option  [value]=\"7\">Una semana atrás</ion-select-option>\n    </ion-select>       \n  </ion-item> \n  <ion-row>\n    <ion-col size=\"8\"> \n      <ion-searchbar animated \n        placeholder=\"Buscar por cliente o mesa\"\n        animated=\"true\"\n        showCancelButton=\"never\" \n        color=\"light\" \n        autocomplete=\"on\"\n        enterkeyhint=\"send\"\n        inputmode=\"text\"\n        type=\"text\"\n        debounce=\"300\"\n        value=\"{{palabraFiltro}}\"\n        (ionChange)=\"onChange($event)\">\n      </ion-searchbar>\n    </ion-col>    \n    <ion-col size=\"4\">\n      <ion-item class=\"form-select\"> \n        <ion-label position=\"floating\">Cocina</ion-label>\n        <ion-select multiple=\"true\" (ionChange)=\"onChangeCocina($event)\" [(ngModel)]=\"cocinaFiltro\">\n          <ion-select-option *ngFor=\"let cocina of cocinas\" [value]=\"cocina.id\" selected>{{cocina.nombre}}</ion-select-option>\n        </ion-select>       \n      </ion-item>  \n    </ion-col>\n  </ion-row>\n  \n\n\n  <span [hidden]=\"devWidth > 576\">\n    \n    <ion-list class=\"item-card\" lines=\"none\" *ngIf=\"seccionActiva == 'pendientes'\">     \n      <div *ngFor=\"let item of itemsPendientes\">   \n        <app-card-comanda-v2 [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n      </div>\n    </ion-list>\n\n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'proceso'\">     \n      <div *ngFor=\"let item of itemsProceso\">   \n        <app-card-comanda-v2  [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n      </div>\n    </ion-list> \n\n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'listas'\">     \n      <div *ngFor=\"let item of itemsListas\">   \n        <app-card-comanda-v2  [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n      </div>\n    </ion-list>\n\n    <ion-list lines=\"none\" *ngIf=\"seccionActiva == 'rechazados'\">     \n      <div *ngFor=\"let item of itemsRechazados\">   \n        <app-card-comanda-v2 [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n      </div>\n    </ion-list>\n\n  </span>\n\n  <span [hidden]=\"devWidth < 576\">\n    <ion-grid>\n      <ion-row>        \n        <ion-col>\n          <ion-list lines=\"none\">   \n            <h5>Pendientes ({{itemsPendientes.length}})</h5>  \n            <div *ngFor=\"let item of itemsPendientes\">   \n              <app-card-comanda-v2  [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n        <ion-col>\n          <ion-list lines=\"none\">  \n            <h5>En Proceso ({{itemsProceso.length}})</h5>    \n            <div *ngFor=\"let item of itemsProceso\">   \n              <app-card-comanda-v2  [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n        <ion-col> \n          <ion-list lines=\"none\">  \n            <h5>Listas  ({{itemsListas.length}})</h5>     \n            <div *ngFor=\"let item of itemsListas\">   \n              <app-card-comanda-v2  [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n        <ion-col>\n          <ion-list lines=\"none\">   \n            <h5>Suspendidos ({{itemsRechazados.length}})</h5>  \n            <div *ngFor=\"let item of itemsRechazados\">   \n              <app-card-comanda-v2  [pedido]=\"item\" [cocinasFiltro]=\"cocinaFiltro\" (ver)=\"abrir(item)\"></app-card-comanda-v2>\n            </div>\n          </ion-list> \n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </span>\n \n  \n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comandas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && pedidosAll.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/comandas.fw.png\" alt=\"\">\n    <p>Aún no tienes comandas</p>\n  </div>\n  \n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" >\n    <ion-fab-button (click)=\"nuevoPedido()\">\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n\n");
 
 /***/ }),
 
@@ -152,7 +152,7 @@ ListComandasV2PageModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2xpc3QtY29tYW5kYXMtdjIvbGlzdC1jb21hbmRhcy12Mi5wYWdlLnNjc3MifQ== */");
+/* harmony default export */ __webpack_exports__["default"] = ("ion-list {\n  text-align: center;\n  background-color: white;\n  border-style: none !important;\n  border-bottom: none;\n  border-radius: 15px;\n  border-top: none;\n  margin-bottom: 16px;\n  box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.32);\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbGlzdC1jb21hbmRhcy12Mi9DOlxcUHJveWVjdG9zXFxXZWJBcHBzXFx0aXZpdHkvc3JjXFxhcHBcXGxpc3QtY29tYW5kYXMtdjJcXGxpc3QtY29tYW5kYXMtdjIucGFnZS5zY3NzIiwic3JjL2FwcC9saXN0LWNvbWFuZGFzLXYyL2xpc3QtY29tYW5kYXMtdjIucGFnZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQUE7RUFDQSx1QkFBQTtFQUNGLDZCQUFBO0VBQ0EsbUJBQUE7RUFDQSxtQkFBQTtFQUNBLGdCQUFBO0VBQ0EsbUJBQUE7RUFHQSxnREFBQTtBQ0NGIiwiZmlsZSI6InNyYy9hcHAvbGlzdC1jb21hbmRhcy12Mi9saXN0LWNvbWFuZGFzLXYyLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbImlvbi1saXN0e1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogd2hpdGU7XHJcbiAgYm9yZGVyLXN0eWxlOiBub25lICFpbXBvcnRhbnQ7ICBcclxuICBib3JkZXItYm90dG9tOiBub25lO1xyXG4gIGJvcmRlci1yYWRpdXM6IDE1cHg7XHJcbiAgYm9yZGVyLXRvcDogbm9uZTsgXHJcbiAgbWFyZ2luLWJvdHRvbTogMTZweDtcclxuICAtd2Via2l0LWJveC1zaGFkb3c6IDBweCAycHggNXB4IC0ycHggcmdiYSgwLDAsMCwwLjMyKTtcclxuICAtbW96LWJveC1zaGFkb3c6IDBweCAycHggNXB4IC0ycHggcmdiYSgwLDAsMCwwLjMyKTtcclxuICBib3gtc2hhZG93OiAwcHggMnB4IDVweCAtMnB4IHJnYmEoMCwwLDAsMC4zMik7XHJcbn0iLCJpb24tbGlzdCB7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgYmFja2dyb3VuZC1jb2xvcjogd2hpdGU7XG4gIGJvcmRlci1zdHlsZTogbm9uZSAhaW1wb3J0YW50O1xuICBib3JkZXItYm90dG9tOiBub25lO1xuICBib3JkZXItcmFkaXVzOiAxNXB4O1xuICBib3JkZXItdG9wOiBub25lO1xuICBtYXJnaW4tYm90dG9tOiAxNnB4O1xuICAtd2Via2l0LWJveC1zaGFkb3c6IDBweCAycHggNXB4IC0ycHggcmdiYSgwLCAwLCAwLCAwLjMyKTtcbiAgLW1vei1ib3gtc2hhZG93OiAwcHggMnB4IDVweCAtMnB4IHJnYmEoMCwgMCwgMCwgMC4zMik7XG4gIGJveC1zaGFkb3c6IDBweCAycHggNXB4IC0ycHggcmdiYSgwLCAwLCAwLCAwLjMyKTtcbn0iXX0= */");
 
 /***/ }),
 
@@ -171,10 +171,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Services/comentarios.service */ "./src/app/Services/comentarios.service.ts");
 /* harmony import */ var _Services_loading_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Services/loading.service */ "./src/app/Services/loading.service.ts");
 /* harmony import */ var _Services_pedido_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Services/pedido.service */ "./src/app/Services/pedido.service.ts");
-/* harmony import */ var src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/models/pedido */ "./src/app/models/pedido.ts");
+/* harmony import */ var src_app_models_item__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/models/item */ "./src/app/models/item.ts");
 /* harmony import */ var _Services_cocinas_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Services/cocinas.service */ "./src/app/Services/cocinas.service.ts");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
+/* harmony import */ var _models_pedido__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../models/pedido */ "./src/app/models/pedido.ts");
+/* harmony import */ var _Services_global_navegacion_parametros_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Services/global/navegacion-parametros.service */ "./src/app/Services/global/navegacion-parametros.service.ts");
+/* harmony import */ var _details_comanda_details_comanda_page__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../details-comanda/details-comanda.page */ "./src/app/details-comanda/details-comanda.page.ts");
+
+
+
 
 
 
@@ -185,7 +191,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ListComandasV2Page = class ListComandasV2Page {
-    constructor(pedidosService, loadingService, comentariosService, cocinasService, alertController, router, platform) {
+    constructor(pedidosService, loadingService, comentariosService, cocinasService, alertController, router, platform, modalController, navParametrosService) {
         this.pedidosService = pedidosService;
         this.loadingService = loadingService;
         this.comentariosService = comentariosService;
@@ -193,6 +199,8 @@ let ListComandasV2Page = class ListComandasV2Page {
         this.alertController = alertController;
         this.router = router;
         this.platform = platform;
+        this.modalController = modalController;
+        this.navParametrosService = navParametrosService;
         this.pedidosAll = [];
         this.itemsComandas = [];
         this.itemsPedidos = [];
@@ -207,9 +215,11 @@ let ListComandasV2Page = class ListComandasV2Page {
         this.cocinaFiltro = [];
         this.todas = "";
         this.fechaDesde = new Date();
+        this.fechaHasta = new Date();
         this.buscando = true;
         this.devWidth = this.platform.width();
-        this.fechaDesde.setDate(this.fechaDesde.getDate() - 1);
+        this.fechaDesde.setDate(this.fechaDesde.getDate() - 2);
+        this.fechaHasta.setDate(this.fechaHasta.getDate() + 1);
     }
     ngOnInit() {
         this.loadingService.presentLoadingText("Cargando Pedidos");
@@ -225,7 +235,7 @@ let ListComandasV2Page = class ListComandasV2Page {
         if (this.obsPedidos) {
             this.obsPedidos.unsubscribe();
         }
-        this.obsPedidos = this.pedidosService.listFechaDesde(this.fechaDesde, new Date()).subscribe((pedidos) => {
+        this.obsPedidos = this.pedidosService.listFecha(this.fechaDesde, this.fechaHasta).subscribe((pedidos) => {
             this.buscando = false;
             this.itemsPendientes = [];
             this.itemsProceso = [];
@@ -267,7 +277,6 @@ let ListComandasV2Page = class ListComandasV2Page {
         this.refrescar();
     }
     segmentChanged(event) {
-        console.log(event.target.value);
         this.seccionActiva = event.target.value;
     }
     filtrar() {
@@ -278,16 +287,18 @@ let ListComandasV2Page = class ListComandasV2Page {
         var retorno = false;
         this.pedidosAll.forEach(item => {
             var encontrado = false;
-            this.cocinaFiltro.forEach(cocina => {
-                console.log(cocina);
-                item.productos.forEach(prod => {
-                    console.log(prod.cocinaId);
-                    if (prod.cocinaId == cocina) {
-                        encontrado = true;
-                    }
+            if (this.cocinaFiltro.length > 0) {
+                this.cocinaFiltro.forEach(cocina => {
+                    item.items.forEach(prod => {
+                        if (prod.cocinaId == cocina) {
+                            encontrado = true;
+                        }
+                    });
                 });
-            });
-            console.log(encontrado);
+            }
+            else {
+                encontrado = true;
+            }
             if (encontrado) {
                 if (this.palabraFiltro != "") {
                     encontrado = false;
@@ -312,33 +323,44 @@ let ListComandasV2Page = class ListComandasV2Page {
                     encontrado = true;
                 }
             }
-            console.log(encontrado);
             if (encontrado) {
-                console.log(item);
-                // if(item.suspendido == 1){
-                // this.itemsRechazados.push(item);
-                //  } 
-                //else{
-                if (item.statusComanda == src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].rechazado) {
+                console.log(true);
+                if (item.comanda.estado == src_app_models_item__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].rechazado) {
                     this.itemsRechazados.push(item);
                 }
-                if (item.statusComanda == src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].solicitado) {
+                if (item.comanda.estado == src_app_models_item__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].solicitado) {
                     this.itemsPendientes.push(item);
                 }
-                if (item.statusComanda == src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].tomado) {
+                if (item.comanda.estado == src_app_models_item__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].tomado) {
                     this.itemsProceso.push(item);
                 }
-                if (item.statusComanda == src_app_models_pedido__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].completo) {
+                if (item.comanda.estado == src_app_models_item__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCocina"].completo) {
                     this.itemsListas.push(item);
                 }
-                //  }    
-                console.log(this.itemsPendientes);
-                return true;
             }
+            return true;
         });
     }
     nuevoPedido() {
-        this.router.navigate(['list-productos-servicios']);
+        this.router.navigate(['list-productos-servicios', { carritoIntended: 'list-comandas-v2' }]);
+    }
+    abrir(item) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            console.log(item);
+            let editarPedido = new _models_pedido__WEBPACK_IMPORTED_MODULE_9__["Pedido"]();
+            editarPedido.asignarValores(item);
+            this.navParametrosService.param = editarPedido;
+            // this.router.navigate(['details-pedido'])
+            const modal = yield this.modalController.create({
+                component: _details_comanda_details_comanda_page__WEBPACK_IMPORTED_MODULE_11__["DetailsComandaPage"],
+                id: 'detail-comanda'
+            });
+            modal.onDidDismiss()
+                .then((retorno) => {
+                this.refrescar();
+            });
+            yield modal.present();
+        });
     }
 };
 ListComandasV2Page.ctorParameters = () => [
@@ -348,7 +370,9 @@ ListComandasV2Page.ctorParameters = () => [
     { type: _Services_cocinas_service__WEBPACK_IMPORTED_MODULE_6__["CocinasService"] },
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["AlertController"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_8__["Router"] },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["Platform"] }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["Platform"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["ModalController"] },
+    { type: _Services_global_navegacion_parametros_service__WEBPACK_IMPORTED_MODULE_10__["NavegacionParametrosService"] }
 ];
 ListComandasV2Page = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

@@ -9,6 +9,7 @@ import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../Services/loading.service';
 import { MovimientoCtaCorriente } from '../models/movimientoCtaCorriente';
 import { MovimientosService } from '../Services/movimientos.service';
+import { UsuariosService } from '../Services/usuarios.service';
 
 @Component({
   selector: 'app-details-cta-corriente',
@@ -36,9 +37,11 @@ export class DetailsCtaCorrientePage implements OnInit {
     private authenticationSerivce:AuthenticationService,
     private alertController:AlertController,
     private loadingService:LoadingService,
-    private movimientosService:MovimientosService
+    private movimientosService:MovimientosService,
+    public usuariosService:UsuariosService
   ) { 
-    this.ctaCorriente = new CtaCorriente(this.authenticationSerivce.getUID(), this.authenticationSerivce.getNombre());
+    this.ctaCorriente = new CtaCorriente();
+    this.ctaCorriente.setCreador(this.authenticationSerivce.getUser())
     this.fechaDesde.setDate(this.fechaDesde.getDate() - 1);
   }
 

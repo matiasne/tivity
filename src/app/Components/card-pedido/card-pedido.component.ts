@@ -57,12 +57,11 @@ export class CardPedidoComponent implements OnInit, OnDestroy {
         this.restantesPorcentaje = (this.minutosRestantes/this.item.comanda.demora)*100        
         console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
 
-        this.interval = setInterval(()=>{
-          
+        if(this.minutosRestantes > 0){
+          this.interval = setInterval(()=>{       
             
             let fechaHoy = new Date()
-            this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
-            
+            this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))      
             
             
 
@@ -71,6 +70,8 @@ export class CardPedidoComponent implements OnInit, OnDestroy {
             console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
           
         },60000)
+        }
+        
       }
     }
     

@@ -8,11 +8,13 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import { ComponentsModule } from '../Components/components.module';
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ComponentsModule,
+    DirectivesModule,
     FormsModule,
     IonicModule,
     HomePageRoutingModule

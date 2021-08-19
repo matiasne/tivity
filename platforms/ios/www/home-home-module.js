@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>    \n    <ion-title>Home</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n\n  <ion-refresher slot=\"fixed\" (ionRefresh)=\"refresh($event)\">\n    <ion-refresher-content></ion-refresher-content>\n  </ion-refresher>\n\n  <div *ngIf=\"buscandoComercios\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comercios, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscandoComercios && comercios.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/comercio.fw.png\" alt=\"\">\n    <p>Aún no tienes comercios! Agregar uno nuevo</p>\n  </div>\n  \n\n  <ion-list lines=\"none\">     \n    <ion-grid>\n      <ion-row>\n        <ion-col size=\"6\" size-xs=\"6\" size-sm=\"6\" size-md=\"4\" size-lg=\"3\" *ngFor=\"let item of comercios\" >\n          <ion-card class=\"FadeOut FadeIn\" (click)=\"seleccionar(item)\">\n            <img *ngIf=\"item.icono.url !=''\" width=\"500px\" src=\"{{item.icono}}\"/>\n            <img *ngIf=\"item.icono.url == ''\" width=\"500px\" src=\"../../assets/img/empty-image.fw.png\"/>\n            <ion-card-content text-center>\n              <h2><b>{{item.nombre}}</b> </h2>\n              <p>\n                {{item.rol.rol}}\n              </p>  \n            </ion-card-content>\n          </ion-card>\n        </ion-col>\n      </ion-row>\n    </ion-grid>   \n  </ion-list>\n  <ion-fab *ngIf=\"!buscandoComercios\"  vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevoComercio()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab> \n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>    \n    <ion-title  size=\"small\">Home</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n\n  <ion-refresher slot=\"fixed\" (ionRefresh)=\"refresh($event)\">\n    <ion-refresher-content></ion-refresher-content>\n  </ion-refresher>\n\n  <div *ngIf=\"buscandoComercios\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comercios, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscandoComercios && comercios.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/comercio.fw.png\" alt=\"\">\n    <p>Aún no tienes comercios! Agregar uno nuevo</p>\n  </div>\n  \n  \n\n  <ion-list lines=\"none\">     \n    <ion-grid>\n      <ion-row>\n        <ion-col size=\"6\" size-xs=\"6\" size-sm=\"6\" size-md=\"4\" size-lg=\"3\" *ngFor=\"let item of comercios\" >\n          <ion-card class=\"FadeOut FadeIn\" (click)=\"seleccionar(item)\">\n            <img *ngIf=\"item.icono.url !=''\" width=\"500px\" src=\"{{item.icono}}\"/>\n            <img *ngIf=\"item.icono.url == ''\" width=\"500px\" src=\"../../assets/img/empty-image.fw.png\"/>\n            <ion-card-content text-center>\n              <h2><b>{{item.nombre}}</b> </h2>\n              <p>\n                {{item.rol.rol}}\n              </p>  \n            </ion-card-content>\n          </ion-card>\n        </ion-col>\n      </ion-row>\n    </ion-grid>   \n  </ion-list>\n \n\n  <ion-fab *ngIf=\"!buscandoComercios\"  vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevoComercio()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab> \n</ion-content>\n");
 
 /***/ }),
 
@@ -131,6 +131,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _form_comercio_form_comercio_page__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../form-comercio/form-comercio.page */ "./src/app/form-comercio/form-comercio.page.ts");
 /* harmony import */ var _cambiar_plan_cambiar_plan_page__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../cambiar-plan/cambiar-plan.page */ "./src/app/cambiar-plan/cambiar-plan.page.ts");
 /* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _Services_impresora_impresora_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Services/impresora/impresora.service */ "./src/app/Services/impresora/impresora.service.ts");
+
 
 
 
@@ -145,7 +147,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let HomePage = class HomePage {
-    constructor(authService, comerciosService, rolesService, router, loadingService, alertController, usuariosService, AuthenticationService, toastService, modalCtrl, platform) {
+    constructor(authService, comerciosService, rolesService, router, loadingService, alertController, usuariosService, AuthenticationService, toastService, modalCtrl, platform, impresoraService) {
         this.authService = authService;
         this.comerciosService = comerciosService;
         this.rolesService = rolesService;
@@ -157,6 +159,7 @@ let HomePage = class HomePage {
         this.toastService = toastService;
         this.modalCtrl = modalCtrl;
         this.platform = platform;
+        this.impresoraService = impresoraService;
         this.comercios = [];
         this.conexionEstado = "offline";
         this.habilitadoCrearComercio = true;
@@ -182,7 +185,6 @@ let HomePage = class HomePage {
                     if (roles[i].estado != "pendiente" && roles[i].estado != "rechazada") {
                         let obs = this.comerciosService.get(roles[i].comercioId).subscribe(data => {
                             if (data) {
-                                this.buscandoComercios = false;
                                 let comercio = data;
                                 comercio.rol = roles[i];
                                 console.log(comercio);
@@ -194,6 +196,7 @@ let HomePage = class HomePage {
                 }
             }
             console.log(this.comercios);
+            this.buscandoComercios = false;
         });
     }
     getAfipStatus() {
@@ -262,7 +265,8 @@ HomePage.ctorParameters = () => [
     { type: _Services_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"] },
     { type: _Services_toast_service__WEBPACK_IMPORTED_MODULE_9__["ToastService"] },
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["ModalController"] },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["Platform"] }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["Platform"] },
+    { type: _Services_impresora_impresora_service__WEBPACK_IMPORTED_MODULE_13__["ImpresoraService"] }
 ];
 HomePage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

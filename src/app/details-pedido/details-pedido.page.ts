@@ -30,6 +30,9 @@ import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { MesasService } from '../Services/mesas.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { PedidoService } from '../Services/pedido.service';
+import { ActivatedRoute } from '@angular/router';
+import { ItemPedido } from '../models/itemPedido';
+import { UsuariosService } from '../Services/usuarios.service';
 
 @Component({
   selector: 'app-details-pedido',
@@ -77,7 +80,9 @@ export class DetailsPedidoPage implements OnInit {
     private navParamService:NavegacionParametrosService,
     private carritoService:CarritoService,
     private modalNotificacion:ModalNotificacionService,
-    private afipService:AfipServiceService
+    private afipService:AfipServiceService,
+    private route: ActivatedRoute,
+    private usuariosService:UsuariosService
   ) { 
 
     this.comercio = new Comercio()
@@ -90,6 +95,11 @@ export class DetailsPedidoPage implements OnInit {
       console.log(this.pedido)
       this.getTotal();
     }  
+    else if(this.route.snapshot.params.id){
+      this.pedidosService.get(this.route.snapshot.params.id).subscribe(data=>{
+        this.pedido = data;
+      })
+    }
     else{
       this.pedido = new Pedido()
     }      
@@ -399,7 +409,7 @@ export class DetailsPedidoPage implements OnInit {
     .then((retorno) => {
       if(retorno.data){
 
-        if(retorno.data instanceof  Item){
+        if(retorno.data instanceof  ItemPedido){
           const p = JSON.parse(JSON.stringify(retorno.data));
 
           this.pedido.items.push(p); 

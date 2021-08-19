@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-title>servicio-calendario</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-button color=\"light\" (click)=\"agregarEspacios()\">Agregar Espacios</ion-button>\n  <full-calendar #fullcalendar deepChangeDetection=\"true\" [options]=\"calendarOptions\"></full-calendar>\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-title  size=\"small\">servicio-calendario</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-button color=\"light\" (click)=\"agregarEspacios()\">Agregar Espacios</ion-button>\n  <full-calendar #fullcalendar deepChangeDetection=\"true\" [options]=\"calendarOptions\"></full-calendar>\n</ion-content>\n");
 
 /***/ }),
 

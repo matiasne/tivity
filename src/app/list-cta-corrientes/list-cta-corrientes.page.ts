@@ -34,7 +34,7 @@ export class ListCtaCorrientesPage implements OnInit {
 
       this.buscando = false;
       cuentas.forEach((cta: any) => {           
-          var item:CtaCorriente = new CtaCorriente(this.authenticationService.getUID(), this.authenticationService.getNombre());
+          var item:CtaCorriente = new CtaCorriente();
           item.asignarValores(cta);       
           
           

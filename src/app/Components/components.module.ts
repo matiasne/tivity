@@ -15,6 +15,7 @@ import { ItemBluetoothDeviceComponent } from './item-bluetooth-device/item-bluet
 import { ItemBluetoothPrinterComponent } from './item-bluetooth-printer/item-bluetooth-printer.component';
 import { CardItemComponent } from './card-item/card-item.component';
 import { CardItemPedidoComponent } from './card-item-pedido/card-item-pedido.component';
+import { SearchFilterInputComponent } from './search-filter-input/search-filter-input.component';
 
 
 
@@ -38,7 +39,8 @@ imports: [
     CardPedidoWoocommerceComponent,
     CardProductoWoocommerceComponent,
     ItemBluetoothDeviceComponent,
-    ItemBluetoothPrinterComponent
+    ItemBluetoothPrinterComponent,
+    SearchFilterInputComponent,
   ],
   exports: [
     BtnSeleccionarImagenComponent,
@@ -52,7 +54,8 @@ imports: [
     CardPedidoWoocommerceComponent,
     CardProductoWoocommerceComponent, 
     ItemBluetoothDeviceComponent,
-    ItemBluetoothPrinterComponent
+    ItemBluetoothPrinterComponent,
+    SearchFilterInputComponent
   ]
 })
 export class ComponentsModule {}

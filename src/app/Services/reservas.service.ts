@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { firestore } from 'firebase';
 import { map } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ComerciosService } from './comercios.service';
@@ -46,23 +47,23 @@ export class ReservasService extends BaseService{
 
                     //================= borra lo anterior a la fecha configurada de almacenamiento
                    
-                    console.log(this.memoriaDias)
                     if(this.memoriaDias > 0){
 
                       var batch = this.afs.firestore.batch();
-
-                      let fechaDiasMemoria = new Date();
-                      
-                      fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
-  
+                      let fechaDiasMemoria = new Date();                      
+                      fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));  
                       let borrar = false;
-                      console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
-                      if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
-                        borrar = true
-                        var pedidoRef:any = this.getRef(data.id)
-                        batch.delete(pedidoRef)
-                        console.log("borrando pedido id: "+data.id)
+                      console.log(data.desde)
+                      if(data.desde instanceof firestore.Timestamp){
+                        if(data.desde.toDate().getTime() < fechaDiasMemoria.getTime()){
+                          borrar = true
+                          var pedidoRef:any = this.getRef(data.id)
+                          batch.delete(pedidoRef)
+                          console.log("borrando pedido id: "+data.id)
+                        }
                       }
+                     // console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+                      
   
                       if(borrar){
                         batch.commit()

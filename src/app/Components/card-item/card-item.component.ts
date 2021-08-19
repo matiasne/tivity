@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Item } from 'src/app/models/item';
+import { User } from 'src/app/models/user';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class CardItemComponent implements OnInit {
     
   constructor() { 
     this.item = new Item()
+    
   }
 
   ngOnInit() { 

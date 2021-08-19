@@ -8,40 +8,19 @@ import { ComerciosService } from './comercios.service';
 })
 export class SubscripcionesService extends BaseService{
 
+  private comercioId = "";
+
   constructor(
     protected afs: AngularFirestore,
     private firestore: AngularFirestore,
     private comerciosService:ComerciosService
     ) {     
       super(afs); 
-     
+      this.comerciosService.getSelectedCommerce().subscribe(data=>{
+        if(data){
+          this.comercioId = data.id
+          this.setPath("comercios/"+this.comercioId+"/subscripciones/");
+         }        
+      })
   }
-
-  setPath(clienteId){
-    let comercioId = this.comerciosService.getSelectedCommerceId()
-    this.path = 'comercios/'+comercioId+'/clientes/'+clienteId+'/subscripciones'
-  }
-
-  addSubscripcion(clienteId,subscripcion){
-    this.setPath(clienteId)
-    return super.add(subscripcion)    
-  }
-
-  listSubscripciones(clienteId){
-    this.setPath(clienteId)
-    return super.list()    
-  }
-
-  getSubscripciones(clienteId,subscripcionId){
-    this.setPath(clienteId)
-    return super.get(subscripcionId)    
-  }
-
-  deleteSubscripciones(clienteId,subscripcionId){
-    this.setPath(clienteId)
-    return super.delete(subscripcionId)    
-  }
-  
-
-
 }

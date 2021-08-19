@@ -25,6 +25,7 @@ import { PedidoService } from '../Services/pedido.service';
 import { ProductosService } from '../Services/productos.service';
 import { ToastService } from '../Services/toast.service';
 import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
+import { MercadopagoService } from '../Services/mercadopago.service';
 
 @Component({
   selector: 'app-form-cobrar-pedido', 
@@ -79,7 +80,8 @@ export class FormCobrarPedidoPage implements OnInit {
     private ctasCorrientesService:CtaCorrientesService,
     public afipService:AfipServiceService,
     private loadingService:LoadingService,
-    private alertController:AlertController
+    private alertController:AlertController,
+    private mercadoPagoService:MercadopagoService
   ) { 
 
   }
@@ -134,6 +136,12 @@ export class FormCobrarPedidoPage implements OnInit {
 
   setMontos(){
 
+    this.pedido.montoPagoEfectivo = 0;
+    this.pedido.montoPagoDebito = 0;
+    this.pedido.montoPagoCredito = 0;
+    this.pedido.montoPagoCtaCorriente = 0;
+    this.pedido.montoPagoMercadoPago = 0;
+
     if(this.metodoPagoSeleccionado.includes("efectivo")){
       this.pedido.montoPagoEfectivo = this.getTotal();
     }
@@ -170,9 +178,22 @@ export class FormCobrarPedidoPage implements OnInit {
       modal.onDidDismiss()
         .then((retorno) => {
           if(retorno.data){
-           if(retorno.data == "approved"){
-             this.cobrar()
-           }
+            this.loadingService.presentLoadingText("Cargando Pago")
+            this.mercadoPagoService.procesarPago({...retorno.data,pedidoId:this.pedido.id}).then(data=>{
+              console.log(data)
+              this.loadingService.dismissLoading()
+              const response:any = data
+              if(response.status == "approved"){      
+                  this.alertRealizado()    
+                  this.cobrar()        
+              }
+              else{
+                  this.alertRechazado()
+                  this.presentAlert("El pago no pudo realizarse, por favor verifique los datos de la tarjeta")
+              }
+            },err=>{
+              console.log(err)
+            })
           }
                   
       });
@@ -186,6 +207,19 @@ export class FormCobrarPedidoPage implements OnInit {
 
     
   }
+
+  
+async presentAlert(mensaje) {
+  alert(mensaje)
+}
+
+async alertRealizado(){
+   alert("Pago Realizado")
+}
+
+async alertRechazado(){
+ alert("Pago Rechazado")
+}
  
   async cobrar(){
 

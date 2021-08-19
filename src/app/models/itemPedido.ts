@@ -1,5 +1,6 @@
 import { GrupoOpciones } from "./grupoOpciones";
 import { TipoItem } from "./item";
+import { User } from "./user";
 
 export class ItemPedido {
 
@@ -7,6 +8,10 @@ export class ItemPedido {
 
     public id="";
     public suspendido = 0;
+
+    public creadorId = "";
+    public creadorEmail="";
+    public creadorNombre="";
     
     public nombre = "";
     public barcode="";
@@ -29,11 +34,16 @@ export class ItemPedido {
     public impuestoPorcentaje = "0.21";
     public reembolsar = false 
 
-    
-
-	public constructor() {
+    constructor(){
         this.opcionesSeleccionadas =[];
     }
+
+    public setCreador(usuario:User){
+        this.creadorId = usuario.uid;
+        this.creadorEmail = usuario.email;
+        this.creadorNombre = usuario.displayName;
+    }
+
 
     public asignarValores(init?: Partial<ItemPedido>) {
         Object.assign(this, init);

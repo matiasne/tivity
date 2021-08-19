@@ -125,22 +125,7 @@
       </ion-select>
     </ion-item>
     <ion-button slot="end" (click)="openAddEstado()">Agregar Nuevo Estado</ion-button>
-    <ion-list lines="none">
-      <ion-item-sliding  class="item-card" *ngFor="let item of comentarios">
-        <ion-item>           
-          <ion-label>
-            <p>  
-              {{item.text}}
-            </p>    
-            <p>{{item.senderEmail}} -  {{item.createdAt.toDate() | date:'dd/MM/yyyy hh:mm'}}</p>
-          </ion-label>         
-        </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="eliminarComentario(item)"><ion-icon name="trash" ></ion-icon> Remover</ion-item-option>
-      </ion-item-options>
-
-      </ion-item-sliding>
-    </ion-list>
+    
 
   </div>
   

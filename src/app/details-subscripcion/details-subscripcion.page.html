@@ -1,21 +1,76 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title  size="small">Detalle Subscripción</ion-title>    
+    <ion-title  size="small">Detalle Subscripción</ion-title>
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon  name="close-outline"></ion-icon>
+    </ion-button>    
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-card-subscription [item]="subscripcion"></app-card-subscription>
+  <app-card-subscription [subscripcion]="subscripcion"></app-card-subscription>
+  
+  <ion-list>       
+    <app-card-item-pedido *ngFor="let item of subscripcion.items; let i = index"
+      [item]="item"  
+      [showStock]="false" 
+      [showImage]="false"
+      [showEnCarrito]="false"
+      [multiplicador]="1" 
+    ></app-card-item-pedido>  
+       
+
+    <ion-text color="primary" *ngIf="subscripcion.descuentos.length > 0">
+      <h4>Descuentos</h4>
+    </ion-text> 
+
+    <span *ngFor="let descuento of subscripcion.descuentos; let i = index">
+      <ion-item-sliding>
+        <ion-item>
+          <ion-label>                
+            <h2>
+              <b><span *ngIf="descuento.tipo== enumTipo.porcentaje">%</span> <span *ngIf="descuento.tipo== enumTipo.monto">$</span> {{descuento.monto}}</b>  {{descuento.motivo}}             
+            </h2>
+          </ion-label>
+        </ion-item>
+        <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="eliminarDescuento(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          </ion-item-options>
+        </span>
+        
+  
+      </ion-item-sliding>
+    </span>
+
+    <ion-text color="primary" *ngIf="subscripcion.recargos.length > 0">
+      <h4>Recargos</h4>
+    </ion-text> 
+
+    <span *ngFor="let recargo of subscripcion.recargos; let i = index">
+      <ion-item-sliding>
+        <ion-item>
+          <ion-label>                
+            <h2>
+              <b><span *ngIf="recargo.tipo== enumTipo.porcentaje">%</span> <span *ngIf="recargo.tipo== enumTipo.monto">$</span> {{recargo.monto}}</b>  {{recargo.motivo}}             
+            </h2>
+          </ion-label>
+        </ion-item>
+        <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="eliminarRecargo(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          </ion-item-options>   
+        </span>
+         
+      </ion-item-sliding>
+    </span>
+   
+  </ion-list>
+  
   <ion-item *ngFor="let pagare of pagares">
     <ion-label>
       {{pagare.createdAt | date:'dd/MM/yyyy'}} {{pagare.monto | currency}} 
     </ion-label>
-    
-
-      <ion-button  slot="end" *ngIf="pagare.estado == 'debe'" size="large"  (click)="cobrar(pagare)"  expand="block">Cobrar</ion-button>
-
+    <ion-button  slot="end" *ngIf="pagare.estado == 'debe'" size="large"  (click)="cobrar(pagare)"  expand="block">Cobrar</ion-button>
   </ion-item>
 </ion-content>

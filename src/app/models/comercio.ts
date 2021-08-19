@@ -30,6 +30,7 @@ export class Comercio {
         comandas: true,
         cocinas:true,
         reservas:true,
+        personal:true,
         mesas:true,
         impresion:false,
         clientes:true,

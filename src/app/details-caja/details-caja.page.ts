@@ -14,6 +14,7 @@ import { PedidoService } from '../Services/pedido.service';
 import { Pedido } from '../models/pedido';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-details-caja',
@@ -57,7 +58,7 @@ export class DetailsCajaPage implements OnInit {
     public changeRef:ChangeDetectorRef,
   ) { 
     this.comercio = new Comercio()
-    this.caja = new Caja();
+    this.caja = new Caja()
     this.caja.id = this.route.snapshot.params.id;
     this.fechaDesde.setDate(this.fechaDesde.getDate() - 1);
 

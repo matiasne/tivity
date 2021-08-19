@@ -53,8 +53,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/__ivy_ngcc__/fesm2015/forms.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
 /* harmony import */ var _form_comercio_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./form-comercio-routing.module */ "./src/app/form-comercio/form-comercio-routing.module.ts");
-/* harmony import */ var ngx_image_cropper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-image-cropper */ "./node_modules/ngx-image-cropper/__ivy_ngcc__/fesm2015/ngx-image-cropper.js");
-/* harmony import */ var _Components_components_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Components/components.module */ "./src/app/Components/components.module.ts");
+/* harmony import */ var _form_comercio_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./form-comercio.page */ "./src/app/form-comercio/form-comercio.page.ts");
+/* harmony import */ var ngx_image_cropper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-image-cropper */ "./node_modules/ngx-image-cropper/__ivy_ngcc__/fesm2015/ngx-image-cropper.js");
+/* harmony import */ var _Components_components_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Components/components.module */ "./src/app/Components/components.module.ts");
+
 
 
 
@@ -69,14 +71,16 @@ FormComercioPageModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
-            _Components_components_module__WEBPACK_IMPORTED_MODULE_7__["ComponentsModule"],
+            _Components_components_module__WEBPACK_IMPORTED_MODULE_8__["ComponentsModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
-            ngx_image_cropper__WEBPACK_IMPORTED_MODULE_6__["ImageCropperModule"],
+            ngx_image_cropper__WEBPACK_IMPORTED_MODULE_7__["ImageCropperModule"],
             _form_comercio_routing_module__WEBPACK_IMPORTED_MODULE_5__["FormComercioPageRoutingModule"]
         ],
-        declarations: []
+        declarations: [
+            _form_comercio_page__WEBPACK_IMPORTED_MODULE_6__["FormComercioPage"]
+        ]
     })
 ], FormComercioPageModule);
 

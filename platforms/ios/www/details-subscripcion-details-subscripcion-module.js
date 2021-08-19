@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Detalle Subscripción</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <app-card-subscription [item]=\"subscripcion\"></app-card-subscription>\n  <ion-item *ngFor=\"let pagare of pagares\">\n    <ion-label>\n      {{pagare.createdAt | date:'dd/MM/yyyy'}} {{pagare.monto | currency}} \n    </ion-label>\n    \n\n      <ion-button  slot=\"end\" *ngIf=\"pagare.estado == 'debe'\" size=\"large\"  (click)=\"cobrar(pagare)\"  expand=\"block\">Cobrar</ion-button>\n\n  </ion-item>\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Detalle Subscripción</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <app-card-subscription [item]=\"subscripcion\"></app-card-subscription>\n  <ion-item *ngFor=\"let pagare of pagares\">\n    <ion-label>\n      {{pagare.createdAt | date:'dd/MM/yyyy'}} {{pagare.monto | currency}} \n    </ion-label>\n    \n\n      <ion-button  slot=\"end\" *ngIf=\"pagare.estado == 'debe'\" size=\"large\"  (click)=\"cobrar(pagare)\"  expand=\"block\">Cobrar</ion-button>\n\n  </ion-item>\n</ion-content>\n");
 
 /***/ }),
 
@@ -179,9 +179,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
 /* harmony import */ var _models_subscripcion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/subscripcion */ "./src/app/models/subscripcion.ts");
 /* harmony import */ var _models_cliente__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/cliente */ "./src/app/models/cliente.ts");
-/* harmony import */ var _models_servicio__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../models/servicio */ "./src/app/models/servicio.ts");
-/* harmony import */ var _Services_pagares_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Services/pagares.service */ "./src/app/Services/pagares.service.ts");
-
+/* harmony import */ var _Services_pagares_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Services/pagares.service */ "./src/app/Services/pagares.service.ts");
 
 
 
@@ -197,7 +195,6 @@ let DetailsSubscripcionPage = class DetailsSubscripcionPage {
         this.pagares = [];
         this.subscripcion = new _models_subscripcion__WEBPACK_IMPORTED_MODULE_4__["Subscripcion"]("", "");
         this.cliente = new _models_cliente__WEBPACK_IMPORTED_MODULE_5__["Cliente"]();
-        this.servicio = new _models_servicio__WEBPACK_IMPORTED_MODULE_6__["Servicio"]();
     }
     ngOnInit() {
         this.subscripcionesService.get(this.route.snapshot.params.id).subscribe(data => {
@@ -248,7 +245,7 @@ let DetailsSubscripcionPage = class DetailsSubscripcionPage {
 DetailsSubscripcionPage.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"] },
     { type: _Services_subscripciones_service__WEBPACK_IMPORTED_MODULE_2__["SubscripcionesService"] },
-    { type: _Services_pagares_service__WEBPACK_IMPORTED_MODULE_7__["PagaresService"] }
+    { type: _Services_pagares_service__WEBPACK_IMPORTED_MODULE_6__["PagaresService"] }
 ];
 DetailsSubscripcionPage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -262,39 +259,35 @@ DetailsSubscripcionPage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"
 
 /***/ }),
 
-/***/ "./src/app/models/servicio.ts":
-/*!************************************!*\
-  !*** ./src/app/models/servicio.ts ***!
-  \************************************/
-/*! exports provided: Servicio */
+/***/ "./src/app/models/cliente.ts":
+/*!***********************************!*\
+  !*** ./src/app/models/cliente.ts ***!
+  \***********************************/
+/*! exports provided: Cliente */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Servicio", function() { return Servicio; });
-class Servicio {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cliente", function() { return Cliente; });
+/* harmony import */ var _localizacion__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./localizacion */ "./src/app/models/localizacion.ts");
+
+class Cliente {
     constructor() {
         this.id = "";
-        this.plan = {
-            id: "",
-            nombre: "",
-            precio: 0,
-            tipo: "",
-            dias: ""
-        };
+        this.comercioId = "";
         this.nombre = "";
+        this.documentoTipo = "";
+        this.documento = "";
+        this.personaJuridica = "";
+        this.fecha_nacimiento = "";
+        this.telefono = "";
+        this.email = "";
         this.descripcion = "";
-        this.categorias = [];
-        this.profesionales = [];
         this.foto = "";
-        this.createdAt = "";
-        this.fechaInicio = "";
-        this.pagoAdelantado = "true";
-        this.descripcion_venta = "";
-        this.recibirReservas = true;
-        this.precio = 0;
-        this.tipo = "";
-        this.dias = "";
+        this.vendedorId = "";
+        this.estado = "";
+        this.keywords = [];
+        this.direccion = new _localizacion__WEBPACK_IMPORTED_MODULE_0__["Localizacion"]();
     }
     asignarValores(init) {
         Object.assign(this, init);

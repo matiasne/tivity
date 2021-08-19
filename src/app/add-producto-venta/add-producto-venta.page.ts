@@ -17,6 +17,7 @@ import { ModalNotificacionService } from '../Services/modal-notificacion.service
 import { FormProductoPage } from '../form-producto/form-producto.page';
 import { EnumEstadoCobro } from '../models/pedido';
 import { ItemPedido } from '../models/itemPedido';
+import { UsuariosService } from '../Services/usuarios.service';
 
 @Component({
   selector: 'app-add-producto-venta',
@@ -53,7 +54,6 @@ export class AddProductoVentaPage implements OnInit {
     private cocinasService:CocinasService,
     private gruposOpcionesService:GrupoOpcionesService,
     private loadingService:LoadingService,
-    private modalNotificacion:ModalNotificacionService
   ) { }
 
   ngOnInit() {
@@ -100,19 +100,7 @@ export class AddProductoVentaPage implements OnInit {
 
   }
 
-  async editarProducto(){
-    this.modalCtrl.dismiss()
-   // this.router.navigate(['form-producto',{id:this.item.id}]);
-
-    let modal = await this.modalCtrl.create({
-      component: FormProductoPage,
-      componentProps: {
-        id:this.item.id
-      }
-    });  
-    return await modal.present();
-
-  }
+  
 
   
   sumarCantidad(){

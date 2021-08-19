@@ -1,0 +1,248 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title  size="small">Permisos</ion-title>    
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <div class="item-card ion-padding">
+    
+    <ion-grid>
+      <b>Datos de Otros Usuarios</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Este usuario puede ver datos cargados por otros usuarios?
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.alcanceOtros"  (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >No</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Si</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Cobros</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Este usuario puede realizar cobros de pedidos?
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.cobro"  (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >No</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Si</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Catálogo</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del Catálogo
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.catalogo" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Lista de Pedidos</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de pedidos
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.pedidos" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Mesas</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de mesas
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.mesas" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Comandas</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de comandas
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.comandas" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Reservas</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de reservas
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.reservas" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Clientes</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de clientes
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.clientes" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Cuentas Corrientes</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de ctasCorrientes
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.ctasCorrientes" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Cajas</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de cajas
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.cajas" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <b>Subscripciones</b>
+      <ion-row>
+        <ion-col size="8">
+          <p>
+            Seleccione el alcance de este usuario dentro del listado de subscripciones
+          </p>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item> 
+            <ion-label position="floating">Permiso</ion-label>
+            <ion-select multiple=false [(ngModel)]="rol.permisos.subscripciones" (ionChange)="guardar()">
+              <ion-select-option  [value]="permisos.Oculto" >Oculto</ion-select-option>
+              <ion-select-option  [value]="permisos.Visible">Visible</ion-select-option>
+              <ion-select-option  [value]="permisos.Editor">Editor</ion-select-option>
+            </ion-select>       
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+  
+
+</ion-content>

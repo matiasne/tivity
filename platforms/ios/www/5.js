@@ -10,9 +10,9 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_backdrop", function() { return Backdrop; });
-/* harmony import */ var _index_7a8b7a1c_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index-7a8b7a1c.js */ "./node_modules/@ionic/core/dist/esm/index-7a8b7a1c.js");
-/* harmony import */ var _ionic_global_63a97a32_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ionic-global-63a97a32.js */ "./node_modules/@ionic/core/dist/esm/ionic-global-63a97a32.js");
-/* harmony import */ var _gesture_controller_31cb6bb9_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./gesture-controller-31cb6bb9.js */ "./node_modules/@ionic/core/dist/esm/gesture-controller-31cb6bb9.js");
+/* harmony import */ var _index_92848855_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index-92848855.js */ "./node_modules/@ionic/core/dist/esm/index-92848855.js");
+/* harmony import */ var _ionic_global_23e7365a_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ionic-global-23e7365a.js */ "./node_modules/@ionic/core/dist/esm/ionic-global-23e7365a.js");
+/* harmony import */ var _gesture_controller_89173521_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./gesture-controller-89173521.js */ "./node_modules/@ionic/core/dist/esm/gesture-controller-89173521.js");
 
 
 
@@ -22,57 +22,57 @@ const backdropIosCss = ":host{left:0;right:0;top:0;bottom:0;display:block;positi
 const backdropMdCss = ":host{left:0;right:0;top:0;bottom:0;display:block;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0);contain:strict;cursor:pointer;opacity:0.01;-ms-touch-action:none;touch-action:none;z-index:2}:host(.backdrop-hide){background:transparent}:host(.backdrop-no-tappable){cursor:auto}:host{background-color:var(--ion-backdrop-color, #000)}";
 
 const Backdrop = class {
-  constructor(hostRef) {
-    Object(_index_7a8b7a1c_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
-    this.ionBackdropTap = Object(_index_7a8b7a1c_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this, "ionBackdropTap", 7);
-    this.blocker = _gesture_controller_31cb6bb9_js__WEBPACK_IMPORTED_MODULE_2__["G"].createBlocker({
-      disableScroll: true
-    });
-    /**
-     * If `true`, the backdrop will be visible.
-     */
-    this.visible = true;
-    /**
-     * If `true`, the backdrop will can be clicked and will emit the `ionBackdropTap` event.
-     */
-    this.tappable = true;
-    /**
-     * If `true`, the backdrop will stop propagation on tap.
-     */
-    this.stopPropagation = true;
-  }
-  connectedCallback() {
-    if (this.stopPropagation) {
-      this.blocker.block();
+    constructor(hostRef) {
+        Object(_index_92848855_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.ionBackdropTap = Object(_index_92848855_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this, "ionBackdropTap", 7);
+        this.blocker = _gesture_controller_89173521_js__WEBPACK_IMPORTED_MODULE_2__["G"].createBlocker({
+            disableScroll: true
+        });
+        /**
+         * If `true`, the backdrop will be visible.
+         */
+        this.visible = true;
+        /**
+         * If `true`, the backdrop will can be clicked and will emit the `ionBackdropTap` event.
+         */
+        this.tappable = true;
+        /**
+         * If `true`, the backdrop will stop propagation on tap.
+         */
+        this.stopPropagation = true;
     }
-  }
-  disconnectedCallback() {
-    this.blocker.unblock();
-  }
-  onMouseDown(ev) {
-    this.emitTap(ev);
-  }
-  emitTap(ev) {
-    if (this.stopPropagation) {
-      ev.preventDefault();
-      ev.stopPropagation();
+    connectedCallback() {
+        if (this.stopPropagation) {
+            this.blocker.block();
+        }
     }
-    if (this.tappable) {
-      this.ionBackdropTap.emit();
+    disconnectedCallback() {
+        this.blocker.unblock();
     }
-  }
-  render() {
-    const mode = Object(_ionic_global_63a97a32_js__WEBPACK_IMPORTED_MODULE_1__["b"])(this);
-    return (Object(_index_7a8b7a1c_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_index_7a8b7a1c_js__WEBPACK_IMPORTED_MODULE_0__["H"], { tabindex: "-1", "aria-hidden": "true", class: {
-        [mode]: true,
-        'backdrop-hide': !this.visible,
-        'backdrop-no-tappable': !this.tappable,
-      } }));
-  }
+    onMouseDown(ev) {
+        this.emitTap(ev);
+    }
+    emitTap(ev) {
+        if (this.stopPropagation) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
+        if (this.tappable) {
+            this.ionBackdropTap.emit();
+        }
+    }
+    render() {
+        const mode = Object(_ionic_global_23e7365a_js__WEBPACK_IMPORTED_MODULE_1__["b"])(this);
+        return (Object(_index_92848855_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_index_92848855_js__WEBPACK_IMPORTED_MODULE_0__["H"], { tabindex: "-1", class: {
+                [mode]: true,
+                'backdrop-hide': !this.visible,
+                'backdrop-no-tappable': !this.tappable,
+            } }));
+    }
 };
 Backdrop.style = {
-  ios: backdropIosCss,
-  md: backdropMdCss
+    ios: backdropIosCss,
+    md: backdropMdCss
 };
 
 

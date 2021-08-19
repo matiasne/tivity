@@ -13,6 +13,185 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/app/Services/clientes.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/Services/clientes.service.ts ***!
+  \**********************************************/
+/*! exports provided: ClientesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClientesService", function() { return ClientesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _keyword_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./keyword.service */ "./src/app/Services/keyword.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+
+
+
+
+
+
+
+
+let ClientesService = class ClientesService extends _base_service__WEBPACK_IMPORTED_MODULE_7__["BaseService"] {
+    constructor(afs, keywordService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.keywordService = keywordService;
+        this.comerciosService = comerciosService;
+        this.comerciosService.getSelectedCommerce().subscribe(data => {
+            // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
+            if (data) {
+                console.log(data.id);
+                this.setPath('comercios/' + data.id + '/clientes');
+            }
+        });
+        this.collectionGroup = '/clientes';
+    }
+    create(data) {
+        this.keywordService.agregarKeywords(data, [data.nombre, data.email]);
+        const param = JSON.parse(JSON.stringify(data));
+        return this.afs.collection(this.path).doc(data.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    getByEmail(email) {
+        return this.afs.collection(this.path, ref => ref.where('email', '==', email)).valueChanges();
+    }
+    getByNombre(nombre) {
+        return this.afs.collection(this.path, ref => ref.where('nombre', '==', nombre)).valueChanges();
+    }
+    getRef(id) {
+        return this.afs.collection(this.path).doc(id).ref;
+    }
+    getAll() {
+        return this.afs.collection(this.path).snapshotChanges();
+    }
+    update(cliente) {
+        this.keywordService.agregarKeywords(cliente, [cliente.nombre, cliente.email]);
+        console.log(cliente);
+        const param = JSON.parse(JSON.stringify(cliente));
+        return this.afs.collection(this.path).doc(cliente.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    delete(data) {
+        //Debo eliminar primero cada subscripción
+        if (data.subscripciones) {
+            data.subscripciones.forEach(subscripcion => {
+                this.afs.doc(subscripcion).delete();
+            });
+        }
+        return this.afs.collection(this.path).doc(data.id).delete();
+    }
+    addCtaCorriente(clienteId, ctaCorrienteId) {
+        let param = {
+            ctaId: ctaCorrienteId
+        };
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).set(param);
+    }
+    deleteCtaCorriente(clienteId, ctaCorrienteId) {
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).delete();
+    }
+    search(limit, orderBy, palabra, ultimo) {
+        if (ultimo == "") {
+            console.log("!!!!!! primero");
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .limit(limit)).snapshotChanges();
+        }
+        else {
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .startAfter(ultimo)
+                .limit(limit)).snapshotChanges();
+        }
+    }
+    //Esto para ver todos los beneficios o cuestiones del cliente particular en todo el entorno
+    getAllClientesbyEmail(email) {
+        return this.afs.collectionGroup(this.collectionGroup, ref => ref.where('email', '==', email)).get( /*{ source: 'server' }*/)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(actions => {
+            const data = [];
+            actions.forEach(a => {
+                const item = a.data();
+                item.id = a.id;
+                data.push(item);
+            });
+            return data;
+        }));
+    }
+};
+ClientesService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _keyword_service__WEBPACK_IMPORTED_MODULE_5__["KeywordService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_6__["ComerciosService"] }
+];
+ClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ClientesService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/keyword.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/keyword.service.ts ***!
+  \*********************************************/
+/*! exports provided: KeywordService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeywordService", function() { return KeywordService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let KeywordService = class KeywordService {
+    constructor() { }
+    agregarKeywords(objeto, palabras) {
+        objeto.keywords.push('');
+        objeto.keywords.push(' ');
+        console.log(palabras);
+        palabras.forEach(palabra => {
+            objeto.keywords.push(palabra);
+            let p = palabra.toLowerCase().split(" ");
+            p.forEach(element => {
+                objeto.keywords = objeto.keywords.concat(this.createKeywords(element));
+            });
+        });
+    }
+    createKeywords(name) {
+        const arrName = [];
+        let curName = '';
+        name.split('').forEach(letter => {
+            curName += letter;
+            arrName.push(curName);
+        });
+        return arrName;
+    }
+};
+KeywordService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], KeywordService);
+
+
+
+/***/ }),
+
 /***/ "./src/app/form-apertura-caja/form-apertura-caja-routing.module.ts":
 /*!*************************************************************************!*\
   !*** ./src/app/form-apertura-caja/form-apertura-caja-routing.module.ts ***!
@@ -170,26 +349,11 @@ let FormAperturaCajaPage = class FormAperturaCajaPage {
     abrir() {
         this.submitted = true;
         this.caja.estado = "abierta";
-        var aperturaEfectivo = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        aperturaEfectivo.tipo = this.enumTipoMovimientoCaja.apertura;
-        aperturaEfectivo.cajaId = this.caja.id;
-        aperturaEfectivo.isApertura = true;
-        aperturaEfectivo.metodoPago = "efectivo";
-        aperturaEfectivo.monto = Number(this.efectivo);
+        var aperturaEfectivo = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"]("", this.enumTipoMovimientoCaja.apertura, "local", this.caja.id, "efectivo", Number(this.efectivo), "Apertura De Caja Efectivo", this.authenticationService.getUID(), this.authenticationService.getEmail());
         this.movimientosService.add(aperturaEfectivo);
-        var aperturaDebito = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        aperturaDebito.tipo = this.enumTipoMovimientoCaja.apertura;
-        aperturaDebito.cajaId = this.caja.id;
-        aperturaDebito.isApertura = true;
-        aperturaDebito.metodoPago = "debito";
-        aperturaDebito.monto = Number(this.debito);
+        var aperturaDebito = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"]("", this.enumTipoMovimientoCaja.apertura, "local", this.caja.id, "debito", Number(this.debito), "Apertura De Caja Débito", this.authenticationService.getUID(), this.authenticationService.getEmail());
         this.movimientosService.add(aperturaDebito);
-        var aperturaCredito = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        aperturaCredito.tipo = this.enumTipoMovimientoCaja.apertura;
-        aperturaCredito.metodoPago = "credito";
-        aperturaCredito.cajaId = this.caja.id;
-        aperturaCredito.isApertura = true;
-        aperturaCredito.monto = Number(this.credito);
+        var aperturaCredito = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"]("", this.enumTipoMovimientoCaja.apertura, "local", this.caja.id, "credito", Number(this.credito), "Apertura De Caja Crédito", this.authenticationService.getUID(), this.authenticationService.getEmail());
         this.movimientosService.add(aperturaCredito);
         this.caja.estado = "abierta";
         this.caja.totalEfectivo = Number(this.efectivo);

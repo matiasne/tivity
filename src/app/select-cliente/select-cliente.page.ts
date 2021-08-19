@@ -6,6 +6,7 @@ import { ClientesService } from '../Services/clientes.service';
 import { Cliente } from '../models/cliente';
 import { LoadingService } from '../Services/loading.service';
 import { FormClientePage } from '../form-cliente/form-cliente.page';
+import { UsuariosService } from '../Services/usuarios.service';
 
 @Component({
   selector: 'app-select-cliente',
@@ -35,7 +36,8 @@ export class SelectClientePage implements OnInit {
     private route: ActivatedRoute,
     public clientesService:ClientesService,
     public modalCtrl: ModalController,
-    public loadingService:LoadingService
+    public loadingService:LoadingService,
+    public usuariosServices:UsuariosService
   ) { }
 
   ngOnInit() {      

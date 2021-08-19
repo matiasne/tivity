@@ -53,6 +53,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/__ivy_ngcc__/fesm2015/forms.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
 /* harmony import */ var _form_producto_grupo_opciones_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./form-producto-grupo-opciones-routing.module */ "./src/app/form-producto-grupo-opciones/form-producto-grupo-opciones-routing.module.ts");
+/* harmony import */ var _form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./form-producto-grupo-opciones.page */ "./src/app/form-producto-grupo-opciones/form-producto-grupo-opciones.page.ts");
+
 
 
 
@@ -70,7 +72,7 @@ FormProductoGrupoOpcionesPageModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[
             _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
             _form_producto_grupo_opciones_routing_module__WEBPACK_IMPORTED_MODULE_5__["FormProductoGrupoOpcionesPageRoutingModule"]
         ],
-        declarations: []
+        declarations: [_form_producto_grupo_opciones_page__WEBPACK_IMPORTED_MODULE_6__["FormProductoGrupoOpcionesPage"]]
     })
 ], FormProductoGrupoOpcionesPageModule);
 

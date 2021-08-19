@@ -130,11 +130,14 @@
     <p>Aún no tienes comandas</p>
   </div>
   
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
-    <ion-fab-button (click)="nuevoPedido()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
+      <ion-fab-button (click)="nuevoPedido()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </span>
+ 
 
 </ion-content>
 

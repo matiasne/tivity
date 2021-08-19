@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController, LoadingController, AlertController } from '@ionic/angular';
 import { SubscripcionesService } from '../Services/subscripciones.service';
 import { Subscripcion } from '../models/subscripcion';
+import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
+import { FormSubscripcionPage } from '../form-subscripcion/form-subscripcion.page';
+import { DetailsSubscripcionPage } from '../details-subscripcion/details-subscripcion.page';
 
 @Component({
   selector: 'app-list-subscripciones',
@@ -12,32 +15,30 @@ import { Subscripcion } from '../models/subscripcion';
 })
 export class ListSubscripcionesPage implements OnInit {
 
-  items:any[] = [];
+  public itemsAll:any[] = [];
 
   public itemsView:Subscripcion[] =[];
 
-  public subsItems: Subscription;
-  public subsServ:Subscription;
-  public subsPlanes:Subscription;
-  public subsClientes:Subscription;
-  public subsPagare:Subscription;
-
-  public palabraFiltro = "";
-  public ultimoItem = "";
-  public loadingActive = false;
   
   constructor(
-    public modalController: ModalController,
     public loadingController: LoadingController,
     private route: ActivatedRoute,
     private subscripcionesService:SubscripcionesService,
+    private navParametrosService:NavegacionParametrosService,
+    private modalCtrl:ModalController,
   ) { }
 
   ngOnInit() {   
-    this.ultimoItem = "";
-    if(this.route.snapshot.params.filtro)
-      this.palabraFiltro = this.route.snapshot.params.filtro;
-    this.obtener();
+    this.subscripcionesService.list().subscribe((data:any)=>{
+      this.itemsAll = data
+      this.itemsView = data
+      console.log(this.itemsView)
+    })
+  }
+
+  mostrar(arrayElementos){
+    console.log(arrayElementos)
+    this.itemsView = arrayElementos
   }
 
   ionViewDidEnter(){
@@ -47,80 +48,82 @@ export class ListSubscripcionesPage implements OnInit {
   ionViewDidLeave(){
   }
 
-  buscar(){
+  async editarSubscripcion(subscripcion:Subscripcion){
+    let subs = new Subscripcion()
+    subs.asignarValores(subscripcion)
+
+    this.navParametrosService.param = subs
+    const modal = await this.modalCtrl.create({
+      component: FormSubscripcionPage,  
+      cssClass:'modal-custom-wrapper',
+    });         
+
+    modal.onDidDismiss()
     
-    if(this.palabraFiltro != ""){
-      this.itemsView = [];
-     
-      this.items.forEach(item => {
+    .then((retorno) => { 
 
-        
-        if(item.cliente.nombre.toLowerCase().includes(this.palabraFiltro.toLowerCase())){
-          console.log("ok")
-          this.itemsView.push(item);
-          return;
-        }         
+      if(retorno.data){   
+      this.subscripcionesService.update(retorno.data).then(data=>{
+        console.log("Subscripcion guardada")
+      })
+      }else{
 
-        if(item.servicio.nombre.toLowerCase().includes(this.palabraFiltro.toLowerCase())){
-          this.itemsView.push(item);
-          return;
-        }    
+      }     
 
-      });     
-      
-    }
-    
-    else{
-      console.log(this.itemsView)
-      this.itemsView = this.items;
-    }
+
+    });
+
+    await modal.present();
   }
 
-  obtener(){
+  async nuevaSubscripcion(fechaInicio = null){
+    this.navParametrosService.param = null
+   const modal = await this.modalCtrl.create({
+      component: FormSubscripcionPage,
+      componentProps:{
+        fechaInicio:fechaInicio
+      },     
+      cssClass:'modal-custom-wrapper',
+
+    });         
+
+    modal.onDidDismiss()
     
-    this.ultimoItem = "";  
-    
-   
-    
-    this.subscripcionesService.list().subscribe(snapshot =>{
-      this.items = [];  
-      console.log(snapshot)
-      snapshot.forEach(async item =>{    
-        this.items.push(item);                 
-      });  
-      this.buscar();
-   
-    })
+    .then((retorno) => { 
+
+      if(retorno.data){   
+      this.subscripcionesService.add(retorno.data).then(data=>{
+        console.log("Subscripcion guardada")
+      })
+      }else{
+
+      }     
+
+
+    });
+
+    await modal.present();
   }
-
   
 
- 
+  
+  async ver(item){
+    let subs = new Subscripcion()
+    subs.asignarValores(item)
+    this.navParametrosService.param = subs;
+    const modal = await this.modalCtrl.create({
+        component: DetailsSubscripcionPage,
+        cssClass:'modal-custom-wrapper',
+    });         
 
-  leapYear(year)
-  {
-    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+    modal.onDidDismiss()
+    
+    .then((retorno) => { 
+
+    });
+
+    await modal.present();
   }
-  
-  dynamicSort(property) {
-    var sortOrder = -1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
-  } 
-
-
-  
-  
-
-
-  
-
 
   
 

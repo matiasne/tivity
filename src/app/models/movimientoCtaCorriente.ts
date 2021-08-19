@@ -17,8 +17,8 @@ export class MovimientoCtaCorriente{
         public motivo:string,
         public metodo:string,
         public monto:number,
-		public vendedorId:string, 
-        public vendedorNombre:string
+		public creadorId:string, 
+        public creadorNombre:string
 		){
 
     }

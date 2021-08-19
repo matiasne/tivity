@@ -177,6 +177,14 @@
   }
 }
 
+ion-content{
+  --ion-background-color: #fbfbfb !important;
+}
+
+ion-item{
+  --ion-background-color: #ffffff !important;
+}
+
 .swal2-container {
 
   position: relative !important;
@@ -197,6 +205,9 @@ button{
   margin-top: 3px;
 }
 
+.swipe-button-rounded{
+  background-color:#2dd36f !important;
+}
 .button-rounded{ 
   font-size: 16px;
   --border-radius: 50px;
@@ -370,7 +381,7 @@ producto-foto img{
   margin-bottom: 16px;
   -webkit-box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.32);
   -moz-box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.32);
-  box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.32);
+  box-shadow: 0px 2px 3px -2px rgb(0 0 0 / 15%)
   
 } 
 
@@ -545,34 +556,36 @@ ion-fab{
 }
 
 
-@keyframes FadeIn {
+@keyframes FadeOut {
   0% {
     opacity: 0;
-    margin-left: 650px;
+    margin-top: 20px;
   }
   100% {
     opacity: 1;
-    margin-left: 0px;
+    margin-top: 0px;
   }
 }
 
-.FadeIn {
-  animation-name: FadeIn;
+.FadeOut {
+  animation-name: FadeOut FadeIn;
   animation-duration: 1s;
 }
 
 @keyframes FadeOut {
   0% {
     opacity: 0;
+    margin-top: 20px;
   }
   100% {
     opacity: 1;
+    margin-top: 0px;
   }
 }
 
 .FadeOut {
   animation-name: FadeOut;
-  animation-duration: 1s;
+  animation-duration: 400ms;
 }
 
 .login-imagen-container{

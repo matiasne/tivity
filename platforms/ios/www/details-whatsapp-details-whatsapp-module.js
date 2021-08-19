@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Link Whatsapp</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n <a href=\"{{value}}\">{{value}}</a> \n <ngx-qrcode \n            [elementType]=\"elementType\" \n            [value] = \"value\"\n            cssClass = \"aclass\"\n            errorCorrectionLevel = \"L\">\n      </ngx-qrcode>\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Link Whatsapp</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n <a href=\"{{value}}\">{{value}}</a> \n <ngx-qrcode \n            [elementType]=\"elementType\" \n            [value] = \"value\"\n            cssClass = \"aclass\"\n            errorCorrectionLevel = \"L\">\n      </ngx-qrcode>\n</ion-content>\n");
 
 /***/ }),
 

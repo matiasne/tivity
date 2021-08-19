@@ -8,11 +8,13 @@ import { DetailsSubscripcionPageRoutingModule } from './details-subscripcion-rou
 
 import { DetailsSubscripcionPage } from './details-subscripcion.page';
 import { ComponentsModule } from '../Components/components.module';
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ComponentsModule,
+    DirectivesModule,
     FormsModule,
     IonicModule,
     DetailsSubscripcionPageRoutingModule

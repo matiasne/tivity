@@ -122,6 +122,7 @@ export class CarritoService {
 
   vaciar(){ 
       this.carrito = new Pedido()
+      this.carrito.setCreador(this.authenticationService.getUser())
       this.carrito.on = false;    
       this.actualCarritoSubject.next(this.carrito);       
   }
@@ -133,15 +134,13 @@ export class CarritoService {
   async crearPedido(){
 
     let c:any = new Pedido()  //NO borrar!!! importante para cuando está en modo offline!!!
+    c.setCreador(this.authenticationService.getUser())
     Object.assign(c, this.carrito);
     this.vaciar(); 
 
     this.modalNotificacion.success("Cargado","El pedido ha sido cargado a la lista.")
     c.id = this.firestore.createId();
     c.comanda.numero = await this.comerciosService.obtenerActualizarNumeroPedido()
-    c.personalId = this.authenticationService.getUID();
-    c.personalEmail = this.authenticationService.getEmail();
-    c.personalNombre = this.authenticationService.getNombre();
     c.total = this.getTotal()
 
     c.primerMensaje = this.comentario
@@ -163,6 +162,7 @@ export class CarritoService {
 
     c.direccion = JSON.parse(JSON.stringify(c.direccion));
     
+    console.log(c)
 
     this.pedidosService.set(c.id,c).then((data:any)=>{       
       console.log("!!!!!!"+data.fromCache)   

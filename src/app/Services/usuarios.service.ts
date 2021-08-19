@@ -24,7 +24,7 @@ export class UsuariosService {
 
   public setForConnectionStatus(uid){
     this.get(uid).subscribe((data:any)=>{
-      this.usuarioLogueado = data.payload.data();
+      this.usuarioLogueado.asignarValores(data.payload.data());
       this.usuarioSubject.next(data.payload.data())
       this.connectionSubject.next(this.usuarioLogueado.state);
     })   
@@ -34,9 +34,10 @@ export class UsuariosService {
     return this.connectionSubject.asObservable();
   }
 
-  public getUserData(){
+  public obsUserData(){
     return this.usuarioSubject.asObservable();
   }
+
 
   public get(documentId: string) {
     return this.firestore.collection(this.collection).doc(documentId).snapshotChanges();

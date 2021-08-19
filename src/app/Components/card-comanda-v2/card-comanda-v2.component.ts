@@ -66,21 +66,22 @@ export class CardComandaV2Component implements OnInit, OnDestroy {
         
         this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100        
         console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+        if(this.minutosRestantes > 0){
+          this.interval = setInterval(()=>{
+            
+              
+              let fechaHoy = new Date()
+              this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+              
+              
+              
 
-        this.interval = setInterval(()=>{
-          
-            
-            let fechaHoy = new Date()
-            this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
-            
-            
-            
+              this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100
 
-            this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100
-
-            console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
-          
-        },60000)
+              console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+            
+          },60000)
+        }
       }
     }
     

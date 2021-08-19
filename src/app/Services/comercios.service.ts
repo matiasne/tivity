@@ -48,21 +48,16 @@ export class ComerciosService extends BaseService {
     return this.afs.collection(this.path).doc(id).ref;
   }
 
+  updateComercio(data){
+    this.update(data)
+    this.commerceSubject.next(data)
+  }
 
 
-  public setSelectedCommerce(comercioId){    
-    localStorage.setItem('comercio_seleccionadoId',comercioId);
-    if(comercioId){        
-        this.get(comercioId).subscribe(data =>{     
-          this.commerceSubject.next(data);
-          this.comercio.asignarValores(data);
-        });
-    }
-    else{
-      this.commerceSubject.next(undefined);    
-    }
 
-    
+  public setSelectedCommerce(comercio){    
+    localStorage.setItem('comercio_seleccionadoId',comercio.id);
+    this.commerceSubject.next(comercio);    
   }
 
   public search(by,palabra,ultimo){      

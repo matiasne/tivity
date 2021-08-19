@@ -9,7 +9,138 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>  \n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title>Cuentas Corrientes</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding ion-text-wrap\"> \n\n  <ion-row>\n    <ion-col size=\"10\">\n      <ion-input placeholder=\"Buscar\" style=\"border:1px solid rgb(206, 206, 206); border-radius: 5px;\"\n      [(ngModel)]=\"palabraFiltro\"\n      ></ion-input>\n    </ion-col>\n    <ion-col size=\"2\">\n      <ion-button color=\"primary\" style=\"margin-top: -1px; height: 42px;\"  (click)=\"buscar()\">\n          <ion-icon name=\"search\"></ion-icon>\n      </ion-button>\n    </ion-col>\n  </ion-row>\n\n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comandas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && itemsView.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/ctasCorrientes.fw.png\" alt=\"\">\n    <p>Aún no tienes cuentas corrientes.</p>\n  </div>\n\n  <ion-item-sliding *ngFor=\"let item of itemsView\" class=\"item-card\">\n    \n    <ion-item (click)=\"seleccionar(item)\">\n      <div slot=\"start\">\n        <ion-icon name=\"wallet-outline\" *ngIf=\"!item.foto\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{item.nombre}}</b> {{item.montoTotal | currency}}</h2>         \n        <p *ngFor=\"let cliente of item.clientes\">\n          {{cliente.nombre}} - DNI: {{cliente.documento}}\n        </p>           \n      </ion-label>  \n    </ion-item>     \n  \n    <ion-item-options side=\"end\">\n      <ion-item-option (click)=\"editarCtaCorriente(item)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n    </ion-item-options>\n\n  </ion-item-sliding>\n\n  <!-- fab placed to the bottom end -->\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevaCtaCorriente()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>  \n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Cuentas Corrientes</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding ion-text-wrap\"> \n\n  <ion-row>\n    <ion-col size=\"10\">\n      <ion-input placeholder=\"Buscar\" style=\"border:1px solid rgb(206, 206, 206); border-radius: 5px;\"\n      [(ngModel)]=\"palabraFiltro\"\n      ></ion-input>\n    </ion-col>\n    <ion-col size=\"2\">\n      <ion-button color=\"primary\" style=\"margin-top: -1px; height: 42px;\"  (click)=\"buscar()\">\n          <ion-icon name=\"search\"></ion-icon>\n      </ion-button>\n    </ion-col>\n  </ion-row>\n\n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comandas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && itemsView.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/ctasCorrientes.fw.png\" alt=\"\">\n    <p>Aún no tienes cuentas corrientes.</p>\n  </div>\n\n  <ion-item-sliding *ngFor=\"let item of itemsView\" class=\"item-card\">\n    \n    <ion-item (click)=\"seleccionar(item)\">\n      <div slot=\"start\">\n        <ion-icon name=\"wallet-outline\" *ngIf=\"!item.foto\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{item.nombre}}</b> {{item.montoTotal | currency}}</h2>         \n        <p *ngFor=\"let cliente of item.clientes\">\n          {{cliente.nombre}} - DNI: {{cliente.documento}}\n        </p>           \n      </ion-label>  \n    </ion-item>     \n  \n    <ion-item-options side=\"end\">\n      <ion-item-option (click)=\"editarCtaCorriente(item)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n    </ion-item-options>\n\n  </ion-item-sliding>\n\n  <!-- fab placed to the bottom end -->\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevaCtaCorriente()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n");
+
+/***/ }),
+
+/***/ "./src/app/Services/clientes.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/Services/clientes.service.ts ***!
+  \**********************************************/
+/*! exports provided: ClientesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClientesService", function() { return ClientesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _keyword_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./keyword.service */ "./src/app/Services/keyword.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+
+
+
+
+
+
+
+
+let ClientesService = class ClientesService extends _base_service__WEBPACK_IMPORTED_MODULE_7__["BaseService"] {
+    constructor(afs, keywordService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.keywordService = keywordService;
+        this.comerciosService = comerciosService;
+        this.comerciosService.getSelectedCommerce().subscribe(data => {
+            // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
+            if (data) {
+                console.log(data.id);
+                this.setPath('comercios/' + data.id + '/clientes');
+            }
+        });
+        this.collectionGroup = '/clientes';
+    }
+    create(data) {
+        this.keywordService.agregarKeywords(data, [data.nombre, data.email]);
+        const param = JSON.parse(JSON.stringify(data));
+        return this.afs.collection(this.path).doc(data.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    getByEmail(email) {
+        return this.afs.collection(this.path, ref => ref.where('email', '==', email)).valueChanges();
+    }
+    getByNombre(nombre) {
+        return this.afs.collection(this.path, ref => ref.where('nombre', '==', nombre)).valueChanges();
+    }
+    getRef(id) {
+        return this.afs.collection(this.path).doc(id).ref;
+    }
+    getAll() {
+        return this.afs.collection(this.path).snapshotChanges();
+    }
+    update(cliente) {
+        this.keywordService.agregarKeywords(cliente, [cliente.nombre, cliente.email]);
+        console.log(cliente);
+        const param = JSON.parse(JSON.stringify(cliente));
+        return this.afs.collection(this.path).doc(cliente.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    delete(data) {
+        //Debo eliminar primero cada subscripción
+        if (data.subscripciones) {
+            data.subscripciones.forEach(subscripcion => {
+                this.afs.doc(subscripcion).delete();
+            });
+        }
+        return this.afs.collection(this.path).doc(data.id).delete();
+    }
+    addCtaCorriente(clienteId, ctaCorrienteId) {
+        let param = {
+            ctaId: ctaCorrienteId
+        };
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).set(param);
+    }
+    deleteCtaCorriente(clienteId, ctaCorrienteId) {
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).delete();
+    }
+    search(limit, orderBy, palabra, ultimo) {
+        if (ultimo == "") {
+            console.log("!!!!!! primero");
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .limit(limit)).snapshotChanges();
+        }
+        else {
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .startAfter(ultimo)
+                .limit(limit)).snapshotChanges();
+        }
+    }
+    //Esto para ver todos los beneficios o cuestiones del cliente particular en todo el entorno
+    getAllClientesbyEmail(email) {
+        return this.afs.collectionGroup(this.collectionGroup, ref => ref.where('email', '==', email)).get( /*{ source: 'server' }*/)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(actions => {
+            const data = [];
+            actions.forEach(a => {
+                const item = a.data();
+                item.id = a.id;
+                data.push(item);
+            });
+            return data;
+        }));
+    }
+};
+ClientesService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _keyword_service__WEBPACK_IMPORTED_MODULE_5__["KeywordService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_6__["ComerciosService"] }
+];
+ClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ClientesService);
+
+
 
 /***/ }),
 
@@ -84,6 +215,54 @@ CtaCorrientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])(
         providedIn: 'root'
     })
 ], CtaCorrientesService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/keyword.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/keyword.service.ts ***!
+  \*********************************************/
+/*! exports provided: KeywordService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeywordService", function() { return KeywordService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let KeywordService = class KeywordService {
+    constructor() { }
+    agregarKeywords(objeto, palabras) {
+        objeto.keywords.push('');
+        objeto.keywords.push(' ');
+        console.log(palabras);
+        palabras.forEach(palabra => {
+            objeto.keywords.push(palabra);
+            let p = palabra.toLowerCase().split(" ");
+            p.forEach(element => {
+                objeto.keywords = objeto.keywords.concat(this.createKeywords(element));
+            });
+        });
+    }
+    createKeywords(name) {
+        const arrName = [];
+        let curName = '';
+        name.split('').forEach(letter => {
+            curName += letter;
+            arrName.push(curName);
+        });
+        return arrName;
+    }
+};
+KeywordService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], KeywordService);
 
 
 
@@ -227,8 +406,8 @@ let ListCtaCorrientesPage = class ListCtaCorrientesPage {
                 item.coTitularesId.forEach((clienteId) => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
                     console.log(clienteId);
                     if (clienteId)
-                        yield this.clientesServices.get(clienteId).subscribe(snap => {
-                            item.clientes.push(snap.payload.data());
+                        yield this.clientesServices.get(clienteId).subscribe(cliente => {
+                            item.clientes.push(cliente);
                         });
                 }));
                 this.items.push(item);
@@ -291,37 +470,6 @@ ListCtaCorrientesPage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])
     })
 ], ListCtaCorrientesPage);
 
-
-
-/***/ }),
-
-/***/ "./src/app/models/ctacorriente.ts":
-/*!****************************************!*\
-  !*** ./src/app/models/ctacorriente.ts ***!
-  \****************************************/
-/*! exports provided: CtaCorriente */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CtaCorriente", function() { return CtaCorriente; });
-class CtaCorriente {
-    constructor(vendedorId, vendedorNombre) {
-        this.vendedorId = vendedorId;
-        this.vendedorNombre = vendedorNombre;
-        this.id = "";
-        this.comercioId = localStorage.getItem('comercio_seleccionadoId');
-        this.nombre = "";
-        this.coTitularesId = [];
-        this.montoActual = 0;
-        this.montoTotal = 0;
-        this.comercios = [];
-        this.clientes = [];
-    }
-    asignarValores(init) {
-        Object.assign(this, init);
-    }
-}
 
 
 /***/ })

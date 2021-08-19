@@ -54,8 +54,6 @@ export class ListProductosServiciosPage implements OnInit {
   itemsProductos:any = [];
   //itemsRenderProductos:any = [] 
 
-  itemsPerPage = 30
-  itemsRenderizados = 0;
 
   public carrito:any
 
@@ -97,6 +95,8 @@ export class ListProductosServiciosPage implements OnInit {
 
   public impresoraStatus = false;
 
+  public flagCobrando = false;
+
   constructor(
     public loadingController: LoadingController,
     private router: Router,
@@ -131,7 +131,7 @@ export class ListProductosServiciosPage implements OnInit {
 
 
     console.log(this.ionSearchbar)
-    this.notificacionesAppService.getSinLeer(this.usuariosServices.usuarioLogueado).subscribe(snapshot =>{
+    this.notificacionesAppService.getSinLeer(this.authenticationService.getUser()).subscribe(snapshot =>{
       console.log(snapshot.length)
       this.countNotificaciones = snapshot.length;
     }) 
@@ -214,7 +214,7 @@ export class ListProductosServiciosPage implements OnInit {
   }
  
   ionViewDidEnter(){
-    this.buscar(undefined);
+    //this.buscar(undefined);
     console.log("DidEnter")
     //this.marcarEnCarrito();
   //  this.wordpressService.obtainToken()
@@ -240,104 +240,37 @@ export class ListProductosServiciosPage implements OnInit {
         });
     }) 
   }
-/*
-  verMas(){
 
-    console.log("!!!!! Lazy")
-    
-    if(this.itemsRenderizados < this.itemsPerPage){
-      console.log("No hay más!!!"+this.itemsRenderizados)
-      this.infiniteScroll.complete();
-      this.infiniteScroll.disabled = true;
-      return;
-    }
-
-    let start = this.itemsRenderizados;
-   
-    for(let i=start; i < start+this.itemsPerPage;i++){
-
-      if(this.itemsProductos[i] == undefined){
-        console.log("No hay más!!! fuera del array"+this.itemsRenderizados)
-        this.infiniteScroll.complete();
-        this.infiniteScroll.disabled = true;
-        return;
-      }
-      
-      if(this.itemsProductos[i].id){
-        this.itemsRenderProductos.push(this.itemsProductos[i])
-        this.itemsRenderizados +=1;
-        console.log("pushing to render") 
-      }
-     
-    }
-    this.infiniteScroll.complete();
-
-
-  }*/
-
-
-  buscar(event){ 
-
-    //this.itemsRenderProductos = []
-    this.itemsRenderizados = 0
-    
-    if(event)
-      this.palabraFiltro = event.target.value;     
-
-    if(this.palabraFiltro != ""){
-      
-      this.itemsProductos = [];
-
-      const options = {
-        keys: [
-          "nombre",
-          "barcode"
-        ]
-      };
-      
-      const fuse = new Fuse(this.itemsAllProductos, options);
-      
-      let result:any = fuse.search(this.palabraFiltro)
-
-      result.forEach(element => {
-        this.itemsProductos.push(element.item)
-      });
-      console.log(this.itemsProductos)
-      
-      if(this.buscandoBarCode){
-        this.buscandoBarCode = false;
-        if(this.itemsProductos.length == 1){
-          this.agregarItem(this.itemsProductos[0])
-          this.toastServices.mensaje("Se seleccionó el producto: "+this.itemsProductos[0].nombre,"");
-        }
-      }
-
-      
-      if(this.cargaPorVoz.reconociendoPorVoz){
-        this.cargaPorVoz.reconociendoPorVoz = false;
-        if(this.itemsProductos.length == 1){
-          this.agregarItem(this.itemsProductos[0]);
-          this.toastServices.mensaje("Se seleccionó el producto: "+this.itemsProductos[0].nombre,"");
-        }
-      }           
-      
-    }
-    else{
-      this.itemsProductos = this.itemsAllProductos
-    }
-    
-   
-    this.changeRef.detectChanges()    
+  mostrar(items){
+    console.log(items)
+    this.itemsProductos = items
   }
+
+  buscarCodigo(codigo){
+    console.log(codigo)
+    for(let i=0; i < this.itemsAllProductos.length ;i++){
+      if(this.itemsAllProductos[i].barcode === codigo){
+        this.itemsProductos.push(this.itemsAllProductos[i]);
+      }
+    }
+    console.log(this.itemsProductos)
+    if(this.itemsProductos.length == 1){
+      this.agregarItem(this.itemsProductos[0])
+      this.toastServices.mensaje("Se seleccionó el producto: "+this.itemsProductos[0].nombre,"");
+    }
+    
+    this.changeRef.detectChanges()  
+
+  }
+
+
 
   async editarProducto(item){
     
-    //this.router.navigate(['form-producto',{id:item.id}]);
-
     let modal = await this.modalCtrl.create({
       component: FormProductoPage,
       componentProps: {
-        id:item.id
+        item:item
       }
     });  
     return await modal.present();
@@ -362,7 +295,7 @@ export class ListProductosServiciosPage implements OnInit {
           producto.producto = true;
           producto.enCarrito = 0;      
       }); 
-      this.buscar(undefined); 
+      this.itemsProductos = this.itemsAllProductos
       
       
 
@@ -434,35 +367,12 @@ export class ListProductosServiciosPage implements OnInit {
     
   }
 
-  reconocimientoPorVoz(){
-
-    if(!this.cargaPorVoz.reconociendoPorVoz){
-      this.cargaPorVoz.reconociendoPorVoz = true;
-      this.cargaPorVoz.startReconocimiento().subscribe(matches=>{        
-          let message = matches[0]; //Guarda la primera frase que ha interpretado en nuestra variable     
-          this.palabraFiltro = message;
-          this.buscar(undefined);        
-        },
-        (onerror) =>{
-            if(onerror == 0){
-              this.toastServices.mensaje("Reconocimiento por voz finalizado","");
-              this.palabraFiltro = "";
-               this.buscar(undefined);
-            } 
-        }) 
-    }else{
-      this.cargaPorVoz.reconociendoPorVoz = false;
-      this.cargaPorVoz.stopReconocimiento();
-    }
-  }
-
 
   lectorDeCodigo(){
+    this.showSearchBar = true;
     this.buscandoBarCode = true;
     this.barcodeScanner.scan().then(barcodeData => {      
-      //var codeBar:any =JSON.stringify(barcodeData);
-      this.palabraFiltro = barcodeData.text;
-      this.buscar(undefined)
+     this.buscarCodigo(barcodeData.text)
      }).catch(err => {
     
      });
@@ -550,7 +460,8 @@ export class ListProductosServiciosPage implements OnInit {
 
   async verCarrito(){
    // this.router.navigate(['details-carrito',{carritoIntended:this.route.snapshot.params.carritoIntended}])  
-    const modal = await this.modalController.create({
+   this.flagCobrando = true; 
+   const modal = await this.modalController.create({
       component: DetailsCarritoPage,
       componentProps:{}      
     });    
@@ -565,25 +476,29 @@ export class ListProductosServiciosPage implements OnInit {
         }) 
       }
     });
+
+    modal.onDidDismiss().then(data=>{
+      this.flagCobrando = false;
+    })
+    
     return await modal.present();
+
+    
   }
 
   async cobrarDirectamente(){
-
+    this.flagCobrando = true;
     
     let pedido = new Pedido()  
-
+    pedido.setCreador(this.authenticationService.getUser())
     pedido.asignarValores(this.carrito)
-
-    pedido.personalId = this.authenticationService.getUID();
-    pedido.personalEmail = this.authenticationService.getEmail();
-    pedido.personalNombre = this.authenticationService.getNombre();   
 
     
     pedido.direccion = JSON.parse(JSON.stringify(pedido.direccion));
-    this.pedidosService.add( pedido).then(async data=>{
-  
+   
+    this.pedidosService.add(pedido).then(async data=>{
       let editarPedido = new Pedido();
+      editarPedido.setCreador(this.authenticationService.getUser())
       editarPedido.asignarValores(data);
 
       this.navParametrosService.param = editarPedido;
@@ -592,7 +507,13 @@ export class ListProductosServiciosPage implements OnInit {
         id:'detail-pedido'      
       });
       
-      await modal.present();    
+      modal.present().then(data=>{
+       
+      });    
+
+      modal.onDidDismiss().then(data=>{
+        this.flagCobrando = false;
+      })
     })
     
     
@@ -663,14 +584,6 @@ export class ListProductosServiciosPage implements OnInit {
     
   }
 
-  focusBuscar(){
-    this.showSearchBar = true;
-    setTimeout(() => {
-          // Set the focus to the input box of the ion-Searchbar component
-    this.ionSearchbar.setFocus();
-    },100);
-  
-  }
 
   verImpresora(){
     this.router.navigate(['form-impresora-config'])

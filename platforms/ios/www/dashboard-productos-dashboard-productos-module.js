@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title>Dashboard Productos</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  \n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Dashboard Productos</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  \n</ion-content>\n");
 
 /***/ }),
 
@@ -119,6 +119,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
+/* harmony import */ var _form_producto_form_producto_page__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../form-producto/form-producto.page */ "./src/app/form-producto/form-producto.page.ts");
+
 
 
 
@@ -134,7 +136,13 @@ let DashboardProductosPage = class DashboardProductosPage {
     ionViewDidEnter() {
     }
     nuevo() {
-        this.router.navigate(['form-producto']);
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            //this.router.navigate(['form-producto']);
+            let modal = yield this.modalController.create({
+                component: _form_producto_form_producto_page__WEBPACK_IMPORTED_MODULE_4__["FormProductoPage"]
+            });
+            return yield modal.present();
+        });
     }
 };
 DashboardProductosPage.ctorParameters = () => [

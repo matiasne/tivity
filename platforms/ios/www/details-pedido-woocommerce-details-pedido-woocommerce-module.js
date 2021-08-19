@@ -9,7 +9,213 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Detalle Pedido</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <span *ngIf=\"order.statusCobro == cEstado.pendiente\"> <b style=\"color: blue;\"> Pendiente </b></span>\n  <span *ngIf=\"order.statusCobro == cEstado.suspendido\"> <b style=\"color: red;\"> Suspendido </b></span>\n  <span *ngIf=\"order.statusCobro == cEstado.cobrado\"> <b style=\"color: green;\"> Cobrado</b></span> \n  <span *ngIf=\"order.statusCobro == cEstado.reembolsado\"> <b style=\"color: red;\"> Reembolsado </b></span> <br>\n\n  <h5>Productos</h5>\n  <app-card-producto-woocommerce *ngFor=\"let producto of order.line_items \"\n          [item]=\"producto\"  \n  ></app-card-producto-woocommerce>\n  <h5>Datos de envío:</h5>\n  <p>\n    {{order.billing.first_name}} {{order.billing.last_name}}<br>\n    dirección: {{order.billing.address_1}}\n    <span *ngIf=\"order.billing.address_2\">\n      dirección 2: {{order.billing.address_2}}\n    </span><br>\n    ciudad:{{order.billing.city}}<br>\n    provincia:{{order.billing.state}}<br>\n    código postal:{{order.billing.postcode}}<br>\n    <ion-icon name=\"mail-outline\"></ion-icon><span (click)=\"enviarMail()\">email:{{order.billing.email}}</span> <br>\n    <ion-icon name=\"call-outline\"></ion-icon><span (click)=\"llamar()\" >phone:{{order.billing.phone}} </span>\n  </p>\n\n  <h5>Método de pago:</h5>\n  <p> {{order.payment_method_title}} </p>\n\n</ion-content>\n\n<ion-footer *ngIf=\"order.statusCobro != cEstado.reembolsado\" class=\"ion-no-border ion-padding\">    \n  <ion-grid *ngIf=\"order.payment_method == 'cod' && order.statusCobro != cEstado.suspendido\">\n    <ion-row>\n      <ion-col size=\"6\">\n        <ion-item *ngIf=\"cajas.length > 0\" class=\"item-card\">\n          <ion-label position=\"floating\">Caja</ion-label>\n          <ion-select [(ngModel)]=\"cajaSeleccionadaIndex\" (ionChange)=\"setearCaja()\">\n            <span *ngFor=\"let caja of cajas;let i=index\">\n              <ion-select-option [value]=\"i\" selected>{{caja.nombre}}</ion-select-option>\n            </span>          \n          </ion-select> \n        </ion-item>\n       \n      </ion-col>\n      <ion-col size=\"6\">\n        <ion-item class=\"item-card\" *ngIf=\"cajas[cajaSeleccionadaIndex]\">\n          <ion-label position=\"floating\">Método</ion-label>\n          <ion-select [(ngModel)]=\"metodoPagoSeleccionado\">\n            <ion-select-option *ngIf=\"cajas[cajaSeleccionadaIndex].efectivo\" [value]=\"'efectivo'\">Efectivo</ion-select-option>\n            <ion-select-option *ngIf=\"cajas[cajaSeleccionadaIndex].debito\" [value]=\"'debito'\">Débito</ion-select-option>\n            <ion-select-option *ngIf=\"cajas[cajaSeleccionadaIndex].credito\" [value]=\"'credito'\">Crédito</ion-select-option>\n          </ion-select>    \n        </ion-item>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n   \n  <ion-grid *ngIf=\"order.payment_method != 'cod'\">\n    <ion-row>\n      <ion-col size=\"6\">\n        El pedido ya ha sido cobrado.\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n  \n  <ion-toolbar *ngIf=\"order.payment_method == 'cod' || order.payment_method == 'en_local'\">   \n    <ion-button *ngIf=\"order.statusCobro == cEstado.suspendido\" class=\"button-rounded\"  color=\"primary\" (click)=\"reanudar()\">Reanudar</ion-button>\n    <ion-button *ngIf=\"order.statusCobro == cEstado.cobrado\" class=\"button-rounded\"  color=\"danger\" (click)=\"reembolsar()\">Reembolsar: {{order.total | currency}}</ion-button>\n    <ion-button slot=\"start\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"danger\" (click)=\"suspender()\">Suspender</ion-button>\n    <ion-button slot=\"end\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"success\" (click)=\"cobrar()\">Cobrar: {{order.total | currency}}</ion-button>\n  </ion-toolbar>\n\n  <ion-toolbar *ngIf=\"order.payment_method != 'cod' && order.payment_method != 'en_local'\">   \n    <ion-button slot=\"start\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"danger\" (click)=\"suspender()\">Suspender</ion-button>\n    <ion-button slot=\"end\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"success\" (click)=\"completar()\">Completado</ion-button>\n  </ion-toolbar>\n  \n</ion-footer>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Detalle Pedido</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <span *ngIf=\"order.statusCobro == cEstado.pendiente\"> <b style=\"color: blue;\"> Pendiente </b></span>\n  <span *ngIf=\"order.statusCobro == cEstado.suspendido\"> <b style=\"color: red;\"> Suspendido </b></span>\n  <span *ngIf=\"order.statusCobro == cEstado.cobrado\"> <b style=\"color: green;\"> Cobrado</b></span> \n  <span *ngIf=\"order.statusCobro == cEstado.reembolsado\"> <b style=\"color: red;\"> Reembolsado </b></span> <br>\n\n  <h5>Productos</h5>\n  <app-card-producto-woocommerce *ngFor=\"let producto of order.line_items \"\n          [item]=\"producto\"  \n  ></app-card-producto-woocommerce>\n  <h5>Datos de envío:</h5>\n  <p>\n    {{order.billing.first_name}} {{order.billing.last_name}}<br>\n    dirección: {{order.billing.address_1}}\n    <span *ngIf=\"order.billing.address_2\">\n      dirección 2: {{order.billing.address_2}}\n    </span><br>\n    ciudad:{{order.billing.city}}<br>\n    provincia:{{order.billing.state}}<br>\n    código postal:{{order.billing.postcode}}<br>\n    <ion-icon name=\"mail-outline\"></ion-icon><span (click)=\"enviarMail()\">email:{{order.billing.email}}</span> <br>\n    <ion-icon name=\"call-outline\"></ion-icon><span (click)=\"llamar()\" >phone:{{order.billing.phone}} </span>\n  </p>\n\n  <h5>Método de pago:</h5>\n  <p> {{order.payment_method_title}} </p>\n\n</ion-content>\n\n<ion-footer *ngIf=\"order.statusCobro != cEstado.reembolsado\" class=\"ion-no-border ion-padding\">    \n \n   \n  <ion-grid *ngIf=\"order.payment_method != 'cod'\">\n    <ion-row>\n      <ion-col size=\"6\">\n        El pedido ya ha sido cobrado.\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n  \n  <ion-toolbar *ngIf=\"order.payment_method == 'cod' || order.payment_method == 'en_local'\">   \n    <ion-button *ngIf=\"order.statusCobro == cEstado.suspendido\" class=\"button-rounded\"  color=\"primary\" (click)=\"reanudar()\">Reanudar</ion-button>\n    <ion-button *ngIf=\"order.statusCobro == cEstado.cobrado\" class=\"button-rounded\"  color=\"danger\" (click)=\"reembolsar()\">Reembolsar: {{order.total | currency}}</ion-button>\n    <ion-button slot=\"start\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"danger\" (click)=\"suspender()\">Suspender</ion-button>\n    <ion-button slot=\"end\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"success\" (click)=\"cobrar()\">Cobrar: {{order.total | currency}}</ion-button>\n  </ion-toolbar>\n\n  <ion-toolbar *ngIf=\"order.payment_method != 'cod' && order.payment_method != 'en_local'\">   \n    <ion-button slot=\"start\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"danger\" (click)=\"suspender()\">Suspender</ion-button>\n    <ion-button slot=\"end\" *ngIf=\"order.statusCobro != cEstado.cobrado && order.statusCobro != cEstado.suspendido\" class=\"button-rounded\"  color=\"success\" (click)=\"completar()\">Completado</ion-button>\n  </ion-toolbar>\n  \n</ion-footer>");
+
+/***/ }),
+
+/***/ "./src/app/Services/clientes.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/Services/clientes.service.ts ***!
+  \**********************************************/
+/*! exports provided: ClientesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClientesService", function() { return ClientesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _keyword_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./keyword.service */ "./src/app/Services/keyword.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+
+
+
+
+
+
+
+
+let ClientesService = class ClientesService extends _base_service__WEBPACK_IMPORTED_MODULE_7__["BaseService"] {
+    constructor(afs, keywordService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.keywordService = keywordService;
+        this.comerciosService = comerciosService;
+        this.comerciosService.getSelectedCommerce().subscribe(data => {
+            // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
+            if (data) {
+                console.log(data.id);
+                this.setPath('comercios/' + data.id + '/clientes');
+            }
+        });
+        this.collectionGroup = '/clientes';
+    }
+    create(data) {
+        this.keywordService.agregarKeywords(data, [data.nombre, data.email]);
+        const param = JSON.parse(JSON.stringify(data));
+        return this.afs.collection(this.path).doc(data.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    getByEmail(email) {
+        return this.afs.collection(this.path, ref => ref.where('email', '==', email)).valueChanges();
+    }
+    getByNombre(nombre) {
+        return this.afs.collection(this.path, ref => ref.where('nombre', '==', nombre)).valueChanges();
+    }
+    getRef(id) {
+        return this.afs.collection(this.path).doc(id).ref;
+    }
+    getAll() {
+        return this.afs.collection(this.path).snapshotChanges();
+    }
+    update(cliente) {
+        this.keywordService.agregarKeywords(cliente, [cliente.nombre, cliente.email]);
+        console.log(cliente);
+        const param = JSON.parse(JSON.stringify(cliente));
+        return this.afs.collection(this.path).doc(cliente.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    delete(data) {
+        //Debo eliminar primero cada subscripción
+        if (data.subscripciones) {
+            data.subscripciones.forEach(subscripcion => {
+                this.afs.doc(subscripcion).delete();
+            });
+        }
+        return this.afs.collection(this.path).doc(data.id).delete();
+    }
+    addCtaCorriente(clienteId, ctaCorrienteId) {
+        let param = {
+            ctaId: ctaCorrienteId
+        };
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).set(param);
+    }
+    deleteCtaCorriente(clienteId, ctaCorrienteId) {
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).delete();
+    }
+    search(limit, orderBy, palabra, ultimo) {
+        if (ultimo == "") {
+            console.log("!!!!!! primero");
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .limit(limit)).snapshotChanges();
+        }
+        else {
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .startAfter(ultimo)
+                .limit(limit)).snapshotChanges();
+        }
+    }
+    //Esto para ver todos los beneficios o cuestiones del cliente particular en todo el entorno
+    getAllClientesbyEmail(email) {
+        return this.afs.collectionGroup(this.collectionGroup, ref => ref.where('email', '==', email)).get( /*{ source: 'server' }*/)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(actions => {
+            const data = [];
+            actions.forEach(a => {
+                const item = a.data();
+                item.id = a.id;
+                data.push(item);
+            });
+            return data;
+        }));
+    }
+};
+ClientesService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _keyword_service__WEBPACK_IMPORTED_MODULE_5__["KeywordService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_6__["ComerciosService"] }
+];
+ClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ClientesService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/global/navegacion-parametros.service.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/Services/global/navegacion-parametros.service.ts ***!
+  \******************************************************************/
+/*! exports provided: NavegacionParametrosService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavegacionParametrosService", function() { return NavegacionParametrosService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let NavegacionParametrosService = class NavegacionParametrosService {
+    constructor() { }
+};
+NavegacionParametrosService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: "root"
+    })
+], NavegacionParametrosService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/keyword.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/keyword.service.ts ***!
+  \*********************************************/
+/*! exports provided: KeywordService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeywordService", function() { return KeywordService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let KeywordService = class KeywordService {
+    constructor() { }
+    agregarKeywords(objeto, palabras) {
+        objeto.keywords.push('');
+        objeto.keywords.push(' ');
+        console.log(palabras);
+        palabras.forEach(palabra => {
+            objeto.keywords.push(palabra);
+            let p = palabra.toLowerCase().split(" ");
+            p.forEach(element => {
+                objeto.keywords = objeto.keywords.concat(this.createKeywords(element));
+            });
+        });
+    }
+    createKeywords(name) {
+        const arrName = [];
+        let curName = '';
+        name.split('').forEach(letter => {
+            curName += letter;
+            arrName.push(curName);
+        });
+        return arrName;
+    }
+};
+KeywordService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], KeywordService);
+
+
 
 /***/ }),
 
@@ -211,7 +417,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_comercio__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/comercio */ "./src/app/models/comercio.ts");
 /* harmony import */ var _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../models/movimientoCaja */ "./src/app/models/movimientoCaja.ts");
 /* harmony import */ var _models_pedido__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../models/pedido */ "./src/app/models/pedido.ts");
-/* harmony import */ var _models_producto__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../models/producto */ "./src/app/models/producto.ts");
+/* harmony import */ var _models_item__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../models/item */ "./src/app/models/item.ts");
 /* harmony import */ var _models_woocommerce_order__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../models/woocommerce/order */ "./src/app/models/woocommerce/order.ts");
 /* harmony import */ var _Services_authentication_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Services/authentication.service */ "./src/app/Services/authentication.service.ts");
 /* harmony import */ var _Services_cajas_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Services/cajas.service */ "./src/app/Services/cajas.service.ts");
@@ -259,7 +465,7 @@ let DetailsPedidoWoocommercePage = class DetailsPedidoWoocommercePage {
         this.enumTipoMovimientoCaja = _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_6__["EnumTipoMovimientoCaja"];
         this.cajas = [];
         this.cajaSeleccionadaIndex = 0;
-        this.metodoPagoSeleccionado = "";
+        this.metodoPagoSeleccionado = []; //!!!!!!!!!!!!!!! aca debe 
         this.cantidadMetodos = 0;
         this.metodoTexto = "";
         this.cEstado = _models_pedido__WEBPACK_IMPORTED_MODULE_7__["EnumEstadoCobro"];
@@ -321,9 +527,9 @@ let DetailsPedidoWoocommercePage = class DetailsPedidoWoocommercePage {
             this.metodoTexto = "Solo Efectivo";
             this.cantidadMetodos++;
         }
-        this.metodoPagoSeleccionado = "";
+        this.metodoPagoSeleccionado = [];
         if (this.cantidadMetodos == 1) {
-            this.metodoPagoSeleccionado = setear;
+            this.metodoPagoSeleccionado.push(setear);
         }
     }
     cobrar() {
@@ -358,15 +564,7 @@ let DetailsPedidoWoocommercePage = class DetailsPedidoWoocommercePage {
         this.ordersService.updateStatus(this.order).subscribe(data => {
             //restar stock de productos 
         });
-        var reembolso = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_6__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        reembolso.tipo = this.enumTipoMovimientoCaja.devolucion;
-        reembolso.cajaId = this.cajaSeleccionada.id;
-        reembolso.metodoPago = this.metodoPagoSeleccionado;
-        reembolso.monto = -Number(this.order.total);
-        reembolso.motivo = "Pago de pedido Web id:" + this.order.id;
-        this.movimientosService.setearPath(this.cajaSeleccionada.id);
-        this.movimientosService.add(reembolso);
-        this.navCtrl.back();
+        //!!!!!!!!!!!!aca debe mostrar modal de reembolso
     }
     suspender() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
@@ -404,15 +602,7 @@ let DetailsPedidoWoocommercePage = class DetailsPedidoWoocommercePage {
         });
         this.ordersService.updateStatus(this.order).subscribe(data => {
         });
-        var pago = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_6__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        pago.tipo = this.enumTipoMovimientoCaja.pago;
-        pago.cajaId = this.cajaSeleccionada.id;
-        pago.metodoPago = this.metodoPagoSeleccionado;
-        pago.monto = Number(this.order.total);
-        pago.motivo = "Pago de pedido Web id:" + this.order.id;
-        this.movimientosService.setearPath(this.cajaSeleccionada.id);
-        this.movimientosService.add(pago);
-        this.navCtrl.back();
+        //!!!!!!!!!!!!!!!aca debe mostrar modal de cobro
     }
     /*
       mantenerStock(){ //esto se hace para asegurar que en woocommerce y en firebase existe el mismo stock
@@ -437,7 +627,7 @@ let DetailsPedidoWoocommercePage = class DetailsPedidoWoocommercePage {
                 let obs = this.productosService.getByName(item.name).subscribe((data) => {
                     obs.unsubscribe();
                     console.log(data);
-                    let prod = new _models_producto__WEBPACK_IMPORTED_MODULE_8__["Producto"]();
+                    let prod = new _models_item__WEBPACK_IMPORTED_MODULE_8__["Item"]();
                     prod.asignarValores(data[0]);
                     let deltaStock = 0;
                     if (prod.valorPor)
@@ -456,7 +646,7 @@ let DetailsPedidoWoocommercePage = class DetailsPedidoWoocommercePage {
                 let obs = this.productosService.getByName(item.name).subscribe((data) => {
                     obs.unsubscribe();
                     console.log(data);
-                    let prod = new _models_producto__WEBPACK_IMPORTED_MODULE_8__["Producto"]();
+                    let prod = new _models_item__WEBPACK_IMPORTED_MODULE_8__["Item"]();
                     prod.asignarValores(data[0]);
                     let deltaStock = 0;
                     if (prod.valorPor)

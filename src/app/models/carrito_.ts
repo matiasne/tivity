@@ -1,7 +1,6 @@
 import { Item } from './item';
 import { Pagare } from './pagare';
 import { Cliente } from './cliente';
-import { Comanda } from './comanda';
 import { MovimientoCtaCorriente } from './movimientoCtaCorriente';
 import { Mesa } from './mesa';
 import { Descuento } from './descuento';

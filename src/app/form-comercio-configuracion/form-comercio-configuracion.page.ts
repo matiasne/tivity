@@ -147,8 +147,9 @@ export class FormComercioConfiguracionPage implements OnInit {
     this.router.navigate(['list-beneficios']);
   }
 
-  openBeneficiosPuntaje(){
-    
+
+  importarCatalogo(){
+    this.router.navigate(['form-importar-catalogo-csv']);
   }
   
   update(){
@@ -157,7 +158,7 @@ export class FormComercioConfiguracionPage implements OnInit {
       this.comercio.config.beneficiosClientes = false;
       this.comercio.config.beneficiosPorPuntaje = false;
     }
-    this.comerciosService.update(this.comercio);
+    this.comerciosService.updateComercio(this.comercio);
   }
 
   

@@ -1,10 +1,11 @@
 {
   "name": "tivity",
   "integrations": {
-    "capacitor": {},
+    "capacitor": {
+      "enabled": false
+    },
     "cordova": {}
   },
   "type": "angular",
   "id": "b39b909d"
 }
-

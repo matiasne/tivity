@@ -171,7 +171,7 @@ export class DetailsClientePage implements OnInit {
     }]);
   }
 
-  verDetallesSubscripcion(id){
+  verDetalles(id){
     this.router.navigate(['details-subscripcion',{id:id}]);
   } 
 

@@ -26,7 +26,7 @@
   <ion-button *ngIf="impresora.address == '' && comercio.config.impresion" class="button-rounded" color="primary" (click)="agregarImpresora()">Agregar Impresora Bluetooth</ion-button>
 
   <span *ngIf="comercio.config.impresion && impresora.address!=''">
-    <ion-item-sliding class="item-card fivePhasesFadeIn"> 
+    <ion-item-sliding class="item-card fivePhasesFadeOut FadeIn"> 
       <app-item-bluetooth-printer
         [item] = "impresora"
         (seleccionar) = "seleccionar(impresora)"

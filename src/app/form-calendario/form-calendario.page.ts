@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavController, ModalController, NavParams, AlertController } from '@ionic/angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { ToastService } from '../Services/toast.service';
-import { Calendario } from '../models/calendario';
 import { CalendariosService } from '../Services/calendarios.service';
 
 @Component({
@@ -15,7 +14,6 @@ export class FormCalendarioPage implements OnInit {
 
   datosForm: FormGroup;
   submitted = false;
-  public calendario:Calendario;
   public canElimianr = false;
   public comercioId = "";
 

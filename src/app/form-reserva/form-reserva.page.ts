@@ -9,8 +9,11 @@ import { ItemPedido } from '../models/itemPedido';
 import { Mesa } from '../models/mesa';
 import { Recargo } from '../models/recargo';
 import { Reserva } from '../models/reserva';
+import { Rol } from '../models/rol';
+import { User } from '../models/user';
 import { SelectClientePage } from '../select-cliente/select-cliente.page';
 import { SelectMesaPage } from '../select-mesa/select-mesa.page';
+import { SelectPersonalPage } from '../select-personal/select-personal.page';
 import { SelectProductPage } from '../select-product/select-product.page';
 import { AuthenticationService } from '../Services/authentication.service';
 import { ComerciosService } from '../Services/comercios.service';
@@ -27,6 +30,7 @@ export class FormReservaPage implements OnInit {
   public comercio:Comercio
   public reserva:Reserva;
   public mesa:Mesa;
+  public personal:Rol
   constructor(
     public authService:AuthenticationService,
     public modalController:ModalController,
@@ -39,7 +43,7 @@ export class FormReservaPage implements OnInit {
     this.comercio = new Comercio()
     this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue());
     this.mesa = new Mesa();
-    this.reserva = new Reserva(this.authService.getUID(),this.authService.getNombre())
+    this.reserva = new Reserva()
     
   }
 
@@ -50,7 +54,7 @@ export class FormReservaPage implements OnInit {
       this.reserva.asignarValores(this.navParamService.param);
     }  
     else{
-      this.reserva = new Reserva(this.authService.getUID(),this.authService.getNombre())
+      this.reserva = new Reserva()
     }
     
     console.log(this.reserva)
@@ -183,6 +187,32 @@ export class FormReservaPage implements OnInit {
       }           
     });
     return await modal.present();
+  }
+
+
+  async seleccionarPersonal(){
+    const modal = await this.modalController.create({
+      component: SelectPersonalPage,
+      cssClass:'modal-custom-wrapper'      
+    });
+    
+    modal.onDidDismiss()
+    .then((retorno) => {
+      if(retorno.data){
+          let cliente = retorno.data.item;
+          this.reserva.personalEmail = cliente.userEmail
+          this.reserva.personalId = cliente.id;        
+      }           
+    });
+    return await modal.present();
+  }
+
+
+  eliminarPersonal(){
+    this.personal = new Rol();
+    this.reserva.personalId = "";
+    this.reserva.personalNombre ="";
+    this.reserva.personalEmail ="";
   }
 
   async seleccionarMesa(){

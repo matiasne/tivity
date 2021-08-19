@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Importar Catálogo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <input type="file" (change)="uploadFile($event.target.files)">
+
+  <ion-item *ngFor="let key of itemKeys">
+    <ion-icon slot="sync-outline" name="cart-outline"></ion-icon>
+    <ion-label>{{key.name}}</ion-label>
+    <ion-select [(ngModel)]="key.index" [multiple]="key.multiple" interface="popover">
+      <ion-select-option  [value]="null" selected>Omitir</ion-select-option>
+      <ion-select-option *ngFor="let head of header;let i= index"  [value]="i">{{head}}</ion-select-option>       
+    </ion-select>
+  </ion-item>
+  
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button class="margin0 button-rounded" style="height: 60px;" color="success" (click)="crearItems()">
+      Importar
+    </ion-button>
+  </ion-toolbar> 
+</ion-footer>

@@ -19,5 +19,6 @@
     "Speech.framework": 1,
     "Accelerate.framework": 1,
     "Photos.framework": 1,
+    "CoreNFC.framework": 1,
     "AudioToolbox.framework": 1
 }

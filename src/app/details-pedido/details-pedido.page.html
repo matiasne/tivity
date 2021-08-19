@@ -18,10 +18,11 @@
     <span *ngIf="pedido.comanda.estado == pEstado.tomado" style="color: blue;">En Curso</span>
     <span *ngIf="pedido.comanda.estado == pEstado.solicitado" style="color: blue;"> Solicitado</span>
     <span *ngIf="pedido.comanda.estado == pEstado.completo" style="color: green;"> Listo</span>
+    <span *ngIf="pedido.comanda.estado == pEstado.finalizado" style="color: green;"> Listo</span>
   </span> 
    
   
-  <ion-row>
+  <ion-row> 
     <span class="pedido-item" *ngIf="pedido.statusCobro != cEstado.pendiente">
     
       <span *ngIf="pedido.statusCobro == cEstado.suspendido" style="color: red;">
@@ -74,15 +75,18 @@
           [showImage]="false"
           [showEnCarrito]="false"
           [multiplicador]="1" 
-        ></app-card-item-pedido>        
-        <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
-          <ion-item-option *ngIf="pedido.id != '' &&  producto.suspendido == 0" color="danger" (click)="suspenderProducto(producto,i)"><ion-icon name="trash"></ion-icon>Suspender</ion-item-option>
-          <ion-item-option *ngIf="pedido.id == '' &&  producto.suspendido == 0" color="danger" (click)="suspenderProducto(producto,i)"><ion-icon name="trash"></ion-icon>Eliminar</ion-item-option>
-          
-          <ion-item-option *ngIf="producto.suspendido == 1" (click)="reanudarProducto(producto)">Reanudar</ion-item-option>
-
-          
-        </ion-item-options> 
+        ></app-card-item-pedido>  
+        <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+          <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+            <ion-item-option *ngIf="pedido.id != '' &&  producto.suspendido == 0" color="danger" (click)="suspenderProducto(producto,i)"><ion-icon name="trash"></ion-icon>Suspender</ion-item-option>
+            <ion-item-option *ngIf="pedido.id == '' &&  producto.suspendido == 0" color="danger" (click)="suspenderProducto(producto,i)"><ion-icon name="trash"></ion-icon>Eliminar</ion-item-option>
+            
+            <ion-item-option *ngIf="producto.suspendido == 1" (click)="reanudarProducto(producto)">Reanudar</ion-item-option>
+  
+            
+          </ion-item-options> 
+        </span>      
+        
       </ion-item-sliding>  
 
       <ion-text color="primary" *ngIf="pedido.descuentos.length > 0">
@@ -98,9 +102,12 @@
               </h2>
             </ion-label>
           </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" (click)="eliminarDescuento(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
-          </ion-item-options>
+          <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="eliminarDescuento(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+            </ion-item-options>
+          </span>
+          
     
         </ion-item-sliding>
       </span>
@@ -118,20 +125,26 @@
               </h2>
             </ion-label>
           </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" (click)="eliminarRecargo(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
-          </ion-item-options>
-    
+          <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="eliminarRecargo(i)"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+            </ion-item-options>   
+          </span>
+           
         </ion-item-sliding>
       </span>
-
-      <ion-button *ngIf="pedido.statusCobro == cEstado.pendiente" class="button-rounded" color="light" (click)="agregarItem()"><ion-icon name="add"></ion-icon> Item</ion-button>     
+      <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+        <ion-button *ngIf="pedido.statusCobro == cEstado.pendiente" class="button-rounded" color="light" (click)="agregarItem()"><ion-icon name="add"></ion-icon> Item</ion-button>     
+      </span>
+      
     </ion-list>
 
     
 
-
-    <ion-button class="button-rounded" color="light"  *ngIf="!pedido.clienteNombre && comercio.config.clientes" (click)="seleccionarCliente()"><ion-icon name="add"></ion-icon> Cliente</ion-button>    
+    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+      <ion-button class="button-rounded" color="light"  *ngIf="!pedido.clienteNombre && comercio.config.clientes" (click)="seleccionarCliente()"><ion-icon name="add"></ion-icon> Cliente</ion-button>    
+    </span>
+    
     <ion-item-sliding class="item-card" *ngIf="pedido.clienteNombre && comercio.config.clientes">
      
       <ion-item>
@@ -146,12 +159,18 @@
           <p *ngIf="pedido.clientePersonaJuridica == '3'">Iva Exento</p>
         </ion-label>  
       </ion-item>
-      <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
-        <ion-item-option color="danger" (click)="eliminarCliente()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
-      </ion-item-options>
+      <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+        <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+          <ion-item-option color="danger" (click)="eliminarCliente()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+        </ion-item-options>
+      </span>
+      
     </ion-item-sliding>
 
-    <ion-button class="button-rounded" color="light" *ngIf="!pedido.mesaId && comercio.config.mesas" (click)="seleccionarMesa()" ><ion-icon name="add"></ion-icon> Mesa</ion-button>
+    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+      <ion-button class="button-rounded" color="light" *ngIf="!pedido.mesaId && comercio.config.mesas" (click)="seleccionarMesa()" ><ion-icon name="add"></ion-icon> Mesa</ion-button>
+    </span>
+    
     <ion-item-sliding class="item-card" *ngIf="pedido.mesaId && comercio.config.mesas">
       <ion-item>
         <ion-avatar slot="start">
@@ -162,12 +181,18 @@
         </ion-label>      
       </ion-item>
 
-      <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
-        <ion-item-option color="danger" (click)="eliminarMesa()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
-      </ion-item-options>
+      <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+        <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+          <ion-item-option color="danger" (click)="eliminarMesa()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+        </ion-item-options>
+      </span>
+      
     </ion-item-sliding>
 
-    <ion-button *ngIf="!pedido.direccion.street_name" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
+    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+      <ion-button *ngIf="!pedido.direccion.street_name" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
+    </span>
+    
     <ion-item-sliding class="item-card" *ngIf="pedido.direccion.street_name">  
       <ion-item>
         <ion-avatar slot="start">
@@ -182,15 +207,18 @@
         </ion-label>      
       </ion-item>
   
-      <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
-        <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
-      </ion-item-options>
+      <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+        <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
+          <ion-item-option color="danger" (click)="eliminarDireccion()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+        </ion-item-options>
+      </span>
+      
     </ion-item-sliding>
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
      
       <ion-fab-button *ngIf="pedido.id != ''" (click)="chat()">
-        <ion-icon name="chatbubble-outline"></ion-icon>{{pedido.countMensajes}}
+        <ion-icon name="chatbubble-outline"></ion-icon>
       </ion-fab-button>
       <br>
       <ion-fab-button (click)="imprimir()">
@@ -200,7 +228,7 @@
     </ion-fab>   
 </ion-content> 
 
-<ion-footer class="ion-no-border ion-padding">  
+<ion-footer class="ion-no-border ion-padding" *appCheckUsuarioPermisos="{feature:'cobro',permiso:'Editor'}">  
   <ion-toolbar>   
     <ion-button *ngIf="pedido.statusCobro == cEstado.suspendido" class="button-rounded"  color="primary" (click)="reanudar()">Reanudar</ion-button>
     <ion-button *ngIf="pedido.statusCobro == cEstado.cobrado" class="button-rounded"  color="danger" (click)="devolverPedido()">Reembolsar</ion-button>

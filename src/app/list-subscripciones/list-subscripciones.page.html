@@ -3,30 +3,43 @@
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
-    <ion-title  size="small">List Subscripciones</ion-title>    
+    <ion-title  size="small">Subscripciones</ion-title>    
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">  
   
-  <ion-row>
-    <ion-col size="10">
-      <ion-input placeholder="Buscar" style="border:1px solid rgb(206, 206, 206); border-radius: 5px;"
-      [(ngModel)]="palabraFiltro"
-      ></ion-input>
-    </ion-col>
-    <ion-col size="2">
-      <ion-button color="primary" style="margin-top: -1px; height: 42px;"  (click)="buscar()">
-          <ion-icon name="search"></ion-icon>
-      </ion-button>
-    </ion-col>
-  </ion-row>
+  <app-search-filter-input
+    [arrayAll]="itemsAll" 
+    [parametros]="['clienteNombre','id']"
+    [placeholder]="'Buscar por cliente'"
+    (resultado)="mostrar($event)"
+  >
 
+  </app-search-filter-input>
+  
   <ion-list lines="none">    
     <div *ngFor="let item of itemsView">
-      <app-card-subscription [item]="item"></app-card-subscription>
+      <ion-item-sliding class="item-card" *appCheckUsuarioPermisos="{feature:'subscripciones',permiso:'Visible',creador:item.creadorEmail}">    
+        <app-card-subscription [subscripcion]="item" (select)="ver(item)"></app-card-subscription>
+        <span *appCheckUsuarioPermisos="{feature:'subscripciones',permiso:'Editor'}">
+          <ion-item-options side="end">
+            <ion-item-option (click)="editarSubscripcion(item)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
+          </ion-item-options>
+        </span>
+     
+    
+    </ion-item-sliding>
     </div>
     
   </ion-list>
 
+  <span *appCheckUsuarioPermisos="{feature:'subscripciones',permiso:'Editor'}">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
+      <ion-fab-button (click)="nuevaSubscripcion()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </span>
+  
 </ion-content>

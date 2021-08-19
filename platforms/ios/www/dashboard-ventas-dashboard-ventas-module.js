@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title>Dashboard Ventas</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  Datos y estadisticas de ventas\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Dashboard Ventas</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  Datos y estadisticas de ventas\n</ion-content>\n");
 
 /***/ }),
 

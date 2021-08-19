@@ -1,15 +1,13 @@
 <ion-header>
   <ion-toolbar> 
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
+    <ion-button fill="clear" (click)="cerrar()" color="primary" slot="end">
+      <ion-icon  name="close-outline"></ion-icon>
+    </ion-button>   
     <ion-title  size="small">{{titulo}} <p class="header-subtitulo">{{item.nombre}}</p></ion-title>    
   </ion-toolbar>
 </ion-header>
 
-<ion-content  class="ion-padding">
-
-  
+<ion-content  class="ion-padding">  
   <form [formGroup]="datosForm">
     <div class="form-card">
       <ion-item>
@@ -234,6 +232,6 @@
   <ion-toolbar> 
     <ion-button class="button-rounded" slot="end" color="success" (click)="guardar()">Guardar</ion-button>
     
-    <ion-button class="button-rounded" slot="start"  color="light" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button class="button-rounded" slot="start"  color="light" (click)="cerrar()">Cancelar</ion-button>
   </ion-toolbar>
 </ion-footer>

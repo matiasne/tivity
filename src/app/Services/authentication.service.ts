@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { UsuariosService } from './usuarios.service';
 import { LoadingService } from './loading.service';
-import { EnumPlanes } from '../models/user';
+import { EnumPlanes, User } from '../models/user';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -34,7 +34,8 @@ export class AuthenticationService {
   public userRol = new BehaviorSubject <any>("");
 
   public userSubs:Subscription;
-  
+  public usuarioLogueado:User
+
   constructor(
     public firebaseAuth: AngularFireAuth,
     private httpClient: HttpClient,
@@ -54,10 +55,13 @@ export class AuthenticationService {
       this.checkToken();
     });
 
+    this.usuarioLogueado = new User();
+    
     this.getActualUserIdObservable().subscribe(uid=>{
       if(uid){
         this.userSubs = this.usuarioService.get(uid).subscribe( (data:any)=>{
           localStorage.setItem('user',JSON.stringify(data.payload.data()));
+          this.usuarioLogueado.asignarValores(data.payload.data());
         })        
       }
       else{        
@@ -66,6 +70,11 @@ export class AuthenticationService {
       }
     })
     
+  }
+
+  public getUser(){
+    console.log(this.usuarioLogueado)
+    return this.usuarioLogueado;
   }
 
   checkToken() {    
@@ -397,14 +406,14 @@ export class AuthenticationService {
         return user.id;
     }  
   }
-
+/*
   getConnectionStatus(){    
     let user =  JSON.parse(localStorage.getItem('user'));
   
     if(user){
       return user.state;
     }  
-  }
+  }*/
 
   getRef(id){
     console.log(id);

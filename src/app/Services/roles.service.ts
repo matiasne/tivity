@@ -3,17 +3,20 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AuthenticationService } from './authentication.service';
 import * as firebase from 'firebase';
 import { map } from 'rxjs/operators';
-import { Rol } from '../models/rol';
+import { Permisos, Rol } from '../models/rol';
 import { ComerciosService } from './comercios.service';
 import { BaseService } from './base.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolesService extends BaseService {
-
+  
+  public rolSubject = new BehaviorSubject <any>("");
   private collectionGroup:string;
   private comercioId=""
+
   constructor(
     private firestore: AngularFirestore,
     private auth:AuthenticationService,
@@ -36,11 +39,20 @@ export class RolesService extends BaseService {
     this.setPath('comercios/'+this.comerciosService.getSelectedCommerceId()+'/roles')   
   }
 
+  getRolValue(){
+    return this.rolSubject.value;
+  }
+
+  getRol(): Observable<any>{
+    return this.rolSubject.asObservable();
+  }
+
+  setRol(rol:Rol){
+    this.rolSubject.next(rol);    
+  }
     
   
   public create(data) {    
-   
-
     return this.firestore.collection(this.path).doc(data.userEmail).set({...data,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
@@ -140,15 +152,27 @@ export class RolesService extends BaseService {
     
     this.setPath('comercios/'+comercioId+'/roles')   
  
-    let params = {
-      userEmail : this.auth.getEmail(),
-      userId : this.auth.getUID(),
-      comercioId : comercioId,
-      rol : "Administrador"
-    }
+    let rol = new Rol();
+
+    rol.rol = "Administrador";
+    rol.userEmail = this.auth.getEmail();
+    rol.userId = this.auth.getUID();
+    rol.comercioId = comercioId;
+
+    rol.permisos.cajas = Permisos.Editor;
+    rol.permisos.catalogo=Permisos.Editor;
+    rol.permisos.pedidos=Permisos.Editor;
+    rol.permisos.comandas=Permisos.Editor;
+    rol.permisos.reservas=Permisos.Editor;
+    rol.permisos.clientes=Permisos.Editor;
+    rol.permisos.ctasCorrinentes=Permisos.Editor;
+    rol.permisos.cajas=Permisos.Editor;
+    rol.permisos.subscripciones=Permisos.Editor;
+    rol.permisos.configuracion=Permisos.Editor;
 
 
-    this.firestore.collection(this.path).add(Object.assign({}, params));       
+
+    this.firestore.collection(this.path).add(Object.assign({}, rol));       
   } 
 
   public getAllOwnerId(){

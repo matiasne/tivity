@@ -29,10 +29,10 @@
   <ion-list lines="none">
     <ion-item-sliding *ngFor="let item of itemsAll" class="item-card" >    
     
-      <ion-item>
+      <ion-item (click)="editarPermisos(item)">
         <div slot="start">
           <img src="{{item.foto}}" *ngIf="item.foto">
-          <ion-icon name="person-outline" *ngIf="!item.foto"></ion-icon>
+          <ion-icon name="person" *ngIf="!item.foto"></ion-icon>
         </div>      
         <ion-label text-wrap>
           <p>{{item.userEmail}}</p> 

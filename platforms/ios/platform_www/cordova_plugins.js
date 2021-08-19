@@ -359,12 +359,27 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "phonegap-nfc.NFC",
+      "file": "plugins/phonegap-nfc/www/phonegap-nfc.js",
+      "pluginId": "phonegap-nfc",
+      "runs": true
+    },
+    {
       "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
       "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
       "pluginId": "phonegap-plugin-barcodescanner",
       "clobbers": [
         "cordova.plugins.barcodeScanner"
       ]
+    },
+    {
+      "id": "ionic-plugin-deeplinks.deeplink",
+      "file": "plugins/ionic-plugin-deeplinks/www/deeplink.js",
+      "pluginId": "ionic-plugin-deeplinks",
+      "clobbers": [
+        "IonicDeeplink"
+      ],
+      "runs": true
     }
   ];
   module.exports.metadata = {
@@ -387,8 +402,10 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-printer": "0.8.0",
     "cordova-plugin-speechrecognition": "1.1.2",
     "cordova-plugin-statusbar": "2.4.3",
-    "cordova-plugin-telerik-imagepicker": "2.3.5",
+    "cordova-plugin-telerik-imagepicker": "2.3.3",
     "cordova-plugin-whitelist": "1.3.4",
-    "phonegap-plugin-barcodescanner": "8.1.0"
+    "phonegap-nfc": "1.2.0",
+    "phonegap-plugin-barcodescanner": "8.1.0",
+    "ionic-plugin-deeplinks": "1.0.22"
   };
 });

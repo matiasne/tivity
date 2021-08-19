@@ -2,7 +2,7 @@
     <div *ngIf="item.mesaNombre" class="encabezado-card-mesa">
       <ion-row> 
         <ion-col size="6" center text-center>            
-          <ion-icon name="person"></ion-icon> {{item.personalEmail}}
+          <ion-icon name="person"></ion-icon> {{item.creadorEmail}}
         </ion-col>     
         <ion-col size="6" >
           <div class="encabezado-time">
@@ -18,7 +18,7 @@
     <div *ngIf="!item.mesaNombre" class="encabezado-card-general">     
       <ion-row> 
         <ion-col size="6" center text-center>            
-          <ion-icon name="person"></ion-icon> {{item.personalEmail}}
+          <ion-icon name="person"></ion-icon> {{item.creadorEmail}}
         </ion-col>      
         <ion-col size="6" >
           <div class="encabezado-time">
@@ -39,6 +39,7 @@
           <span *ngIf="item.comanda.estado == pEstado.tomado" style="color: blue;">En Curso</span>          
           <span *ngIf="item.comanda.estado == pEstado.solicitado" style="color: blue;"> Solicitado</span>
           <span *ngIf="item.comanda.estado == pEstado.completo" style="color: green;"> Listo</span>
+          <span *ngIf="item.comanda.estado == pEstado.finalizado" style="color: green;"> Listo</span>
 
           <span *ngIf="item.comanda.demora" class="minutos-restantes" (click)="open()"> <ion-icon name="alarm-outline"></ion-icon> Tiempo restante: {{minutosRestantes}} min.</span>
         </span> 
@@ -95,7 +96,7 @@
           </span>     
           
           <div class="pedido-item"> 
-            <ion-icon name="chatbubble-outline"></ion-icon> {{item.countMensajes}} 
+            <ion-icon name="chatbubble-outline"></ion-icon> 
           </div>
                   
       </ion-row>  

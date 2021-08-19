@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export class Caja{
     public id ="";
     public comercioId = "";
@@ -11,9 +13,20 @@ export class Caja{
     public totalCredito = 0;
     public totalCtaCorriente = 0;
     public estado = "abierta";
-	constructor(
-		
-		){
+
+    public creadorId = "";
+    public creadorEmail="";
+    public creadorNombre="";
+	
+    constructor(
+
+    ){
+    }
+
+    public setCreador(usuario:User){
+        this.creadorId = usuario.uid;
+        this.creadorEmail = usuario.email;
+        this.creadorNombre = usuario.displayName;
     }
     
     public asignarValores(init?: Partial<Caja>) {

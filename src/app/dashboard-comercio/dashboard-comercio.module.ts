@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { DashboardComercioPageRoutingModule } from './dashboard-comercio-routing.module';
 
 import { DashboardComercioPage } from './dashboard-comercio.page';
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    DirectivesModule,
     FormsModule,
     IonicModule,
     DashboardComercioPageRoutingModule

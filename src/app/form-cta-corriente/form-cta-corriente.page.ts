@@ -47,7 +47,8 @@ export class FormCtaCorrientePage implements OnInit {
     private alertController:AlertController
   ) {
 
-    this.ctaCorriente = new CtaCorriente(this.authenticationService.getUID(),this.authenticationService.getNombre());
+    this.ctaCorriente = new CtaCorriente();
+    this.ctaCorriente.setCreador(this.authenticationService.getUser())
 
     this.datosForm = this.formBuilder.group({
       nombre: ['', Validators.required],          

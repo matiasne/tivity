@@ -68,16 +68,19 @@
     <p>No tienes pedidos.</p>
   </div>
 
-  <ion-list lines="none" >        
-    <ion-item-sliding *ngFor="let pedido of pedidosLocales"  class="item-card">
-      <app-card-pedido [item]="pedido" (click)="seleccionar(pedido)"></app-card-pedido>
-      <ion-item-options *ngIf="pedido.statusCobro == cEstado.pendiente" side="end">
-        <ion-item-option color="danger" (click)="cancelar(pedido)"><ion-icon name="trash" ></ion-icon>Suspender</ion-item-option>
-      </ion-item-options> 
-      <ion-item-options *ngIf="pedido.statusCobro == cEstado.suspendido" side="end">
-        <ion-item-option  (click)="reanudar(pedido)"><ion-icon name="trash" ></ion-icon>Reanudar</ion-item-option>
-      </ion-item-options> 
-    </ion-item-sliding>  
+  <ion-list lines="none" >     
+    <span *ngFor="let pedido of pedidosLocales">
+      <ion-item-sliding *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Visible',creador:pedido.creadorEmail}"   class="item-card">
+        <app-card-pedido [item]="pedido" (click)="seleccionar(pedido)"></app-card-pedido>
+        <ion-item-options *ngIf="pedido.statusCobro == cEstado.pendiente" side="end">
+          <ion-item-option color="danger" (click)="cancelar(pedido)"><ion-icon name="trash" ></ion-icon>Suspender</ion-item-option>
+        </ion-item-options> 
+        <ion-item-options *ngIf="pedido.statusCobro == cEstado.suspendido" side="end">
+          <ion-item-option  (click)="reanudar(pedido)"><ion-icon name="trash" ></ion-icon>Reanudar</ion-item-option>
+        </ion-item-options> 
+      </ion-item-sliding>  
+    </span>   
+    
   </ion-list>
 
   <ion-list lines="none">        
@@ -92,9 +95,14 @@
     <ion-fab-button *ngIf="palabraFiltro == ''"  color="success" (click)="focusBuscar()">
       <ion-icon name="filter"></ion-icon>
     </ion-fab-button><br>
-    <ion-fab-button (click)="nuevoPedido()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
+
+    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+      <ion-fab-button (click)="nuevoPedido()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </span>
+
+    
   </ion-fab>
 
 </ion-content>

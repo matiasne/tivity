@@ -57,7 +57,7 @@
           </ion-label>  
         </ion-item> 
       
-        <ion-item-options side="end">
+        <ion-item-options side="end" *appCheckUsuarioPermisos="{feature:'clientes',permiso:'Editor'}">
           <ion-item-option (click)="editar(item)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
         </ion-item-options>
       
@@ -74,7 +74,7 @@
 
   
   <!-- fab placed to the bottom end -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="nuevo()">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="nuevo()" *appCheckUsuarioPermisos="{feature:'clientes',permiso:'Editor'}">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

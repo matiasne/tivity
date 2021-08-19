@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>{{titulo}}</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <form [formGroup]=\"datosForm\" >\n    <div [ngClass]=\"{'form-card': true, 'form-card-error': submitted && !datosForm.controls.nombre.valid}\">\n      <ion-text color=\"primary\">\n        <h4>Nombre *</h4>        \n      </ion-text>\n          \n      <ion-item>\n        <ion-input name=\"nombre\" type=\"text\" formControlName=\"nombre\" required></ion-input>\n      </ion-item>\n      <div *ngIf=\"submitted && f.nombre.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.nombre.errors.required\"><h5>Ingresa el nombre de la cuenta corriente</h5></div>\n      </div> \n    </div>\n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Monto Actual*</h4>        \n      </ion-text>        \n      <ion-item class=\"item-card\">\n        <ion-input name=\"monto\" type=\"number\" formControlName=\"montoTotal\" required></ion-input>\n      </ion-item>\n    </div>\n    \n    <div [ngClass]=\"{'form-card': true, 'form-card-error': submitted && !datosForm.controls.coTitularesId.valid}\">\n      <ion-text color=\"primary\">\n        <h4>Co-Titulares *</h4>        \n      </ion-text>\n      <ion-item *ngFor=\"let cliente of clientes;let i=index\" class=\"item-card\">\n        <ion-avatar slot=\"start\">\n          <img src=\"{{cliente.foto}}\" *ngIf=\"cliente.foto\">\n          <ion-icon name=\"person\" *ngIf=\"!cliente.foto\"></ion-icon>\n        </ion-avatar>\n        <ion-label text-wrap>\n          <h2>{{cliente.nombre}}</h2>\n          <p>{{cliente.email}}</p>\n        </ion-label>      \n        <ion-button color=\"danger\" slot=\"end\" (click)=\"eliminarCliente(i)\"><ion-icon name=\"trash\"></ion-icon></ion-button>       \n      </ion-item>\n      <ion-item style=\"border-bottom: none;\" >\n        <ion-button  size=\"large\" (click)=\"seleccionarCliente()\"  expand=\"block\">Agregar Titular * </ion-button>\n      </ion-item>\n    </div>   \n\n    \n\n  </form>\n  \n\n    <ion-button *ngIf=\"updating\" class=\"button-rounded\"  color=\"danger\" (click)=\"eliminar()\">Eliminar Cta. Corriente</ion-button>\n \n\n  \n</ion-content>\n<ion-footer>\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\"  slot=\"end\" (click)=\"guardar()\">Guardar</ion-button>\n    \n    <ion-button class=\"button-rounded\"  slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n</ion-footer>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">{{titulo}}</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <form [formGroup]=\"datosForm\" >\n    <div [ngClass]=\"{'form-card': true, 'form-card-error': submitted && !datosForm.controls.nombre.valid}\">\n      <ion-text color=\"primary\">\n        <h4>Nombre *</h4>        \n      </ion-text>\n          \n      <ion-item>\n        <ion-input name=\"nombre\" type=\"text\" formControlName=\"nombre\" required></ion-input>\n      </ion-item>\n      <div *ngIf=\"submitted && f.nombre.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.nombre.errors.required\"><h5>Ingresa el nombre de la cuenta corriente</h5></div>\n      </div> \n    </div>\n\n    <div class=\"form-card\">\n      <ion-text color=\"primary\">\n        <h4>Monto Actual*</h4>        \n      </ion-text>        \n      <ion-item class=\"item-card\">\n        <ion-input name=\"monto\" type=\"number\" formControlName=\"montoTotal\" required></ion-input>\n      </ion-item>\n    </div>\n    \n    <div [ngClass]=\"{'form-card': true, 'form-card-error': submitted && !datosForm.controls.coTitularesId.valid}\">\n      <ion-text color=\"primary\">\n        <h4>Co-Titulares *</h4>        \n      </ion-text>\n      <ion-item *ngFor=\"let cliente of clientes;let i=index\" class=\"item-card\">\n        <ion-avatar slot=\"start\">\n          <img src=\"{{cliente.foto}}\" *ngIf=\"cliente.foto\">\n          <ion-icon name=\"person\" *ngIf=\"!cliente.foto\"></ion-icon>\n        </ion-avatar>\n        <ion-label text-wrap>\n          <h2>{{cliente.nombre}}</h2>\n          <p>{{cliente.email}}</p>\n        </ion-label>      \n        <ion-button color=\"danger\" slot=\"end\" (click)=\"eliminarCliente(i)\"><ion-icon name=\"trash\"></ion-icon></ion-button>       \n      </ion-item>\n      <ion-item style=\"border-bottom: none;\" >\n        <ion-button  size=\"large\" (click)=\"seleccionarCliente()\"  expand=\"block\">Agregar Titular * </ion-button>\n      </ion-item>\n    </div>   \n\n    \n\n  </form>\n  \n\n    <ion-button *ngIf=\"updating\" class=\"button-rounded\"  color=\"danger\" (click)=\"eliminar()\">Eliminar Cta. Corriente</ion-button>\n \n\n  \n</ion-content>\n<ion-footer>\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\"  slot=\"end\" (click)=\"guardar()\">Guardar</ion-button>\n    \n    <ion-button class=\"button-rounded\"  slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n</ion-footer>");
 
 /***/ }),
 
@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>    \n    <ion-title>Seleccionar Clientes</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content style=\"margin-top: 50px;\" class=\"ion-padding\">  \n  <ion-searchbar animated #search\n    placeholder=\"Buscar nombre\"\n    animated=\"true\"\n    showCancelButton=\"never\" \n    color=\"light\" \n    autocomplete=\"on\"\n    enterkeyhint=\"send\"\n    inputmode=\"text\"\n    type=\"text\"\n    debounce=\"300\"\n    value=\"{{palabraFiltro}}\"\n    (ionChange)=\"onChange($event)\">\n  </ion-searchbar>\n\n  <ion-list lines=\"none\">   \n    \n    <ion-item-sliding *ngFor=\"let item of clientes\" class=\"item-card\" >    \n\n        <ion-item (click)=\"seleccionar(item)\" >\n          <div slot=\"start\">\n            <img src=\"{{item.foto}}\" *ngIf=\"item.foto\">\n            <ion-icon name=\"person-outline\" *ngIf=\"!item.foto\"></ion-icon>\n          </div>      \n          <ion-label text-wrap>\n            <h2><b>{{item.nombre}}</b> </h2>   \n            <p>{{item.email}}</p>         \n          </ion-label>  \n        </ion-item>\n      \n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"editar(item)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n        </ion-item-options>\n  \n      </ion-item-sliding>\n\n \n  </ion-list>\n\n  <span *ngIf=\"clientes.length == 0\">\n    \n      No exite ningún cliente con ese Nombre o Email.\n      <ion-button color=\"primary\" (click)=\"nuevo()\">Crear Uno Nuevo!</ion-button>\n \n  </span>\n\n  <!-- fab placed to the bottom end -->\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevo()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n  <ion-infinite-scroll threshold=\"100px\" (ionInfinite)=\"verMas()\">\n    <ion-infinite-scroll-content\n      loadingSpinner=\"bubbles\"\n      loadingText=\"Cargando más trabajos...\">\n    </ion-infinite-scroll-content>\n  </ion-infinite-scroll>\n  \n</ion-content>\n<ion-footer class=\"ion-no-border ion-padding\">\n  <ion-toolbar>    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n</ion-footer>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>    \n    <ion-title  size=\"small\">Seleccionar Clientes</ion-title>  \n    <ion-button fill=\"clear\" (click)=\"cerrar()\" color=\"primary\" slot=\"end\">\n      <ion-icon name=\"close-outline\"></ion-icon>\n    </ion-button>  \n  </ion-toolbar>\n</ion-header>\n\n\n<ion-content style=\"margin-top: 50px;\" class=\"ion-padding\">  \n  <ion-searchbar animated #search\n    placeholder=\"Buscar nombre\"\n    animated=\"true\"\n    showCancelButton=\"never\" \n    color=\"light\" \n    autocomplete=\"on\"\n    enterkeyhint=\"send\"\n    inputmode=\"text\"\n    type=\"text\"\n    debounce=\"300\"\n    value=\"{{palabraFiltro}}\"\n    (ionChange)=\"onChange($event)\">\n  </ion-searchbar>\n\n  <ion-list lines=\"none\">   \n    \n    <ion-item-sliding *ngFor=\"let item of clientes\" class=\"item-card\" >    \n\n      <ion-item (click)=\"seleccionar(item)\" >\n        <div slot=\"start\">\n          <img src=\"{{item.foto}}\" *ngIf=\"item.foto\">\n          <ion-icon name=\"person-outline\" *ngIf=\"!item.foto\"></ion-icon>\n        </div>      \n        <ion-label text-wrap>\n          <h2><b>{{item.nombre}}</b> </h2>   \n          <p>{{item.email}}</p>        \n          <p>{{item.documentoTipo}}: {{item.documento}}</p> \n          <p *ngIf=\"item.personaJuridica == 1\">Responsable Inscripto</p>\n          <p *ngIf=\"item.personaJuridica == 2\">Monotributista</p>\n          <p *ngIf=\"item.personaJuridica == 3\">Iva Exento</p>\n        </ion-label>  \n      </ion-item> \n      \n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"editar(item)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n        </ion-item-options>\n  \n      </ion-item-sliding>\n\n \n  </ion-list>\n\n  <span *ngIf=\"clientes.length == 0\">\n    \n      No exite ningún cliente con ese Nombre o Email.\n      <ion-button color=\"primary\" (click)=\"nuevo()\">Crear Uno Nuevo!</ion-button>\n \n  </span>\n\n  <!-- fab placed to the bottom end -->\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"nuevo()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n  <ion-infinite-scroll threshold=\"100px\" (ionInfinite)=\"verMas()\">\n    <ion-infinite-scroll-content\n      loadingSpinner=\"bubbles\"\n      loadingText=\"Cargando más trabajos...\">\n    </ion-infinite-scroll-content>\n  </ion-infinite-scroll>\n  \n</ion-content>");
 
 /***/ }),
 
@@ -372,37 +372,6 @@ FormCtaCorrientePage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])(
 
 /***/ }),
 
-/***/ "./src/app/models/ctacorriente.ts":
-/*!****************************************!*\
-  !*** ./src/app/models/ctacorriente.ts ***!
-  \****************************************/
-/*! exports provided: CtaCorriente */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CtaCorriente", function() { return CtaCorriente; });
-class CtaCorriente {
-    constructor(vendedorId, vendedorNombre) {
-        this.vendedorId = vendedorId;
-        this.vendedorNombre = vendedorNombre;
-        this.id = "";
-        this.comercioId = localStorage.getItem('comercio_seleccionadoId');
-        this.nombre = "";
-        this.coTitularesId = [];
-        this.montoActual = 0;
-        this.montoTotal = 0;
-        this.comercios = [];
-        this.clientes = [];
-    }
-    asignarValores(init) {
-        Object.assign(this, init);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/app/select-cliente/select-cliente.page.scss":
 /*!*********************************************************!*\
   !*** ./src/app/select-cliente/select-cliente.page.scss ***!
@@ -533,7 +502,7 @@ let SelectClientePage = class SelectClientePage {
             return yield modal.present();
         });
     }
-    cancelar() {
+    cerrar() {
         this.modalCtrl.dismiss();
     }
 };

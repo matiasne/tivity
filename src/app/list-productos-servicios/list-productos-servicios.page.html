@@ -41,7 +41,7 @@
   
 <ion-content class="ion-padding">  
  
-    <ion-searchbar animated *ngIf="showSearchBar && itemsAllProductos.length > 0" class="FadeOut FadeIn" #ionsearchbar
+    <!--ion-searchbar animated *ngIf="showSearchBar && itemsAllProductos.length > 0" class="FadeOut FadeIn" #ionsearchbar
       placeholder="Buscar por nombre o categoría"
       animated="true"
       showCancelButton="never" 
@@ -53,7 +53,16 @@
       debounce="50"
       value="{{palabraFiltro}}"
       (ionChange)="buscar($event)">
-    </ion-searchbar> 
+    </ion-searchbar-->
+    
+    <app-search-filter-input
+    [arrayAll]="itemsAllProductos" 
+    [parametros]="['nombre','barcode']"
+    [placeholder]="'Buscar por nombre o código de barra'"
+    (resultado)="mostrar($event)"
+  >
+
+  </app-search-filter-input>
     
     <ion-grid *ngIf="itemsAllProductos.length > 0">       
         <ion-row>          
@@ -75,21 +84,25 @@
                 </h2>
               </ion-label>  
             </ion-item>
-          </ion-col>          
+          </ion-col>      
+          
+          <div contenedor>
+            <gmap></gmap>
+            <div contacto></div>
+          </div>
 
           <ion-virtual-scroll [items]="itemsProductos">
           <ion-col size="12" size-xs="12" size-sm="6" size-md="4" size-lg="3" *virtualItem="let producto">           
 
-            <ion-item-sliding class="item-card fivePhasesFadeIn" (ionDrag)="onDrag($event,producto)"> 
+            <ion-item-sliding class="item-card fivePhasesFadeOut FadeIn" (ionDrag)="onDrag($event,producto)"> 
               <app-card-item 
                 [item]="producto"
                 [multiplicador]="1" 
                 [showOpcionesSeleccionadas]="false"
-                [showcomanda.estado]="false"
                 (select)="agregarItem(producto)"
               ></app-card-item>    
             
-              <ion-item-options side="end">
+              <ion-item-options side="end" *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Editor'}">
                 <ion-item-option  (click)="editarProducto(producto)"><ion-icon name="create" ></ion-icon> Editar</ion-item-option>
               </ion-item-options>
         
@@ -111,23 +124,17 @@
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
 
     
-    <ion-fab-button *ngIf="palabraFiltro == ''"  color="success" (click)="focusBuscar()">
+    <!--ion-fab-button  color="success" (click)="focusBuscar()">
       <ion-icon name="search"></ion-icon>
-    </ion-fab-button><br>
+    </ion-fab-button><br-->
 
-    <span *ngIf="palabraFiltro == '' && isMobile">
+    <span *ngIf="isMobile">
       <ion-fab-button   color="success" (click)="lectorDeCodigo()">
         <ion-icon name="barcode"></ion-icon>
       </ion-fab-button><br>
     </span>
     
-    <span  *ngIf="palabraFiltro == '' && isMobile">
-      <ion-fab-button  color="success" (click)="reconocimientoPorVoz()">
-        <ion-icon name="mic-outline"></ion-icon>
-      </ion-fab-button><br>
-    </span>    
-
-    <ion-fab-button *ngIf="palabraFiltro == '' || itemsProductos.length == 0" (click)="nuevoProducto()">
+    <ion-fab-button (click)="nuevoProducto()" *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Editor'}">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -158,8 +165,16 @@
 
 <ion-footer class="ion-no-border ion-padding" *ngIf="carrito.on" style="padding: 0px;"> 
   <ion-toolbar>
-    <ion-button class="margin0 button-rounded" style="height: 60px;" color="success" (click)="siguiente()">
-      <ion-icon name="cart-outline"></ion-icon>{{carrito.items.length}} = {{carritoService.getTotal() | currency}} <ion-icon name="arrow-forward"></ion-icon>
+
+   
+
+    <ion-button class="margin0 button-rounded" style="height: 60px;" color="success" (click)="siguiente()" [disabled]="flagCobrando">
+      <span *ngIf="!flagCobrando">
+        <ion-icon name="cart-outline"></ion-icon>
+        {{carrito.items.length}} = {{carritoService.getTotal() | currency}} 
+      <ion-icon name="arrow-forward"></ion-icon>
+      </span>      
+      <ion-spinner *ngIf="flagCobrando"></ion-spinner>
     </ion-button>
   </ion-toolbar> 
 </ion-footer>

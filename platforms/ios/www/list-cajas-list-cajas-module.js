@@ -9,7 +9,54 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title>Cajas</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  \n  \n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando cajas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && cajas.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/caja.fw.png\" alt=\"\">\n    <p>Aún no tienes cajas, agrega una para hacer un seguimiento de tus egresos e ingresos.</p><br>\n    <ion-button class=\"button-rounded\"  color=\"primary\" (click)=\"openAddCaja()\">Agregar Caja</ion-button>\n  </div>\n\n  <ion-grid *ngIf=\"cajas.length > 0\">       \n    <ion-row>          \n      <ion-col size=\"12\" size-xs=\"12\" size-sm=\"6\" size-md=\"4\" size-lg=\"3\" *ngFor=\"let caja of cajas\">\n        <ion-item-sliding  class=\"item-card\">\n          <ion-item (click)=\"seleccionar(caja.id)\" class=\"remove_inner_bottom\">  \n            <div slot=\"start\">\n              <ion-icon name=\"file-tray-full-outline\"></ion-icon>\n            </div>      \n            <ion-label>\n              <b>{{caja.nombre}}</b>         \n            </ion-label> \n            <ion-badge color=\"success\" *ngIf=\"caja.estado == 'abierta'\" slot=\"end\">Abierta</ion-badge>\n            <ion-badge color=\"danger\" *ngIf=\"caja.estado == 'cerrada'\" slot=\"end\">Cerrada</ion-badge>\n          </ion-item>  \n    \n          \n    \n          <ion-item-options side=\"end\">\n            <ion-item-option (click)=\"openEditCaja(caja)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n          </ion-item-options>\n    \n        </ion-item-sliding>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n  <ion-list lines=\"none\">        \n    \n      \n    \n  </ion-list>\n\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"openAddCaja()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Cajas</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  \n  \n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando cajas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && cajas.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/caja.fw.png\" alt=\"\">\n    <p>Aún no tienes cajas, agrega una para hacer un seguimiento de tus egresos e ingresos.</p><br>\n    <ion-button class=\"button-rounded\"  color=\"primary\" (click)=\"openAddCaja()\">Agregar Caja</ion-button>\n  </div>\n\n  <ion-grid *ngIf=\"cajas.length > 0\">       \n    <ion-row>          \n      <ion-col size=\"12\" size-xs=\"12\" size-sm=\"6\" size-md=\"4\" size-lg=\"3\" *ngFor=\"let caja of cajas\">\n        <ion-item-sliding  class=\"item-card\">\n          <ion-item (click)=\"seleccionar(caja.id)\" class=\"remove_inner_bottom\">  \n            <div slot=\"start\">\n              <ion-icon name=\"file-tray-full-outline\"></ion-icon>\n            </div>      \n            <ion-label>\n              <b>{{caja.nombre}}</b>         \n            </ion-label> \n            <ion-badge color=\"success\" *ngIf=\"caja.estado == 'abierta'\" slot=\"end\">Abierta</ion-badge>\n            <ion-badge color=\"danger\" *ngIf=\"caja.estado == 'cerrada'\" slot=\"end\">Cerrada</ion-badge>\n          </ion-item>  \n    \n          \n    \n          <ion-item-options side=\"end\">\n            <ion-item-option (click)=\"openEditCaja(caja)\"><ion-icon name=\"create\" ></ion-icon> Editar</ion-item-option>\n          </ion-item-options>\n    \n        </ion-item-sliding>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n  <ion-list lines=\"none\">        \n    \n      \n    \n  </ion-list>\n\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" (click)=\"openAddCaja()\">\n    <ion-fab-button>\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n");
+
+/***/ }),
+
+/***/ "./src/app/Services/cajas.service.ts":
+/*!*******************************************!*\
+  !*** ./src/app/Services/cajas.service.ts ***!
+  \*******************************************/
+/*! exports provided: CajasService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CajasService", function() { return CajasService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+
+
+
+
+
+let CajasService = class CajasService extends _base_service__WEBPACK_IMPORTED_MODULE_3__["BaseService"] {
+    constructor(afs, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.comerciosService = comerciosService;
+        this.setPath(this.getPath());
+    }
+    getPath() {
+        let comercioId = this.comerciosService.getSelectedCommerceId();
+        return 'comercios/' + comercioId + '/cajas';
+    }
+};
+CajasService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_4__["ComerciosService"] }
+];
+CajasService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], CajasService);
+
+
 
 /***/ }),
 

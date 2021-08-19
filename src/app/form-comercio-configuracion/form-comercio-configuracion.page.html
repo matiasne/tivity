@@ -193,6 +193,9 @@
   
 
   <ion-button class="button-rounded"    (click)="verImpresora()">Impresora</ion-button>
+
+  <ion-button class="button-rounded"  *ngIf="rolActual.rol == 'Administrador'"  (click)="importarCatalogo()">Importar Catálogo</ion-button>
+
   
   <ion-button *ngIf="rolActual.rol == 'Administrador'"  class="button-rounded" color="danger" (click)="elimiar()">Eliminar Comercio</ion-button>
 

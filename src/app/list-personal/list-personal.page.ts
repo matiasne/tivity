@@ -8,6 +8,7 @@ import { FormInvitacionPage } from '../form-invitacion/form-invitacion.page';
 import { User } from 'firebase';
 import { AuthenticationService } from '../Services/authentication.service';
 import { LoadingService } from '../Services/loading.service';
+import { FormPersonalPermisosPage } from '../form-personal-permisos/form-personal-permisos.page';
 
 @Component({
   selector: 'app-list-personal',
@@ -16,7 +17,7 @@ import { LoadingService } from '../Services/loading.service';
 })
 export class ListPersonalPage implements OnInit {
 
-  items:any = [];
+  public items:any = [];
   public itemsAll:any = [];
   public rolSub: Subscription;
   public palabraFiltro = "";
@@ -35,7 +36,7 @@ export class ListPersonalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-   
+    this.items = [];
     this.user = this.authService.getActualUser();
 
     let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
@@ -49,34 +50,6 @@ export class ListPersonalPage implements OnInit {
       this.buscando = false;
     });
 
-    /*var rolSub = this.rolesService.getAllRolesbyComercio().subscribe(snapshot =>{       
-      
-      snapshot.forEach(snap =>{
-        
-        var rol:any = snap.payload.doc.data();
-        rol.id = snap.payload.doc.id;
-        
-        var usub = this.usuariosService.getByEmail(rol.user_email).subscribe(snapshot2=>{
-
-          console.log(snapshot2);
-          snapshot2.forEach(snap2 =>{
-           
-            var item:any = snap2.payload.doc.data();
-            item.id = rol.id;   
-            item.rol = rol;
-            item.estado = rol.estado;
-            console.log(item);
-            this.itemsAll.push(item);
-
-          });
-          
-          usub.unsubscribe();
-        });
-
-      });
-      this.buscar();
-      rolSub.unsubscribe();
-    });*/
 
   }
 
@@ -157,6 +130,20 @@ export class ListPersonalPage implements OnInit {
       ]
     });
     await alert.present();    
+  }
+
+  async editarPermisos(item){
+    const modal = await this.modalCtrl.create({
+      component: FormPersonalPermisosPage,
+      componentProps: {
+        rol:item      
+      }
+    });
+    modal.onDidDismiss()
+    .then((retorno) => {
+         
+    });
+    return await modal.present();
   }
  
 

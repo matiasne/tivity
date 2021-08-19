@@ -10,6 +10,7 @@ import { LoadingService } from '../Services/loading.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { ModalController } from '@ionic/angular';
 import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
+import { EscanerCodigoBarraService } from '../Services/escaner-codigo-barra.service';
 
 @Component({
   selector: 'app-dashboard-comercio',
@@ -28,7 +29,8 @@ export class DashboardComercioPage implements OnInit {
     private afipService:AfipServiceService,
     private loadingService:LoadingService,
     private impresoraService:ImpresoraService,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private escanerCodigoBarraService:EscanerCodigoBarraService
   ) { 
     this.comercio = new Comercio()
   }
@@ -89,12 +91,9 @@ export class DashboardComercioPage implements OnInit {
     this.router.navigate(['form-egreso-caja']);
   }
 
-  async tarjeta(){
+  async connectUSB(){
     
-    let modal = await this.modalCtrl.create({
-      component: FormCardPaymentPage,
-    });  
-    return await modal.present();
+    this.escanerCodigoBarraService.init()
   }
 
 }

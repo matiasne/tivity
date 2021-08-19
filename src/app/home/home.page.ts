@@ -91,7 +91,7 @@ export class HomePage implements OnInit {
         
         if(roles[i].comercioId){
           if(roles[i].estado != "pendiente" && roles[i].estado != "rechazada"){
-            let obs =this.comerciosService.get(roles[i].comercioId).subscribe(data=>{
+            /*let obs = this.comerciosService.get(roles[i].comercioId).subscribe(data=>{
               if(data){
                 
                 let comercio:any = data;
@@ -101,7 +101,14 @@ export class HomePage implements OnInit {
                 obs.unsubscribe()
               }
               
-            });            
+            });     */
+            let come = await this.comerciosService.get(roles[i].comercioId).toPromise()
+            if(come){
+              let comercio:any = come;
+                comercio.rol = roles[i];
+                console.log(comercio)
+                this.comercios.push(comercio)
+            }       
           }
         }
       }
@@ -171,8 +178,9 @@ export class HomePage implements OnInit {
 
   seleccionar(comercio){
     this.user = this.authService.getActualUser();    
-    this.comerciosService.setSelectedCommerce(comercio.id);   
+    this.comerciosService.setSelectedCommerce(comercio);   
     this.authService.setRol(comercio.rol);
+    this.rolesService.setRol(comercio.rol)
     this.router.navigate(['dashboard-comercio',{id:comercio.id}]);
     this.usuariosService.setComecioSeleccionado(this.authService.getActualUserId(),comercio.id);
        

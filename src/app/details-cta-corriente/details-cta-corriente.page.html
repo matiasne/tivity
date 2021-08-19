@@ -22,8 +22,11 @@
     <ion-text slot="start" color="primary">
       <h4> {{ctaCorriente.montoTotal | currency}}</h4>        
     </ion-text>
-    <ion-button slot="end" color="danger" size="large" (click)="extraer()"  expand="block">Extraer</ion-button>
-    <ion-button slot="end" color="success" size="large" (click)="depositar()"  expand="block">Depositar</ion-button>
+    <span *appCheckUsuarioPermisos="{feature:'ctasCorrientes',permiso:'Editor'}">
+      <ion-button slot="end" color="danger" size="large" (click)="extraer()"  expand="block">Extraer</ion-button>
+      <ion-button slot="end" color="success" size="large" (click)="depositar()"  expand="block">Depositar</ion-button>
+    </span>
+    
   </ion-toolbar> 
 
   

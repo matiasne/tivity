@@ -23,7 +23,7 @@ export class MercadoPagoController {
         mercadopago.configurations.setAccessToken(dataMP.access_token)
 
         const payment_data ={
-            transaction_amount:Number(req.body.trnascationAmount),
+            transaction_amount:Number(req.body.transactionAmount),
             token:req.body.token,
             description:"req.body.description",
             installments:Number(req.body.installments),

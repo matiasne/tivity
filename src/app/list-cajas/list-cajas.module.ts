@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { ListCajasPageRoutingModule } from './list-cajas-routing.module';
 
 import { ListCajasPage } from './list-cajas.page';
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    DirectivesModule,
     FormsModule,
     IonicModule,
     ListCajasPageRoutingModule

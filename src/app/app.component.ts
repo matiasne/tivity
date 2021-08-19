@@ -26,7 +26,10 @@ import { BluetoothService } from './Services/bluetooth.service';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { HomePage } from './home/home.page';
 import { NFC, Ndef } from '@ionic-native/nfc/ngx';
-
+import { AppVersion } from '@ionic-native/app-version/ngx';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
+import { EscanerCodigoBarraService } from './Services/escaner-codigo-barra.service';
 
 @Component({
   selector: 'app-root',
@@ -48,6 +51,8 @@ export class AppComponent implements OnInit {
   public showServicios ="false";
   public showSubscripciones ="false";
   public showConfiguracion ="false";
+
+  private VERSION_MINIMA = 0;
 
   public appActions =[
     
@@ -139,7 +144,12 @@ export class AppComponent implements OnInit {
     private impresoraService:ImpresoraService,
     private deeplinks: Deeplinks,
     private nfc: NFC, 
-    private ndef: Ndef
+    private ndef: Ndef,
+    private alertController:AlertController,
+    private appVersion: AppVersion,
+    private openNativeSettings: OpenNativeSettings,
+    private firebaseDynamicLinks: FirebaseDynamicLinks,
+    private escanerCodigoBarraService:EscanerCodigoBarraService
   ) {
     this.comercioSeleccionado = new Comercio();
     
@@ -160,29 +170,50 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(async () => {
 
       
-      console.log("NgOnInit")
 
-      this.statusBar.styleDefault();
+      if (this.platform.is('cordova')) {
 
-      let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
-      this.nfc.readerMode(flags).subscribe(
-          tag => alert(JSON.stringify(tag)),
-          err => alert(err)
-      );
-      
-      this.deeplinks.route({
-        '/page': "page",
-      }).subscribe(match => {
-        // match.$route - the route we matched, which is the matched entry from the arguments to route()
-        // match.$args - the args passed in the link
-        // match.$link - the full link data
-        alert('Successfully matched route');
-      }, nomatch => {
-        // nomatch.$link - the full link data
-        alert("No match")
-        alert(JSON.stringify(nomatch));
-      });
+        
+
+        this.appVersion.getVersionNumber().then(res => {
+          let ionVersionNumber = res.split('.').join('');
+          if (Number(ionVersionNumber) <= this.VERSION_MINIMA){
+              this.forzarUpgrade()
+          }
+        }).catch(error => {
+          alert(error);
+        });
+
+         
+        this.deeplinks.route({
+          '/page': "page",
+          '':"pp"
+        }).subscribe(match => {
+          // match.$route - the route we matched, which is the matched entry from the arguments to route()
+          // match.$args - the args passed in the link
+          // match.$link - the full link data
+          console.log(match);
+        }, nomatch => {
+          // nomatch.$link - the full link data
+          console.log(nomatch);
+        });
    
+
+        this.fcm.onNotification().subscribe(data => {      
+          if(data.wasTapped){
+            alert("wasTaped")
+          } else {
+            console.log(data);
+            this.toastService.mensajeVerde(data.title,data.body);
+          };
+        });
+  
+        this.bluetoothService.enable();
+
+      }
+     
+      
+     
       /*this.notifiacionesDesktopService.requestPermission();
       this.notifiacionesDesktopService.init().then(data=>{
         console.log("OK")
@@ -190,16 +221,7 @@ export class AppComponent implements OnInit {
         console.log("ERROR"); 
       });*/
 
-      this.fcm.onNotification().subscribe(data => {      
-        if(data.wasTapped){
-          alert("wasTaped")
-        } else {
-          console.log(data);
-          this.toastService.mensajeVerde(data.title,data.body);
-        };
-      });
-
-      this.bluetoothService.enable();
+     
 
       this.authService.getActualUserIdObservable().subscribe(uid=>{       
 
@@ -213,8 +235,7 @@ export class AppComponent implements OnInit {
             console.log("Salió del sistema");
           });
           
-          console.log("Logueado!"+uid)
-          this.splashScreen.hide();
+          
           this.router.navigate(['home']);     
 
           this.notificacionesAppService.getSinLeer(uid).subscribe(snapshot =>{
@@ -237,12 +258,15 @@ export class AppComponent implements OnInit {
             this.connectionStatus = data
           })
 
-          this.usuarioService.getUserData().subscribe(data=>{
+          this.usuarioService.obsUserData().subscribe(data=>{
             this.usuario = data
             console.log(this.usuario)
           })
         
           if (this.platform.is('cordova')) {
+
+            console.log("Logueado!"+uid)
+            this.splashScreen.hide();
 
             this.impresoraService.conectarImpresora()
 
@@ -272,6 +296,8 @@ export class AppComponent implements OnInit {
     });
   }
 
+  
+
   ngOnInit() {
 
     const path = window.location.pathname.split('folder/')[1];
@@ -289,6 +315,8 @@ export class AppComponent implements OnInit {
       } 
     });       
   }
+
+  
  
   verComercios(){
 
@@ -308,5 +336,25 @@ export class AppComponent implements OnInit {
     this.authService.logout();
   }
 
-  
+  async forzarUpgrade(){
+    const alert = await this.alertController.create({
+    header: 'Es necesario que actualices a una versión más reciente',
+    message: '',
+    buttons: [
+        {
+        text: 'OK',
+        handler: () => {      
+            this.openNativeSettings.open("store");   
+            }
+        }
+    ]
+    });
+    await alert.present();   
+}
+
+tagListenerSuccess(tagEvent) {
+  console.log(tagEvent.type);
+  console.log("Ceci est un tag : " + tagEvent)  
+}
+
 }

@@ -9,7 +9,186 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Cierre de caja</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content  class=\"ion-padding\"> \n\n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Fecha de Cierre </h4> \n    </ion-text>             \n    {{fecha | date: 'dd/MM/yyyy h:mm a'}}\n  </div> \n \n  <ion-text color=\"primary\">\n    <h4>Total Efectivo {{caja.totalEfectivo | currency}}</h4>\n  </ion-text>\n\n  <div>\n    <ion-text color=\"primary\">\n      <h4>Extracción Efectivo*</h4> \n    </ion-text>             \n    <ion-item>\n      <ion-input name=\"extraccion\" type=\"number\" [(ngModel)]=\"extraccionEfectivo\" required></ion-input>\n    </ion-item>    \n  </div>\n\n  <ion-text color=\"primary\">\n    <h4>Total Debito {{caja.totalDebito | currency}}</h4>\n  </ion-text>\n\n  <div>\n    <ion-text color=\"primary\">\n      <h4>Extracción Débito*</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"extraccion\" type=\"number\" [(ngModel)]=\"extraccionDebito\" required></ion-input>\n    </ion-item>    \n  </div>\n\n  <ion-text color=\"primary\">\n    <h4>Total Credito {{caja.totalCredito | currency}}</h4>\n  </ion-text>\n\n  <div>\n    <ion-text color=\"primary\">\n      <h4>Extracción Crédito*</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"extraccion\" type=\"number\" [(ngModel)]=\"extraccionCredito\" required></ion-input>\n    </ion-item>    \n  </div>\n   \n  \n\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"cerrar()\">Cerrar</ion-button>\n    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n\n</ion-content>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Cierre de caja</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content  class=\"ion-padding\"> \n\n  <div class=\"form-card\">\n    <ion-text color=\"primary\">\n      <h4>Fecha de Cierre </h4> \n    </ion-text>             \n    {{fecha | date: 'dd/MM/yyyy h:mm a'}}\n  </div> \n \n  <ion-text color=\"primary\">\n    <h4>Total Efectivo {{caja.totalEfectivo | currency}}</h4>\n  </ion-text>\n\n  <div>\n    <ion-text color=\"primary\">\n      <h4>Extracción Efectivo*</h4> \n    </ion-text>             \n    <ion-item>\n      <ion-input name=\"extraccion\" type=\"number\" [(ngModel)]=\"extraccionEfectivo\" required></ion-input>\n    </ion-item>    \n  </div>\n\n  <ion-text color=\"primary\">\n    <h4>Total Debito {{caja.totalDebito | currency}}</h4>\n  </ion-text>\n\n  <div>\n    <ion-text color=\"primary\">\n      <h4>Extracción Débito*</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"extraccion\" type=\"number\" [(ngModel)]=\"extraccionDebito\" required></ion-input>\n    </ion-item>    \n  </div>\n\n  <ion-text color=\"primary\">\n    <h4>Total Credito {{caja.totalCredito | currency}}</h4>\n  </ion-text>\n\n  <div>\n    <ion-text color=\"primary\">\n      <h4>Extracción Crédito*</h4> \n    </ion-text>            \n    <ion-item>\n      <ion-input name=\"extraccion\" type=\"number\" [(ngModel)]=\"extraccionCredito\" required></ion-input>\n    </ion-item>    \n  </div>\n   \n  \n\n  <ion-toolbar>\n    <ion-button class=\"button-rounded\" slot=\"end\" (click)=\"cerrar()\">Cerrar</ion-button>\n    \n    <ion-button class=\"button-rounded\" slot=\"start\"  color=\"light\" (click)=\"cancelar()\">Cancelar</ion-button>\n  </ion-toolbar>\n\n</ion-content>");
+
+/***/ }),
+
+/***/ "./src/app/Services/clientes.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/Services/clientes.service.ts ***!
+  \**********************************************/
+/*! exports provided: ClientesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClientesService", function() { return ClientesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _keyword_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./keyword.service */ "./src/app/Services/keyword.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+
+
+
+
+
+
+
+
+let ClientesService = class ClientesService extends _base_service__WEBPACK_IMPORTED_MODULE_7__["BaseService"] {
+    constructor(afs, keywordService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.keywordService = keywordService;
+        this.comerciosService = comerciosService;
+        this.comerciosService.getSelectedCommerce().subscribe(data => {
+            // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
+            if (data) {
+                console.log(data.id);
+                this.setPath('comercios/' + data.id + '/clientes');
+            }
+        });
+        this.collectionGroup = '/clientes';
+    }
+    create(data) {
+        this.keywordService.agregarKeywords(data, [data.nombre, data.email]);
+        const param = JSON.parse(JSON.stringify(data));
+        return this.afs.collection(this.path).doc(data.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    getByEmail(email) {
+        return this.afs.collection(this.path, ref => ref.where('email', '==', email)).valueChanges();
+    }
+    getByNombre(nombre) {
+        return this.afs.collection(this.path, ref => ref.where('nombre', '==', nombre)).valueChanges();
+    }
+    getRef(id) {
+        return this.afs.collection(this.path).doc(id).ref;
+    }
+    getAll() {
+        return this.afs.collection(this.path).snapshotChanges();
+    }
+    update(cliente) {
+        this.keywordService.agregarKeywords(cliente, [cliente.nombre, cliente.email]);
+        console.log(cliente);
+        const param = JSON.parse(JSON.stringify(cliente));
+        return this.afs.collection(this.path).doc(cliente.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    delete(data) {
+        //Debo eliminar primero cada subscripción
+        if (data.subscripciones) {
+            data.subscripciones.forEach(subscripcion => {
+                this.afs.doc(subscripcion).delete();
+            });
+        }
+        return this.afs.collection(this.path).doc(data.id).delete();
+    }
+    addCtaCorriente(clienteId, ctaCorrienteId) {
+        let param = {
+            ctaId: ctaCorrienteId
+        };
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).set(param);
+    }
+    deleteCtaCorriente(clienteId, ctaCorrienteId) {
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).delete();
+    }
+    search(limit, orderBy, palabra, ultimo) {
+        if (ultimo == "") {
+            console.log("!!!!!! primero");
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .limit(limit)).snapshotChanges();
+        }
+        else {
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .startAfter(ultimo)
+                .limit(limit)).snapshotChanges();
+        }
+    }
+    //Esto para ver todos los beneficios o cuestiones del cliente particular en todo el entorno
+    getAllClientesbyEmail(email) {
+        return this.afs.collectionGroup(this.collectionGroup, ref => ref.where('email', '==', email)).get( /*{ source: 'server' }*/)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(actions => {
+            const data = [];
+            actions.forEach(a => {
+                const item = a.data();
+                item.id = a.id;
+                data.push(item);
+            });
+            return data;
+        }));
+    }
+};
+ClientesService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _keyword_service__WEBPACK_IMPORTED_MODULE_5__["KeywordService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_6__["ComerciosService"] }
+];
+ClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ClientesService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/keyword.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/keyword.service.ts ***!
+  \*********************************************/
+/*! exports provided: KeywordService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeywordService", function() { return KeywordService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let KeywordService = class KeywordService {
+    constructor() { }
+    agregarKeywords(objeto, palabras) {
+        objeto.keywords.push('');
+        objeto.keywords.push(' ');
+        console.log(palabras);
+        palabras.forEach(palabra => {
+            objeto.keywords.push(palabra);
+            let p = palabra.toLowerCase().split(" ");
+            p.forEach(element => {
+                objeto.keywords = objeto.keywords.concat(this.createKeywords(element));
+            });
+        });
+    }
+    createKeywords(name) {
+        const arrName = [];
+        let curName = '';
+        name.split('').forEach(letter => {
+            curName += letter;
+            arrName.push(curName);
+        });
+        return arrName;
+    }
+};
+KeywordService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], KeywordService);
+
+
 
 /***/ }),
 
@@ -189,27 +368,9 @@ let FormCierreCajaPage = class FormCierreCajaPage {
         this.caja.estado = "cerrada";
         this.actualizarMontosCaja();
         this.movimientosService.setearPath(this.caja.id);
-        var mov = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        mov.tipo = this.enumTipoMovimientoCaja.cierre;
-        mov.cajaId = this.caja.id;
-        mov.isCierre = true;
-        mov.metodoPago = "efectivo";
-        mov.monto = -Number(this.extraccionEfectivo);
-        this.movimientosService.add(mov);
-        var movDebito = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        movDebito.tipo = this.enumTipoMovimientoCaja.cierre;
-        movDebito.cajaId = this.caja.id;
-        movDebito.isCierre = true;
-        movDebito.metodoPago = "debito";
-        movDebito.monto = -Number(this.extraccionDebito);
-        this.movimientosService.add(movDebito);
-        var movCredito = new _models_movimientoCaja__WEBPACK_IMPORTED_MODULE_8__["MovimientoCaja"](this.authenticationService.getUID(), this.authenticationService.getEmail());
-        movCredito.tipo = this.enumTipoMovimientoCaja.cierre;
-        movCredito.cajaId = this.caja.id;
-        movCredito.isCierre = true;
-        movCredito.metodoPago = "credito";
-        movCredito.monto = -Number(this.extraccionCredito);
-        this.movimientosService.add(movCredito);
+        this.movimientosService.agregarMovimientoCaja(this.caja.id, "", this.enumTipoMovimientoCaja.cierre, "", "efectivo", -this.extraccionEfectivo, "Cierre De Caja Efectivo");
+        this.movimientosService.agregarMovimientoCaja(this.caja.id, "", this.enumTipoMovimientoCaja.cierre, "", "debito", -this.extraccionEfectivo, "Cierre De Caja Débito");
+        this.movimientosService.agregarMovimientoCaja(this.caja.id, "", this.enumTipoMovimientoCaja.cierre, "", "credito", -this.extraccionEfectivo, "Cierre De Caja Crédito");
         this.navCtrl.back();
     }
     cancelar() {

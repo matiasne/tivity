@@ -9,7 +9,239 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title>Detalle Cliente</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">   \n  <ion-segment (ionChange)=\"segmentChanged($event)\">\n    <ion-segment-button value=\"info\">\n      <ion-label>Info</ion-label>\n    </ion-segment-button>\n    <ion-segment-button  *ngIf=\"comercio.config.beneficiosClientes\" value=\"beneficios\">\n      <ion-label>Beneficios</ion-label>\n    </ion-segment-button>\n    <ion-segment-button value=\"seguimiento\">\n      <ion-label>Seguimiento</ion-label>\n    </ion-segment-button>\n  </ion-segment>  \n\n  <div *ngIf=\"seccionActiva == 'info'\">\n    <ion-item (click)=\"enviarMail()\" class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"person-outline\"></ion-icon>\n      </div>      \n      <ion-label text-wrap>\n        <h2><b>{{cliente.nombre}}</b></h2>           \n        <p>documento: {{cliente.documento}}</p>  \n        <p>fecha nacimiento: {{cliente.fecha_nacimiento | date:'dd/MM/yyyy'}}</p>  \n        <!--p>Cliente desde: {{cliente.createdAt.toDate()}}</p-->    \n      </ion-label>  \n    </ion-item>\n  \n    <ion-item (click)=\"enviarMail()\" class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"mail-outline\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{cliente.email}}</b></h2>        \n      </ion-label>  \n    </ion-item>\n  \n    <ion-item (click)=\"llamar()\" class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"call-outline\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{cliente.telefono}}</b></h2>        \n      </ion-label>  \n    </ion-item>\n  \n    <ion-item class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"location-outline\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{cliente.direccion}}</b></h2>        \n      </ion-label>    \n    </ion-item>\n    \n    \n    <!--div id=\"mapA\" class=\"map\"></div-->\n    \n  \n    <ion-item class=\"item-card\"> \n      <div slot=\"start\">      \n        <ion-icon name=\"create-outline\"></ion-icon>\n      </div>       \n      <ion-label> \n        <h2><b>{{cliente.descripcion}}</b></h2>        \n      </ion-label>       \n    </ion-item>  \n\n    <h5>Cuentas Corrientes:</h5>\n    <ion-button *ngIf=\"ctasCorrientes.length == 0\" class=\"button-rounded\" color=\"primary\" (click)=\"crearCuentaCorriente()\">Crear Cuenta Corriente</ion-button>\n \n    \n    <div *ngIf=\"ctasCorrientes.length != 0\">\n      <ion-list lines=\"none\">\n        <ion-item-sliding  class=\"item-card\" *ngFor=\"let item of ctasCorrientes\">\n          <ion-item (click)=\"seleccionarCuentaCorriente(item)\">           \n            <ion-label>\n              <p>  \n                {{item.nombre}}\n              </p> \n              <p>\n                <b>{{item.montoTotal | currency}}</b> \n              </p>        \n            </ion-label>         \n          </ion-item> \n        <ion-item-options side=\"end\">\n          <ion-item-option color=\"primary\" (click)=\"editarCtaCorriente(item)\"><ion-icon name=\"trash\" ></ion-icon> Editar</ion-item-option>\n        </ion-item-options>\n  \n        </ion-item-sliding>\n      </ion-list>\n    </div>\n\n  </div>\n  <div *ngIf=\"seccionActiva == 'beneficios'\">\n    <ion-button  class=\"button-rounded\" color=\"primary\" (click)=\"agregarBeneficio()\">Agregar Beneficio</ion-button>\n    <ion-item-sliding *ngFor=\"let beneficio of beneficios\" class=\"item-card\">\n      <ion-item>  \n        <div slot=\"start\">\n          <ion-icon name=\"file-tray-full-outline\"></ion-icon>\n        </div>      \n        <ion-label>\n          <b>{{beneficio.descripcion}}</b>        \n        </ion-label> \n      </ion-item>  \n      <ion-item-options side=\"end\">\n        <ion-item-option (click)=\"cancelarBeneficio(beneficio)\"><ion-icon name=\"trash\" ></ion-icon>Eliminar</ion-item-option>\n      </ion-item-options>\n    </ion-item-sliding>\n  </div>\n  \n  <div *ngIf=\"seccionActiva == 'seguimiento'\">\n\n    <ion-item  class=\"item-card\">\n      <ion-label position=\"floating\">Estado</ion-label>\n      <ion-select [(ngModel)]=\"cliente.estado\" (ionChange)=\"cambioEstado()\">\n        <ion-select-option *ngFor=\"let estado of estadosClientes\" [value]=\"estado.id\">{{estado.nombre}}</ion-select-option>\n      </ion-select>\n    </ion-item>\n    <ion-button slot=\"end\" (click)=\"openAddEstado()\">Agregar Nuevo Estado</ion-button>\n    <ion-list lines=\"none\">\n      <ion-item-sliding  class=\"item-card\" *ngFor=\"let item of comentarios\">\n        <ion-item>           \n          <ion-label>\n            <p>  \n              {{item.text}}\n            </p>    \n            <p>{{item.senderEmail}} -  {{item.createdAt.toDate() | date:'dd/MM/yyyy hh:mm'}}</p>\n          </ion-label>         \n        </ion-item>\n      <ion-item-options side=\"end\">\n        <ion-item-option color=\"primary\" (click)=\"eliminarComentario(item)\"><ion-icon name=\"trash\" ></ion-icon> Remover</ion-item-option>\n      </ion-item-options>\n\n      </ion-item-sliding>\n    </ion-list>\n\n  </div>\n  \n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" >\n     \n    <ion-fab-button (click)=\"agregarComentario()\">\n      <ion-icon name=\"chatbubble-outline\"></ion-icon>\n    </ion-fab-button>\n   \n  </ion-fab>\n  \n  \n\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button></ion-back-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Detalle Cliente</ion-title>    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">   \n  <ion-segment (ionChange)=\"segmentChanged($event)\">\n    <ion-segment-button value=\"info\">\n      <ion-label>Info</ion-label>\n    </ion-segment-button>\n    <ion-segment-button  *ngIf=\"comercio.config.beneficiosClientes\" value=\"beneficios\">\n      <ion-label>Beneficios</ion-label>\n    </ion-segment-button>\n    <ion-segment-button value=\"seguimiento\">\n      <ion-label>Seguimiento</ion-label>\n    </ion-segment-button>\n  </ion-segment>  \n\n  <div *ngIf=\"seccionActiva == 'info'\">\n    <ion-item (click)=\"enviarMail()\" class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"person-outline\"></ion-icon>\n      </div>      \n      <ion-label text-wrap>\n        <h2><b>{{cliente.nombre}}</b></h2>           \n        <p>documento: {{cliente.documento}}</p>  \n        <p>fecha nacimiento: {{cliente.fecha_nacimiento | date:'dd/MM/yyyy'}}</p>  \n        <!--p>Cliente desde: {{cliente.createdAt.toDate()}}</p-->    \n      </ion-label>  \n    </ion-item>\n  \n    <ion-item (click)=\"enviarMail()\" class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"mail-outline\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{cliente.email}}</b></h2>        \n      </ion-label>  \n    </ion-item>\n  \n    <ion-item (click)=\"llamar()\" class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"call-outline\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{cliente.telefono}}</b></h2>        \n      </ion-label>  \n    </ion-item>\n  \n    <ion-item class=\"item-card\">\n      <div slot=\"start\">      \n        <ion-icon name=\"location-outline\"></ion-icon>\n      </div>      \n      <ion-label>\n        <h2><b>{{cliente.direccion}}</b></h2>        \n      </ion-label>    \n    </ion-item>\n    \n    \n    <!--div id=\"mapA\" class=\"map\"></div-->\n    \n  \n    <ion-item class=\"item-card\"> \n      <div slot=\"start\">      \n        <ion-icon name=\"create-outline\"></ion-icon>\n      </div>       \n      <ion-label> \n        <h2><b>{{cliente.descripcion}}</b></h2>        \n      </ion-label>       \n    </ion-item>  \n\n    <h5>Cuentas Corrientes:</h5>\n    <ion-button *ngIf=\"ctasCorrientes.length == 0\" class=\"button-rounded\" color=\"primary\" (click)=\"crearCuentaCorriente()\">Crear Cuenta Corriente</ion-button>\n \n    \n    <div *ngIf=\"ctasCorrientes.length != 0\">\n      <ion-list lines=\"none\">\n        <ion-item-sliding  class=\"item-card\" *ngFor=\"let item of ctasCorrientes\">\n          <ion-item (click)=\"seleccionarCuentaCorriente(item)\">           \n            <ion-label>\n              <p>  \n                {{item.nombre}}\n              </p> \n              <p>\n                <b>{{item.montoTotal | currency}}</b> \n              </p>        \n            </ion-label>         \n          </ion-item> \n        <ion-item-options side=\"end\">\n          <ion-item-option color=\"primary\" (click)=\"editarCtaCorriente(item)\"><ion-icon name=\"trash\" ></ion-icon> Editar</ion-item-option>\n        </ion-item-options>\n  \n        </ion-item-sliding>\n      </ion-list>\n    </div>\n\n  </div>\n  <div *ngIf=\"seccionActiva == 'beneficios'\">\n    <ion-button  class=\"button-rounded\" color=\"primary\" (click)=\"agregarBeneficio()\">Agregar Beneficio</ion-button>\n    <ion-item-sliding *ngFor=\"let beneficio of beneficios\" class=\"item-card\">\n      <ion-item>  \n        <div slot=\"start\">\n          <ion-icon name=\"file-tray-full-outline\"></ion-icon>\n        </div>      \n        <ion-label>\n          <b>{{beneficio.descripcion}}</b>        \n        </ion-label> \n      </ion-item>  \n      <ion-item-options side=\"end\">\n        <ion-item-option (click)=\"cancelarBeneficio(beneficio)\"><ion-icon name=\"trash\" ></ion-icon>Eliminar</ion-item-option>\n      </ion-item-options>\n    </ion-item-sliding>\n  </div>\n  \n  <div *ngIf=\"seccionActiva == 'seguimiento'\">\n\n    <ion-item  class=\"item-card\">\n      <ion-label position=\"floating\">Estado</ion-label>\n      <ion-select [(ngModel)]=\"cliente.estado\" (ionChange)=\"cambioEstado()\">\n        <ion-select-option *ngFor=\"let estado of estadosClientes\" [value]=\"estado.id\">{{estado.nombre}}</ion-select-option>\n      </ion-select>\n    </ion-item>\n    <ion-button slot=\"end\" (click)=\"openAddEstado()\">Agregar Nuevo Estado</ion-button>\n    <ion-list lines=\"none\">\n      <ion-item-sliding  class=\"item-card\" *ngFor=\"let item of comentarios\">\n        <ion-item>           \n          <ion-label>\n            <p>  \n              {{item.text}}\n            </p>    \n            <p>{{item.senderEmail}} -  {{item.createdAt.toDate() | date:'dd/MM/yyyy hh:mm'}}</p>\n          </ion-label>         \n        </ion-item>\n      <ion-item-options side=\"end\">\n        <ion-item-option color=\"primary\" (click)=\"eliminarComentario(item)\"><ion-icon name=\"trash\" ></ion-icon> Remover</ion-item-option>\n      </ion-item-options>\n\n      </ion-item-sliding>\n    </ion-list>\n\n  </div>\n  \n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" >\n     \n    <ion-fab-button (click)=\"agregarComentario()\">\n      <ion-icon name=\"chatbubble-outline\"></ion-icon>\n    </ion-fab-button>\n   \n  </ion-fab>\n  \n  \n\n</ion-content>\n");
+
+/***/ }),
+
+/***/ "./src/app/Services/beneficios.service.ts":
+/*!************************************************!*\
+  !*** ./src/app/Services/beneficios.service.ts ***!
+  \************************************************/
+/*! exports provided: BeneficiosService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BeneficiosService", function() { return BeneficiosService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _models_beneficio__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/beneficio */ "./src/app/models/beneficio.ts");
+/* harmony import */ var _models_cliente__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/cliente */ "./src/app/models/cliente.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _pedido_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pedido.service */ "./src/app/Services/pedido.service.ts");
+
+
+
+
+
+
+
+
+
+let BeneficiosService = class BeneficiosService extends _base_service__WEBPACK_IMPORTED_MODULE_6__["BaseService"] {
+    constructor(afs, pedidosService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.pedidosService = pedidosService;
+        this.comerciosService = comerciosService;
+        this.comercioId = "";
+        this.setPath('beneficios');
+    }
+    activarBeneficiosMonto(pedido) {
+        let enumDisp = _models_beneficio__WEBPACK_IMPORTED_MODULE_4__["EnumBeneficioDisparador"];
+        if (pedido.clienteId) {
+            let obs = this.list().subscribe(data => {
+                data.forEach((beneficio) => {
+                    if (beneficio.disparador == enumDisp.compraMayorA.toString()) {
+                        if (this.pedidosService.getTotal(pedido) > Number(beneficio.monto)) {
+                            let cliente = new _models_cliente__WEBPACK_IMPORTED_MODULE_5__["Cliente"]();
+                            cliente.id = pedido.clienteId;
+                            cliente.email = pedido.clienteEmail;
+                            this.agregarBeneficioAUsuario(cliente, beneficio);
+                        }
+                    }
+                });
+                obs.unsubscribe();
+            });
+        }
+    }
+    activarBeneficioRegistro(cliente) {
+        let enumDisp = _models_beneficio__WEBPACK_IMPORTED_MODULE_4__["EnumBeneficioDisparador"];
+        let obs = this.list().subscribe(data => {
+            data.forEach((beneficio) => {
+                if (beneficio.disparador == enumDisp.primerRegitro.toString()) {
+                    this.agregarBeneficioAUsuario(cliente, beneficio);
+                }
+            });
+        });
+    }
+    agregarBeneficioAUsuario(cliente, beneficio) {
+        beneficio.comercioId = this.comerciosService.getSelectedCommerceId();
+        beneficio.clienteId = cliente.id;
+        return this.afs.collection("comercios/" + this.comerciosService.getSelectedCommerceId() + "/clientes/" + cliente.id + "/beneficiosAdquiridos").add(beneficio);
+    }
+    eliminarBeneficioAUsuario(cliente, beneficio) {
+        return this.afs.collection("comercios/" + this.comerciosService.getSelectedCommerceId() + "/clientes/" + cliente.id + "/beneficiosAdquiridos").doc(beneficio.id).delete();
+    }
+    getByCliente(id) {
+        return this.afs.collection("comercios/" + this.comerciosService.getSelectedCommerceId() + "/clientes/" + id + "/beneficiosAdquiridos").snapshotChanges()
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(changes => {
+            return changes.map(a => {
+                const data = a.payload.doc.data();
+                data.id = a.payload.doc.id;
+                data.fromCache = a.payload.doc.metadata.fromCache;
+                return data;
+            });
+        }));
+    }
+};
+BeneficiosService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _pedido_service__WEBPACK_IMPORTED_MODULE_8__["PedidoService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_7__["ComerciosService"] }
+];
+BeneficiosService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], BeneficiosService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/clientes.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/Services/clientes.service.ts ***!
+  \**********************************************/
+/*! exports provided: ClientesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClientesService", function() { return ClientesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angularfire2/firestore */ "./node_modules/angularfire2/firestore/index.js");
+/* harmony import */ var angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _keyword_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./keyword.service */ "./src/app/Services/keyword.service.ts");
+/* harmony import */ var _comercios_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./base.service */ "./src/app/Services/base.service.ts");
+
+
+
+
+
+
+
+
+let ClientesService = class ClientesService extends _base_service__WEBPACK_IMPORTED_MODULE_7__["BaseService"] {
+    constructor(afs, keywordService, comerciosService) {
+        super(afs);
+        this.afs = afs;
+        this.keywordService = keywordService;
+        this.comerciosService = comerciosService;
+        this.comerciosService.getSelectedCommerce().subscribe(data => {
+            // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
+            if (data) {
+                console.log(data.id);
+                this.setPath('comercios/' + data.id + '/clientes');
+            }
+        });
+        this.collectionGroup = '/clientes';
+    }
+    create(data) {
+        this.keywordService.agregarKeywords(data, [data.nombre, data.email]);
+        const param = JSON.parse(JSON.stringify(data));
+        return this.afs.collection(this.path).doc(data.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    getByEmail(email) {
+        return this.afs.collection(this.path, ref => ref.where('email', '==', email)).valueChanges();
+    }
+    getByNombre(nombre) {
+        return this.afs.collection(this.path, ref => ref.where('nombre', '==', nombre)).valueChanges();
+    }
+    getRef(id) {
+        return this.afs.collection(this.path).doc(id).ref;
+    }
+    getAll() {
+        return this.afs.collection(this.path).snapshotChanges();
+    }
+    update(cliente) {
+        this.keywordService.agregarKeywords(cliente, [cliente.nombre, cliente.email]);
+        console.log(cliente);
+        const param = JSON.parse(JSON.stringify(cliente));
+        return this.afs.collection(this.path).doc(cliente.id).set(Object.assign(Object.assign({}, param), { createdAt: firebase__WEBPACK_IMPORTED_MODULE_4__["firestore"].FieldValue.serverTimestamp() }));
+    }
+    delete(data) {
+        //Debo eliminar primero cada subscripción
+        if (data.subscripciones) {
+            data.subscripciones.forEach(subscripcion => {
+                this.afs.doc(subscripcion).delete();
+            });
+        }
+        return this.afs.collection(this.path).doc(data.id).delete();
+    }
+    addCtaCorriente(clienteId, ctaCorrienteId) {
+        let param = {
+            ctaId: ctaCorrienteId
+        };
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).set(param);
+    }
+    deleteCtaCorriente(clienteId, ctaCorrienteId) {
+        this.afs.collection(this.path + '/' + clienteId + '/ctasCorrientes').doc(ctaCorrienteId).delete();
+    }
+    search(limit, orderBy, palabra, ultimo) {
+        if (ultimo == "") {
+            console.log("!!!!!! primero");
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .limit(limit)).snapshotChanges();
+        }
+        else {
+            console.log(palabra);
+            console.log(orderBy);
+            return this.afs.collection(this.path, ref => ref.where('keywords', 'array-contains', palabra)
+                .orderBy(orderBy)
+                .startAfter(ultimo)
+                .limit(limit)).snapshotChanges();
+        }
+    }
+    //Esto para ver todos los beneficios o cuestiones del cliente particular en todo el entorno
+    getAllClientesbyEmail(email) {
+        return this.afs.collectionGroup(this.collectionGroup, ref => ref.where('email', '==', email)).get( /*{ source: 'server' }*/)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(actions => {
+            const data = [];
+            actions.forEach(a => {
+                const item = a.data();
+                item.id = a.id;
+                data.push(item);
+            });
+            return data;
+        }));
+    }
+};
+ClientesService.ctorParameters = () => [
+    { type: angularfire2_firestore__WEBPACK_IMPORTED_MODULE_2__["AngularFirestore"] },
+    { type: _keyword_service__WEBPACK_IMPORTED_MODULE_5__["KeywordService"] },
+    { type: _comercios_service__WEBPACK_IMPORTED_MODULE_6__["ComerciosService"] }
+];
+ClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ClientesService);
+
+
 
 /***/ }),
 
@@ -84,6 +316,54 @@ CtaCorrientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])(
         providedIn: 'root'
     })
 ], CtaCorrientesService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/keyword.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/keyword.service.ts ***!
+  \*********************************************/
+/*! exports provided: KeywordService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeywordService", function() { return KeywordService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+
+let KeywordService = class KeywordService {
+    constructor() { }
+    agregarKeywords(objeto, palabras) {
+        objeto.keywords.push('');
+        objeto.keywords.push(' ');
+        console.log(palabras);
+        palabras.forEach(palabra => {
+            objeto.keywords.push(palabra);
+            let p = palabra.toLowerCase().split(" ");
+            p.forEach(element => {
+                objeto.keywords = objeto.keywords.concat(this.createKeywords(element));
+            });
+        });
+    }
+    createKeywords(name) {
+        const arrName = [];
+        let curName = '';
+        name.split('').forEach(letter => {
+            curName += letter;
+            arrName.push(curName);
+        });
+        return arrName;
+    }
+};
+KeywordService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], KeywordService);
 
 
 
@@ -180,7 +460,7 @@ DetailsClientePageModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".perfil-foto {\n  margin-top: -50px;\n  margin-left: 30px;\n  color: white;\n  border-radius: 5px;\n  text-align: center;\n  width: 100px;\n  height: 100px;\n  background-color: grey;\n  font-size: 12px;\n  border: 5px solid white;\n  border-radius: 100px;\n}\n\n.item-card div {\n  width: 70px;\n  /* height: 70px; */\n  margin-right: 10px;\n  margin-left: -10px;\n  text-align: center;\n  line-height: 70px;\n  font-size: 30px;\n}\n\n.map {\n  width: 100%;\n  height: 150px;\n  position: relative !important;\n  left: 0;\n  top: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZGV0YWlscy1jbGllbnRlL0M6XFxQcm95ZWN0b3NcXFdlYiBBcHBcXHRpdml0eS9zcmNcXGFwcFxcZGV0YWlscy1jbGllbnRlXFxkZXRhaWxzLWNsaWVudGUucGFnZS5zY3NzIiwic3JjL2FwcC9kZXRhaWxzLWNsaWVudGUvZGV0YWlscy1jbGllbnRlLnBhZ2Uuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNJLGlCQUFBO0VBQ0EsaUJBQUE7RUFDQSxZQUFBO0VBQ0Esa0JBQUE7RUFDQSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxlQUFBO0VBQ0EsdUJBQUE7RUFDQSxvQkFBQTtBQ0FKOztBREtBO0VBQ0ksV0FBQTtFQUNBLGtCQUFBO0VBQ0Esa0JBQUE7RUFDQSxrQkFBQTtFQUNBLGtCQUFBO0VBQ0EsaUJBQUE7RUFDQSxlQUFBO0FDRko7O0FES0E7RUFDSSxXQUFBO0VBQ0EsYUFBQTtFQUNBLDZCQUFBO0VBQ0EsT0FBQTtFQUNBLE1BQUE7QUNGSiIsImZpbGUiOiJzcmMvYXBwL2RldGFpbHMtY2xpZW50ZS9kZXRhaWxzLWNsaWVudGUucGFnZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbi5wZXJmaWwtZm90b3tcclxuICAgIG1hcmdpbi10b3A6IC01MHB4O1xyXG4gICAgbWFyZ2luLWxlZnQ6IDMwcHg7XHJcbiAgICBjb2xvcjp3aGl0ZTtcclxuICAgIGJvcmRlci1yYWRpdXM6IDVweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIHdpZHRoOiAxMDBweDtcclxuICAgIGhlaWdodDogMTAwcHg7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBncmV5O1xyXG4gICAgZm9udC1zaXplOiAxMnB4O1xyXG4gICAgYm9yZGVyOiA1cHggc29saWQgd2hpdGU7XHJcbiAgICBib3JkZXItcmFkaXVzOiAxMDBweDtcclxufVxyXG5cclxuXHJcblxyXG4uaXRlbS1jYXJkIGRpdiB7XHJcbiAgICB3aWR0aDogNzBweDtcclxuICAgIC8qIGhlaWdodDogNzBweDsgKi9cclxuICAgIG1hcmdpbi1yaWdodDogMTBweDtcclxuICAgIG1hcmdpbi1sZWZ0OiAtMTBweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGxpbmUtaGVpZ2h0OiA3MHB4O1xyXG4gICAgZm9udC1zaXplOiAzMHB4O1xyXG59XHJcblxyXG4ubWFwe1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDE1MHB4O1xyXG4gICAgcG9zaXRpb246IHJlbGF0aXZlICFpbXBvcnRhbnQ7XHJcbiAgICBsZWZ0OiAwO1xyXG4gICAgdG9wOiAwO1xyXG4gIH0iLCIucGVyZmlsLWZvdG8ge1xuICBtYXJnaW4tdG9wOiAtNTBweDtcbiAgbWFyZ2luLWxlZnQ6IDMwcHg7XG4gIGNvbG9yOiB3aGl0ZTtcbiAgYm9yZGVyLXJhZGl1czogNXB4O1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gIHdpZHRoOiAxMDBweDtcbiAgaGVpZ2h0OiAxMDBweDtcbiAgYmFja2dyb3VuZC1jb2xvcjogZ3JleTtcbiAgZm9udC1zaXplOiAxMnB4O1xuICBib3JkZXI6IDVweCBzb2xpZCB3aGl0ZTtcbiAgYm9yZGVyLXJhZGl1czogMTAwcHg7XG59XG5cbi5pdGVtLWNhcmQgZGl2IHtcbiAgd2lkdGg6IDcwcHg7XG4gIC8qIGhlaWdodDogNzBweDsgKi9cbiAgbWFyZ2luLXJpZ2h0OiAxMHB4O1xuICBtYXJnaW4tbGVmdDogLTEwcHg7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgbGluZS1oZWlnaHQ6IDcwcHg7XG4gIGZvbnQtc2l6ZTogMzBweDtcbn1cblxuLm1hcCB7XG4gIHdpZHRoOiAxMDAlO1xuICBoZWlnaHQ6IDE1MHB4O1xuICBwb3NpdGlvbjogcmVsYXRpdmUgIWltcG9ydGFudDtcbiAgbGVmdDogMDtcbiAgdG9wOiAwO1xufSJdfQ== */");
+/* harmony default export */ __webpack_exports__["default"] = (".perfil-foto {\n  margin-top: -50px;\n  margin-left: 30px;\n  color: white;\n  border-radius: 5px;\n  text-align: center;\n  width: 100px;\n  height: 100px;\n  background-color: grey;\n  font-size: 12px;\n  border: 5px solid white;\n  border-radius: 100px;\n}\n\n.item-card div {\n  width: 70px;\n  /* height: 70px; */\n  margin-right: 10px;\n  margin-left: -10px;\n  text-align: center;\n  line-height: 70px;\n  font-size: 30px;\n}\n\n.map {\n  width: 100%;\n  height: 150px;\n  position: relative !important;\n  left: 0;\n  top: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZGV0YWlscy1jbGllbnRlL0M6XFxQcm95ZWN0b3NcXFdlYkFwcHNcXHRpdml0eS9zcmNcXGFwcFxcZGV0YWlscy1jbGllbnRlXFxkZXRhaWxzLWNsaWVudGUucGFnZS5zY3NzIiwic3JjL2FwcC9kZXRhaWxzLWNsaWVudGUvZGV0YWlscy1jbGllbnRlLnBhZ2Uuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNJLGlCQUFBO0VBQ0EsaUJBQUE7RUFDQSxZQUFBO0VBQ0Esa0JBQUE7RUFDQSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxlQUFBO0VBQ0EsdUJBQUE7RUFDQSxvQkFBQTtBQ0FKOztBREtBO0VBQ0ksV0FBQTtFQUNBLGtCQUFBO0VBQ0Esa0JBQUE7RUFDQSxrQkFBQTtFQUNBLGtCQUFBO0VBQ0EsaUJBQUE7RUFDQSxlQUFBO0FDRko7O0FES0E7RUFDSSxXQUFBO0VBQ0EsYUFBQTtFQUNBLDZCQUFBO0VBQ0EsT0FBQTtFQUNBLE1BQUE7QUNGSiIsImZpbGUiOiJzcmMvYXBwL2RldGFpbHMtY2xpZW50ZS9kZXRhaWxzLWNsaWVudGUucGFnZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbi5wZXJmaWwtZm90b3tcclxuICAgIG1hcmdpbi10b3A6IC01MHB4O1xyXG4gICAgbWFyZ2luLWxlZnQ6IDMwcHg7XHJcbiAgICBjb2xvcjp3aGl0ZTtcclxuICAgIGJvcmRlci1yYWRpdXM6IDVweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIHdpZHRoOiAxMDBweDtcclxuICAgIGhlaWdodDogMTAwcHg7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBncmV5O1xyXG4gICAgZm9udC1zaXplOiAxMnB4O1xyXG4gICAgYm9yZGVyOiA1cHggc29saWQgd2hpdGU7XHJcbiAgICBib3JkZXItcmFkaXVzOiAxMDBweDtcclxufVxyXG5cclxuXHJcblxyXG4uaXRlbS1jYXJkIGRpdiB7XHJcbiAgICB3aWR0aDogNzBweDtcclxuICAgIC8qIGhlaWdodDogNzBweDsgKi9cclxuICAgIG1hcmdpbi1yaWdodDogMTBweDtcclxuICAgIG1hcmdpbi1sZWZ0OiAtMTBweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGxpbmUtaGVpZ2h0OiA3MHB4O1xyXG4gICAgZm9udC1zaXplOiAzMHB4O1xyXG59XHJcblxyXG4ubWFwe1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDE1MHB4O1xyXG4gICAgcG9zaXRpb246IHJlbGF0aXZlICFpbXBvcnRhbnQ7XHJcbiAgICBsZWZ0OiAwO1xyXG4gICAgdG9wOiAwO1xyXG4gIH0iLCIucGVyZmlsLWZvdG8ge1xuICBtYXJnaW4tdG9wOiAtNTBweDtcbiAgbWFyZ2luLWxlZnQ6IDMwcHg7XG4gIGNvbG9yOiB3aGl0ZTtcbiAgYm9yZGVyLXJhZGl1czogNXB4O1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gIHdpZHRoOiAxMDBweDtcbiAgaGVpZ2h0OiAxMDBweDtcbiAgYmFja2dyb3VuZC1jb2xvcjogZ3JleTtcbiAgZm9udC1zaXplOiAxMnB4O1xuICBib3JkZXI6IDVweCBzb2xpZCB3aGl0ZTtcbiAgYm9yZGVyLXJhZGl1czogMTAwcHg7XG59XG5cbi5pdGVtLWNhcmQgZGl2IHtcbiAgd2lkdGg6IDcwcHg7XG4gIC8qIGhlaWdodDogNzBweDsgKi9cbiAgbWFyZ2luLXJpZ2h0OiAxMHB4O1xuICBtYXJnaW4tbGVmdDogLTEwcHg7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgbGluZS1oZWlnaHQ6IDcwcHg7XG4gIGZvbnQtc2l6ZTogMzBweDtcbn1cblxuLm1hcCB7XG4gIHdpZHRoOiAxMDAlO1xuICBoZWlnaHQ6IDE1MHB4O1xuICBwb3NpdGlvbjogcmVsYXRpdmUgIWltcG9ydGFudDtcbiAgbGVmdDogMDtcbiAgdG9wOiAwO1xufSJdfQ== */");
 
 /***/ }),
 
@@ -199,21 +479,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
 /* harmony import */ var _Services_subscripciones_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Services/subscripciones.service */ "./src/app/Services/subscripciones.service.ts");
 /* harmony import */ var _Services_clientes_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Services/clientes.service */ "./src/app/Services/clientes.service.ts");
-/* harmony import */ var _Services_servicios_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Services/servicios.service */ "./src/app/Services/servicios.service.ts");
-/* harmony import */ var _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic-native/call-number/ngx */ "./node_modules/@ionic-native/call-number/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic-native/email-composer/ngx */ "./node_modules/@ionic-native/email-composer/__ivy_ngcc__/ngx/index.js");
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
-/* harmony import */ var _Services_cta_corrientes_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Services/cta-corrientes.service */ "./src/app/Services/cta-corrientes.service.ts");
-/* harmony import */ var _form_comentario_form_comentario_page__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../form-comentario/form-comentario.page */ "./src/app/form-comentario/form-comentario.page.ts");
-/* harmony import */ var _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Services/comentarios.service */ "./src/app/Services/comentarios.service.ts");
-/* harmony import */ var _form_cliente_estado_form_cliente_estado_page__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../form-cliente-estado/form-cliente-estado.page */ "./src/app/form-cliente-estado/form-cliente-estado.page.ts");
-/* harmony import */ var _Services_clientes_estados_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Services/clientes-estados.service */ "./src/app/Services/clientes-estados.service.ts");
-/* harmony import */ var _models_cliente__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../models/cliente */ "./src/app/models/cliente.ts");
-/* harmony import */ var _models_comercio__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../models/comercio */ "./src/app/models/comercio.ts");
-/* harmony import */ var _Services_comercios_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Services/comercios.service */ "./src/app/Services/comercios.service.ts");
-/* harmony import */ var _Services_beneficios_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Services/beneficios.service */ "./src/app/Services/beneficios.service.ts");
-/* harmony import */ var _select_beneficio_select_beneficio_page__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../select-beneficio/select-beneficio.page */ "./src/app/select-beneficio/select-beneficio.page.ts");
-
+/* harmony import */ var _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic-native/call-number/ngx */ "./node_modules/@ionic-native/call-number/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic-native/email-composer/ngx */ "./node_modules/@ionic-native/email-composer/__ivy_ngcc__/ngx/index.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
+/* harmony import */ var _Services_cta_corrientes_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Services/cta-corrientes.service */ "./src/app/Services/cta-corrientes.service.ts");
+/* harmony import */ var _form_comentario_form_comentario_page__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../form-comentario/form-comentario.page */ "./src/app/form-comentario/form-comentario.page.ts");
+/* harmony import */ var _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Services/comentarios.service */ "./src/app/Services/comentarios.service.ts");
+/* harmony import */ var _form_cliente_estado_form_cliente_estado_page__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../form-cliente-estado/form-cliente-estado.page */ "./src/app/form-cliente-estado/form-cliente-estado.page.ts");
+/* harmony import */ var _Services_clientes_estados_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Services/clientes-estados.service */ "./src/app/Services/clientes-estados.service.ts");
+/* harmony import */ var _models_cliente__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../models/cliente */ "./src/app/models/cliente.ts");
+/* harmony import */ var _models_comercio__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../models/comercio */ "./src/app/models/comercio.ts");
+/* harmony import */ var _Services_comercios_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Services/comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _Services_beneficios_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Services/beneficios.service */ "./src/app/Services/beneficios.service.ts");
+/* harmony import */ var _select_beneficio_select_beneficio_page__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../select-beneficio/select-beneficio.page */ "./src/app/select-beneficio/select-beneficio.page.ts");
 
 
 
@@ -233,10 +511,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let DetailsClientePage = class DetailsClientePage {
-    constructor(route, clientesServices, serviciosServices, subscripcionesService, router, callNumber, emailComposer, alertController, ctasCorreintesService, modalController, comentarioService, clientesEstadosService, comerciosService, beneficiosService) {
+    constructor(route, clientesServices, subscripcionesService, router, callNumber, emailComposer, alertController, ctasCorreintesService, modalController, comentarioService, clientesEstadosService, comerciosService, beneficiosService) {
         this.route = route;
         this.clientesServices = clientesServices;
-        this.serviciosServices = serviciosServices;
         this.subscripcionesService = subscripcionesService;
         this.router = router;
         this.callNumber = callNumber;
@@ -256,14 +533,13 @@ let DetailsClientePage = class DetailsClientePage {
         this.comentarios = [];
         this.estadosClientes = [];
         this.beneficios = [];
-        this.cliente = new _models_cliente__WEBPACK_IMPORTED_MODULE_14__["Cliente"]();
-        this.comercio = new _models_comercio__WEBPACK_IMPORTED_MODULE_15__["Comercio"]();
+        this.cliente = new _models_cliente__WEBPACK_IMPORTED_MODULE_13__["Cliente"]();
+        this.comercio = new _models_comercio__WEBPACK_IMPORTED_MODULE_14__["Comercio"]();
         this.comercio.asignarValores(this.comerciosService.getSelectedCommerceValue());
     }
     ngOnInit() {
         this.subsCliente = this.clientesServices.get(this.route.snapshot.params.id).subscribe((resp) => {
-            this.cliente.asignarValores(resp.payload.data());
-            this.cliente.id = resp.payload.id;
+            this.cliente.asignarValores(resp);
             console.log(this.cliente);
             this.comentarioService.setearPath("clientes", this.route.snapshot.params.id);
             this.comentarioService.list().subscribe(data => {
@@ -287,7 +563,7 @@ let DetailsClientePage = class DetailsClientePage {
     openAddEstado() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             const modal = yield this.modalController.create({
-                component: _form_cliente_estado_form_cliente_estado_page__WEBPACK_IMPORTED_MODULE_12__["FormClienteEstadoPage"],
+                component: _form_cliente_estado_form_cliente_estado_page__WEBPACK_IMPORTED_MODULE_11__["FormClienteEstadoPage"],
                 componentProps: {
                     comercioId: localStorage.getItem('comercio_seleccionadoId')
                 }
@@ -303,7 +579,7 @@ let DetailsClientePage = class DetailsClientePage {
     agregarBeneficio() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             const modal = yield this.modalController.create({
-                component: _select_beneficio_select_beneficio_page__WEBPACK_IMPORTED_MODULE_18__["SelectBeneficioPage"]
+                component: _select_beneficio_select_beneficio_page__WEBPACK_IMPORTED_MODULE_17__["SelectBeneficioPage"]
             });
             modal.onDidDismiss()
                 .then((retorno) => {
@@ -402,7 +678,7 @@ let DetailsClientePage = class DetailsClientePage {
     agregarComentario() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             const modal = yield this.modalController.create({
-                component: _form_comentario_form_comentario_page__WEBPACK_IMPORTED_MODULE_10__["FormComentarioPage"],
+                component: _form_comentario_form_comentario_page__WEBPACK_IMPORTED_MODULE_9__["FormComentarioPage"],
                 componentProps: {
                     comentableId: this.route.snapshot.params.id,
                     comentableTipo: "clientes"
@@ -423,18 +699,17 @@ let DetailsClientePage = class DetailsClientePage {
 DetailsClientePage.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
     { type: _Services_clientes_service__WEBPACK_IMPORTED_MODULE_4__["ClientesService"] },
-    { type: _Services_servicios_service__WEBPACK_IMPORTED_MODULE_5__["ServiciosService"] },
     { type: _Services_subscripciones_service__WEBPACK_IMPORTED_MODULE_3__["SubscripcionesService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
-    { type: _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_6__["CallNumber"] },
-    { type: _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_7__["EmailComposer"] },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["AlertController"] },
-    { type: _Services_cta_corrientes_service__WEBPACK_IMPORTED_MODULE_9__["CtaCorrientesService"] },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_8__["ModalController"] },
-    { type: _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_11__["ComentariosService"] },
-    { type: _Services_clientes_estados_service__WEBPACK_IMPORTED_MODULE_13__["ClientesEstadosService"] },
-    { type: _Services_comercios_service__WEBPACK_IMPORTED_MODULE_16__["ComerciosService"] },
-    { type: _Services_beneficios_service__WEBPACK_IMPORTED_MODULE_17__["BeneficiosService"] }
+    { type: _ionic_native_call_number_ngx__WEBPACK_IMPORTED_MODULE_5__["CallNumber"] },
+    { type: _ionic_native_email_composer_ngx__WEBPACK_IMPORTED_MODULE_6__["EmailComposer"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["AlertController"] },
+    { type: _Services_cta_corrientes_service__WEBPACK_IMPORTED_MODULE_8__["CtaCorrientesService"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__["ModalController"] },
+    { type: _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_10__["ComentariosService"] },
+    { type: _Services_clientes_estados_service__WEBPACK_IMPORTED_MODULE_12__["ClientesEstadosService"] },
+    { type: _Services_comercios_service__WEBPACK_IMPORTED_MODULE_15__["ComerciosService"] },
+    { type: _Services_beneficios_service__WEBPACK_IMPORTED_MODULE_16__["BeneficiosService"] }
 ];
 DetailsClientePage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -444,6 +719,77 @@ DetailsClientePage = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     })
 ], DetailsClientePage);
 
+
+
+/***/ }),
+
+/***/ "./src/app/models/beneficio.ts":
+/*!*************************************!*\
+  !*** ./src/app/models/beneficio.ts ***!
+  \*************************************/
+/*! exports provided: EnumBeneficioDisparador, Beneficio */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnumBeneficioDisparador", function() { return EnumBeneficioDisparador; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Beneficio", function() { return Beneficio; });
+var EnumBeneficioDisparador;
+(function (EnumBeneficioDisparador) {
+    EnumBeneficioDisparador[EnumBeneficioDisparador["sinDefinir"] = 0] = "sinDefinir";
+    EnumBeneficioDisparador[EnumBeneficioDisparador["compraMayorA"] = 1] = "compraMayorA";
+    EnumBeneficioDisparador[EnumBeneficioDisparador["primerRegitro"] = 3] = "primerRegitro";
+})(EnumBeneficioDisparador || (EnumBeneficioDisparador = {}));
+class Beneficio {
+    constructor() {
+        this.id = "";
+        this.monto = "";
+        this.descripcion = "";
+        this.comercioId = ""; //esto se agrega cuando es un adquirido
+        this.clienteId = ""; //esto se agrega cuando es un adquirido
+    }
+    asignarValores(init) {
+        Object.assign(this, init);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/app/models/cliente.ts":
+/*!***********************************!*\
+  !*** ./src/app/models/cliente.ts ***!
+  \***********************************/
+/*! exports provided: Cliente */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cliente", function() { return Cliente; });
+/* harmony import */ var _localizacion__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./localizacion */ "./src/app/models/localizacion.ts");
+
+class Cliente {
+    constructor() {
+        this.id = "";
+        this.comercioId = "";
+        this.nombre = "";
+        this.documentoTipo = "";
+        this.documento = "";
+        this.personaJuridica = "";
+        this.fecha_nacimiento = "";
+        this.telefono = "";
+        this.email = "";
+        this.descripcion = "";
+        this.foto = "";
+        this.vendedorId = "";
+        this.estado = "";
+        this.keywords = [];
+        this.direccion = new _localizacion__WEBPACK_IMPORTED_MODULE_0__["Localizacion"]();
+    }
+    asignarValores(init) {
+        Object.assign(this, init);
+    }
+}
 
 
 /***/ })

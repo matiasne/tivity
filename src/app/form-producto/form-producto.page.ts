@@ -72,16 +72,11 @@ export class FormProductoPage implements OnInit {
   
   constructor(
     private formBuilder: FormBuilder,
-    private imagePicker: ImagePicker,
-    private camera: Camera,
-    private crop: Crop,
     public actionSheetController: ActionSheetController,
-    private file: File,
     public modalController: ModalController,
     public productosService:ProductosService,
     public categoriaService:CategoriasService,
     private barcodeScanner: BarcodeScanner,
-    private route: ActivatedRoute,
     public alertController: AlertController,
     private navCtrl: NavController, 
     private router:Router,
@@ -120,7 +115,13 @@ export class FormProductoPage implements OnInit {
       recibirPedidos:[true]
     });
 
-    this.paramId = this.navParams.get('id');
+    this.item.asignarValores(this.navParams.get('item'))
+    this.datosForm.patchValue(this.item);
+        
+
+   
+  //  
+
   }
 
   get f() { return this.datosForm.controls; }
@@ -130,54 +131,36 @@ export class FormProductoPage implements OnInit {
 
   async ionViewDidEnter(){
 
-    console.log(this.paramId)
-
-    if(this.paramId){
+    if(this.item.id != ""){
       this.updating = true; 
-    //  this.loadingService.presentLoading()
-      this.productosService.get(this.paramId).subscribe(item=>{        
-        this.titulo = "Editar Producto";
-      //  this.loadingService.dismissLoading()
-        this.datosForm.patchValue(item);
-        this.item.asignarValores(item)
 
-        this.gruposOpciones = []; 
-        this.item.gruposOpcionesId.forEach(id =>{
-          let sub = this.gruposOpcionesService.get(id).subscribe(data=>{
-            this.gruposOpciones.push(data);
-            sub.unsubscribe()
-          })
-        })      
-        this.changeRef.detectChanges()        
-      })    
-      
-      this.productosService.getWoocommerceValue(this.paramId).subscribe(data=>{
+      this.gruposOpciones = []; 
+      this.item.gruposOpcionesId.forEach(id =>{
+        let sub = this.gruposOpcionesService.get(id).subscribe(data=>{
+          this.gruposOpciones.push(data);
+          sub.unsubscribe()
+        })
+      })      
+
+     
+      this.productosService.getWoocommerceValue(this.item.id).subscribe(data=>{
         this.woocommerceSyncData.asignarValores(data);
         console.log(data)
       })
+
+      this.changeRef.detectChanges() 
     } 
     else{
       this.item.id = this.firestore.createId();
     }
 
-    let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId');
-    this.categoriaService.getAll().subscribe((snapshot) => {     
-      this.categorias = [];
-      snapshot.forEach((snap: any) => {         
-          var item = snap.payload.doc.data();
-          item.id = snap.payload.doc.id;              
-          this.categorias.push(item);   
-      }); 
+    this.categoriaService.list().subscribe(data => {     
+      this.categorias = data;
     })
 
     this.cocinasService.list().subscribe((data) => {     
       this.cocinas = data;
-    /*  if(this.cocinas.length == 0 && this.comercio.config.cocinas){
-        this.presentAlertCrearCocinas();
-      }*/
-    })
-
-   
+    })  
 
   }
 
@@ -400,9 +383,8 @@ export class FormProductoPage implements OnInit {
 
 
  
-  cancelar(){
+  cerrar(){
    this.modalCtrl.dismiss()
-    this.navCtrl.back();
   }
 
   elimiar(){

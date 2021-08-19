@@ -22,7 +22,7 @@ export class FormInvitacionPage implements OnInit {
   submitted = false;
   comercio:any = "";
   public invitacion:Invitacion;
-  public rol="";
+  public rol="invitado";
   public email="";
   public roles=[
     "Cocinero",

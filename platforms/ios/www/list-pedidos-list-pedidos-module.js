@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title>Pedidos</ion-title>   \n    <ion-button *ngIf=\"connectionStatus == 'offline'\" fill=\"clear\" color=\"danger\" slot=\"end\">\n      <ion-icon name=\"cloud-offline-outline\"></ion-icon>\n    </ion-button>  \n    <ion-button *ngIf=\"connectionStatus == 'online'\" fill=\"clear\" color=\"success\" slot=\"end\">\n      <ion-icon name=\"cloud-done-outline\"></ion-icon>\n    </ion-button>     \n    \n  </ion-toolbar>\n</ion-header>\n \n<ion-content class=\"ion-padding\"> \n\n  <ion-searchbar animated *ngIf=\"showSearchBar\"  \n      placeholder=\"Buscar\"\n      animated=\"true\"\n      showCancelButton=\"never\" \n      color=\"light\"  \n      autocomplete=\"on\"\n      enterkeyhint=\"send\"\n      inputmode=\"text\"\n      type=\"text\"\n      debounce=\"300\"\n      value=\"{{palabraFiltro}}\"\n      (ionChange)=\"onChange($event)\">\n    </ion-searchbar>\n\n  <ion-row>\n    <ion-col size=\"6\"> \n      <ion-item>  \n        <ion-label position=\"floating\" >Estado</ion-label>\n        <ion-select multiple=\"false\" (ionChange)=\"segmentChanged($event)\">\n          <ion-select-option  value=\"{{cEstado.pendiente}}\" selected>Solicitado</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.suspendido}}\">Suspendido</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.cobrado}}\">Cobrado</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.reembolsado}}\">Reembolsado</ion-select-option>\n        </ion-select>       \n      </ion-item>\n    </ion-col>    \n    <ion-col size=\"6\">\n      <ion-item>  \n        <ion-label position=\"floating\">Desde</ion-label>\n        <ion-select multiple=\"false\" (ionChange)=\"onChangeAtras($event)\">\n          <ion-select-option  [value]=\"1\" selected>Ayer</ion-select-option>\n          <ion-select-option  [value]=\"2\">2 días atras</ion-select-option>\n          <ion-select-option  [value]=\"7\">Una semana atrás</ion-select-option>\n        </ion-select>       \n      </ion-item>  \n    </ion-col>\n    \n  </ion-row>\n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comandas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && pedidosLocales.length == 0 && pedidosWoocommerce.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/pedidos.fw.png\" alt=\"\">\n    <p>No tienes pedidos.</p>\n  </div>\n\n  <ion-list lines=\"none\" >        \n    <ion-item-sliding *ngFor=\"let pedido of pedidosLocales\"  class=\"item-card\">\n      <app-card-pedido [item]=\"pedido\" (click)=\"seleccionar(pedido)\"></app-card-pedido>\n      <ion-item-options *ngIf=\"pedido.statusCobro == cEstado.pendiente\" side=\"end\">\n        <ion-item-option color=\"danger\" (click)=\"cancelar(pedido)\"><ion-icon name=\"trash\" ></ion-icon>Suspender</ion-item-option>\n      </ion-item-options> \n      <ion-item-options *ngIf=\"pedido.statusCobro == cEstado.suspendido\" side=\"end\">\n        <ion-item-option  (click)=\"reanudar(pedido)\"><ion-icon name=\"trash\" ></ion-icon>Reanudar</ion-item-option>\n      </ion-item-options> \n    </ion-item-sliding>  \n  </ion-list>\n\n  <ion-list lines=\"none\">        \n    <span *ngFor=\"let pedido of pedidosWoocommerce\"  >\n      <app-card-pedido-woocommerce [item]=\"pedido\" (click)=\"seleccionarPedidoWoocommerce(pedido)\"></app-card-pedido-woocommerce>\n    </span>  \n  </ion-list>\n  \n\n\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" >\n    <ion-fab-button *ngIf=\"palabraFiltro == ''\"  color=\"success\" (click)=\"focusBuscar()\">\n      <ion-icon name=\"search\"></ion-icon>\n    </ion-fab-button><br>\n    <ion-fab-button (click)=\"nuevoPedido()\">\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button autoHide=\"false\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title  size=\"small\">Pedidos</ion-title>   \n    <ion-button *ngIf=\"connectionStatus == 'offline'\" fill=\"clear\" color=\"danger\" slot=\"end\">\n      <ion-icon name=\"cloud-offline-outline\"></ion-icon>\n    </ion-button>  \n    <ion-button *ngIf=\"connectionStatus == 'online'\" fill=\"clear\" color=\"success\" slot=\"end\">\n      <ion-icon name=\"cloud-done-outline\"></ion-icon>\n    </ion-button>     \n    \n  </ion-toolbar>\n</ion-header>\n \n<ion-content class=\"ion-padding\"> \n  <span *ngIf=\"showSearchBar\">\n    <ion-searchbar animated   \n    placeholder=\"Buscar por Cliente, Mesa, Personal\"\n    animated=\"true\"\n    showCancelButton=\"never\" \n    color=\"light\"  \n    autocomplete=\"on\"\n    enterkeyhint=\"send\"\n    inputmode=\"text\"\n    type=\"text\"\n    debounce=\"300\"\n    value=\"{{palabraFiltro}}\"\n    (ionChange)=\"onChange($event)\">\n  </ion-searchbar>\n\n  <ion-row>\n    <ion-col size=\"6\"> \n      <ion-item>  \n        <ion-label position=\"floating\" >Estado</ion-label>\n        <ion-select multiple=false interface=\"popover\" (ionChange)=\"segmentChanged($event)\">\n          <ion-select-option  value=\"0\" selected>Todos</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.pendiente}}\">Solicitado</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.suspendido}}\">Suspendido</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.cobrado}}\">Cobrado</ion-select-option>\n          <ion-select-option  value=\"{{cEstado.reembolsado}}\">Reembolsado</ion-select-option>\n        </ion-select>       \n      </ion-item>\n    </ion-col>    \n    <ion-col size=\"6\">\n      <!--ion-item>  \n        <ion-label position=\"floating\">Desde</ion-label>\n        <ion-select interface=\"popover\" multiple=false (ionChange)=\"onChangeAtras($event)\">\n          <ion-select-option  [value]=\"1\" selected>Ayer</ion-select-option>\n          <ion-select-option  [value]=\"2\">2 días atras</ion-select-option>\n          <ion-select-option  [value]=\"7\">Una semana atrás</ion-select-option>\n        </ion-select>       \n      </ion-item-->\n      <ion-button fill=\"clear\" color=\"primary\" (click)=\"abrirSelectorFechas()\"><ion-icon name=\"calendar-outline\"></ion-icon></ion-button>  \n    </ion-col>\n    \n  </ion-row>\n  </span>\n  \n  <div *ngIf=\"buscando\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/buscando.fw.png\" alt=\"\">\n    <p>Cargando comandas, aguarde unos segundos por favor</p>\n  </div>\n\n  <div *ngIf=\"!buscando && pedidosLocales.length == 0 && pedidosWoocommerce.length == 0\" class=\"mensaje FadeOut FadeIn\">\n    <img src=\"../../assets/img/pedidos.fw.png\" alt=\"\">\n    <p>No tienes pedidos.</p>\n  </div>\n\n  <ion-list lines=\"none\" >        \n    <ion-item-sliding *ngFor=\"let pedido of pedidosLocales\"  class=\"item-card\">\n      <app-card-pedido [item]=\"pedido\" (click)=\"seleccionar(pedido)\"></app-card-pedido>\n      <ion-item-options *ngIf=\"pedido.statusCobro == cEstado.pendiente\" side=\"end\">\n        <ion-item-option color=\"danger\" (click)=\"cancelar(pedido)\"><ion-icon name=\"trash\" ></ion-icon>Suspender</ion-item-option>\n      </ion-item-options> \n      <ion-item-options *ngIf=\"pedido.statusCobro == cEstado.suspendido\" side=\"end\">\n        <ion-item-option  (click)=\"reanudar(pedido)\"><ion-icon name=\"trash\" ></ion-icon>Reanudar</ion-item-option>\n      </ion-item-options> \n    </ion-item-sliding>  \n  </ion-list>\n\n  <ion-list lines=\"none\">        \n    <span *ngFor=\"let pedido of pedidosWoocommerce\"  >\n      <app-card-pedido-woocommerce [item]=\"pedido\" (click)=\"seleccionarPedidoWoocommerce(pedido)\"></app-card-pedido-woocommerce>\n    </span>  \n  </ion-list>\n  \n\n\n  <ion-fab vertical=\"bottom\" horizontal=\"end\" slot=\"fixed\" >\n    <ion-fab-button *ngIf=\"palabraFiltro == ''\"  color=\"success\" (click)=\"focusBuscar()\">\n      <ion-icon name=\"filter\"></ion-icon>\n    </ion-fab-button><br>\n    <ion-fab-button (click)=\"nuevoPedido()\">\n      <ion-icon name=\"add\"></ion-icon>\n    </ion-fab-button>\n  </ion-fab>\n\n</ion-content>\n");
 
 /***/ }),
 
@@ -122,16 +122,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
-/* harmony import */ var _form_filter_pedidos_form_filter_pedidos_page__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../form-filter-pedidos/form-filter-pedidos.page */ "./src/app/form-filter-pedidos/form-filter-pedidos.page.ts");
-/* harmony import */ var _models_pedido__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/pedido */ "./src/app/models/pedido.ts");
-/* harmony import */ var _models_woocommerce_order__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../models/woocommerce/order */ "./src/app/models/woocommerce/order.ts");
-/* harmony import */ var _Services_authentication_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Services/authentication.service */ "./src/app/Services/authentication.service.ts");
-/* harmony import */ var _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Services/comentarios.service */ "./src/app/Services/comentarios.service.ts");
-/* harmony import */ var _Services_global_navegacion_parametros_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Services/global/navegacion-parametros.service */ "./src/app/Services/global/navegacion-parametros.service.ts");
-/* harmony import */ var _Services_loading_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Services/loading.service */ "./src/app/Services/loading.service.ts");
-/* harmony import */ var _Services_pedido_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Services/pedido.service */ "./src/app/Services/pedido.service.ts");
-/* harmony import */ var _Services_pedidos_woocommerce_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Services/pedidos-woocommerce.service */ "./src/app/Services/pedidos-woocommerce.service.ts");
-/* harmony import */ var _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Services/usuarios.service */ "./src/app/Services/usuarios.service.ts");
+/* harmony import */ var fuse_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! fuse.js */ "./node_modules/fuse.js/dist/fuse.esm.js");
+/* harmony import */ var _details_pedido_details_pedido_page__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../details-pedido/details-pedido.page */ "./src/app/details-pedido/details-pedido.page.ts");
+/* harmony import */ var _form_filter_pedidos_form_filter_pedidos_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../form-filter-pedidos/form-filter-pedidos.page */ "./src/app/form-filter-pedidos/form-filter-pedidos.page.ts");
+/* harmony import */ var _models_pedido__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../models/pedido */ "./src/app/models/pedido.ts");
+/* harmony import */ var _models_woocommerce_order__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../models/woocommerce/order */ "./src/app/models/woocommerce/order.ts");
+/* harmony import */ var _Services_authentication_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Services/authentication.service */ "./src/app/Services/authentication.service.ts");
+/* harmony import */ var _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Services/comentarios.service */ "./src/app/Services/comentarios.service.ts");
+/* harmony import */ var _Services_global_navegacion_parametros_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Services/global/navegacion-parametros.service */ "./src/app/Services/global/navegacion-parametros.service.ts");
+/* harmony import */ var _Services_loading_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Services/loading.service */ "./src/app/Services/loading.service.ts");
+/* harmony import */ var _Services_pedido_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Services/pedido.service */ "./src/app/Services/pedido.service.ts");
+/* harmony import */ var _Services_pedidos_woocommerce_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Services/pedidos-woocommerce.service */ "./src/app/Services/pedidos-woocommerce.service.ts");
+/* harmony import */ var _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Services/usuarios.service */ "./src/app/Services/usuarios.service.ts");
+/* harmony import */ var ion2_calendar__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ion2-calendar */ "./node_modules/ion2-calendar/__ivy_ngcc__/dist/index.js");
+/* harmony import */ var ion2_calendar__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(ion2_calendar__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _Services_comercios_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Services/comercios.service */ "./src/app/Services/comercios.service.ts");
+/* harmony import */ var _models_comercio__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../models/comercio */ "./src/app/models/comercio.ts");
+
+
+
+
+
 
 
 
@@ -147,7 +158,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ListPedidosPage = class ListPedidosPage {
-    constructor(pedidosService, alertController, router, modalController, loadingService, comentariosService, authService, changeRef, navParametrosService, pedidosWoocommerceService, usuariosServices) {
+    constructor(pedidosService, alertController, router, modalController, loadingService, comentariosService, authService, changeRef, navParametrosService, pedidosWoocommerceService, usuariosServices, comercioService) {
         this.pedidosService = pedidosService;
         this.alertController = alertController;
         this.router = router;
@@ -159,6 +170,7 @@ let ListPedidosPage = class ListPedidosPage {
         this.navParametrosService = navParametrosService;
         this.pedidosWoocommerceService = pedidosWoocommerceService;
         this.usuariosServices = usuariosServices;
+        this.comercioService = comercioService;
         this.pedidosLocalesAll = [];
         this.pedidosLocales = [];
         this.pedidosWoocommerceAll = [];
@@ -169,11 +181,12 @@ let ListPedidosPage = class ListPedidosPage {
         this.fechaHasta = new Date();
         this.estado = "";
         this.fuente = "";
-        this.cEstado = _models_pedido__WEBPACK_IMPORTED_MODULE_5__["EnumEstadoCobro"];
-        this.seccionActiva = this.cEstado.pendiente;
+        this.cEstado = _models_pedido__WEBPACK_IMPORTED_MODULE_7__["EnumEstadoCobro"];
+        this.seccionActiva = 0;
         this.buscando = true;
         this.connectionStatus = "offline";
         this.showSearchBar = false;
+        this.comercio = new _models_comercio__WEBPACK_IMPORTED_MODULE_18__["Comercio"]();
     }
     set content(content) {
         if (content) { // initially setter gets called with undefined
@@ -185,12 +198,20 @@ let ListPedidosPage = class ListPedidosPage {
             this.userRol = rol;
         });
         this.fechaDesde.setDate(this.fechaDesde.getDate() - 2);
+        this.fechaHasta.setDate(this.fechaHasta.getDate() + 1);
         this.usuariosServices.getConnectionStatus().subscribe(data => {
             this.connectionStatus = data;
         });
+        this.obsPedidos = this.pedidosService.listPedidos().subscribe((pedidos) => {
+            this.pedidosLocalesAll = pedidos;
+            this.buscando = false;
+            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            this.buscar();
+        });
     }
     ionViewDidEnter() {
-        this.loadingService.presentLoadingText("Cargando Pedidos");
+        this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue());
+        this.seccionActiva = 0;
         this.refrescar();
         this.changeRef.detectChanges();
     }
@@ -201,7 +222,14 @@ let ListPedidosPage = class ListPedidosPage {
     onChangeAtras(event) {
         this.fechaDesde = new Date();
         this.fechaDesde.setDate(this.fechaDesde.getDate() - Number(event.target.value));
-        this.refrescar();
+        this.obsPedidos.unsubscribe();
+        let date = new Date(this.fechaDesde);
+        let fechaHasta = new Date();
+        this.obsPedidos = this.pedidosService.listFecha(date, fechaHasta).subscribe((pedidos) => {
+            this.pedidosLocalesAll = pedidos;
+            this.buscando = false;
+            this.buscar();
+        });
     }
     reanudar(item) {
         item.statusCobro = this.cEstado.pendiente;
@@ -237,10 +265,19 @@ let ListPedidosPage = class ListPedidosPage {
     }
     seleccionar(item) {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            let editarPedido = new _models_pedido__WEBPACK_IMPORTED_MODULE_5__["Pedido"]();
+            let editarPedido = new _models_pedido__WEBPACK_IMPORTED_MODULE_7__["Pedido"]();
             editarPedido.asignarValores(item);
             this.navParametrosService.param = editarPedido;
-            this.router.navigate(['details-pedido']);
+            // this.router.navigate(['details-pedido'])
+            const modal = yield this.modalController.create({
+                component: _details_pedido_details_pedido_page__WEBPACK_IMPORTED_MODULE_5__["DetailsPedidoPage"],
+                id: 'detail-pedido'
+            });
+            modal.onDidDismiss()
+                .then((retorno) => {
+                this.refrescar();
+            });
+            yield modal.present();
         });
     }
     buscarWoocommerce() {
@@ -281,73 +318,94 @@ let ListPedidosPage = class ListPedidosPage {
         });
     }
     buscar() {
-        var retorno = false;
         this.pedidosLocales = [];
-        this.pedidosLocalesAll.forEach(item => {
-            var encontrado = true;
-            //si no es administrador solo ve los pedidos generados por el
+        for (let i = 0; i < this.pedidosLocalesAll.length; i++) {
+            let encontrado = false;
             if (this.userRol == "Administrador") {
                 encontrado = true;
             }
             else {
-                if (this.authService.getActualUserId() == item.personalId)
+                if (this.authService.getActualUserId() == this.pedidosLocalesAll[i].personalId)
                     encontrado = true;
             }
             if (encontrado) {
                 encontrado = false;
-                if (this.palabraFiltro != "") {
-                    encontrado = false;
-                    var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                    if (item.clienteNombre) {
-                        retorno = (item.clienteNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-                        if (retorno)
-                            encontrado = true;
-                    }
-                    if (item.mesaNombre) {
-                        retorno = (item.mesaNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-                        if (retorno)
-                            encontrado = true;
-                    }
-                    if (item.personalEmail) {
-                        retorno = (item.personalEmail.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-                        if (retorno)
-                            encontrado = true;
-                    }
-                    if (item.personalNombre) {
-                        retorno = (item.personalNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-                        if (retorno)
-                            encontrado = true;
-                    }
-                }
-                else {
+                if (this.pedidosLocalesAll[i].createdAt.toDate().getTime() > this.fechaDesde.getTime() && this.pedidosLocalesAll[i].createdAt.toDate().getTime() < this.fechaHasta.getTime())
                     encontrado = true;
-                }
             }
             if (encontrado) {
-                let countListos = 0;
-                item.productos.forEach(element => {
-                    if (element.estadoComanda == "Listo")
-                        countListos++;
-                });
-                item.countListos = countListos;
-                if (this.seccionActiva == item.statusCobro) {
-                    this.pedidosLocales.push(item);
+                console.log(this.seccionActiva);
+                if (this.seccionActiva == 0) {
+                    this.pedidosLocales.push(this.pedidosLocalesAll[i]);
                 }
-                return true;
+                else if (this.seccionActiva == this.pedidosLocalesAll[i].statusCobro) {
+                    this.pedidosLocales.push(this.pedidosLocalesAll[i]);
+                }
             }
+        }
+        const options = {
+            keys: [
+                "clienteNombre",
+                "mesaNombre",
+                "personalEmail",
+                "personalNombre",
+                "comanda.numero"
+            ]
+        };
+        const fuse = new fuse_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.pedidosLocales, options);
+        let result = fuse.search(this.palabraFiltro);
+        result.forEach(element => {
+            this.pedidosLocales.push(element.item);
         });
-        this.loadingService.dismissLoading();
+    }
+    abrirSelectorFechas() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            /*const modal = await this.modalController.create({
+              component: FormFechaRangoPage
+            });
+            modal.onDidDismiss()
+            .then((retorno) => {
+              if(retorno.data){
+                this.fechaDesde = retorno.data.fechaDesde,
+                this.fechaHasta = retorno.data.fechaHasta
+                this.refrescar()
+              }
+            });
+            return await modal.present();    */
+            let comienzo = new Date();
+            comienzo.setDate(comienzo.getDate() - this.comercio.config.memoriaDias);
+            const options = {
+                title: '',
+                from: comienzo,
+                to: new Date(),
+                pickMode: 'range'
+            };
+            const myCalendar = yield this.modalController.create({
+                component: ion2_calendar__WEBPACK_IMPORTED_MODULE_16__["CalendarModal"],
+                componentProps: { options }
+            });
+            myCalendar.onDidDismiss()
+                .then((retorno) => {
+                console.log(retorno);
+                if (retorno.data) {
+                    this.fechaDesde = retorno.data.from.dateObj,
+                        this.fechaHasta = retorno.data.to.dateObj;
+                    this.fechaHasta.setDate(this.fechaHasta.getDate() + 1);
+                    this.refrescar();
+                }
+            });
+            myCalendar.present();
+        });
     }
     segmentChanged(event) {
         console.log(event.target.value);
         this.seccionActiva = event.target.value;
-        this.pedidosLocalesAll = [];
-        this.refrescar();
+        this.buscar();
     }
     showFiltroAvanzado() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             const modal = yield this.modalController.create({
-                component: _form_filter_pedidos_form_filter_pedidos_page__WEBPACK_IMPORTED_MODULE_4__["FormFilterPedidosPage"]
+                component: _form_filter_pedidos_form_filter_pedidos_page__WEBPACK_IMPORTED_MODULE_6__["FormFilterPedidosPage"]
             });
             modal.onDidDismiss()
                 .then((retorno) => {
@@ -363,16 +421,15 @@ let ListPedidosPage = class ListPedidosPage {
         });
     }
     refrescar() {
-        let date = new Date(this.fechaDesde);
-        let fechaHasta = new Date();
-        if (!this.obsPedidos)
-            this.pedidosObs = this.pedidosService.listFechaDesde(date, fechaHasta).subscribe((pedidos) => {
-                this.pedidosLocalesAll = pedidos;
-                console.log(this.pedidosLocalesAll);
-                this.buscando = false;
-                this.buscar();
-                this.pedidosObs.unsubscribe();
-            });
+        this.buscar();
+        /* if(!this.obsPedidos)
+         this.pedidosObs = this.pedidosService.listFechaDesde(date,fechaHasta).subscribe((pedidos:any)=>{
+           this.pedidosLocalesAll = pedidos;
+           console.log(this.pedidosLocalesAll)
+           this.buscando = false;
+           this.buscar();
+           this.pedidosObs.unsubscribe()
+         })*/
         this.pedidosWoocommerceService.list().subscribe((pedidos) => {
             console.log(pedidos);
             this.pedidosWoocommerceAll = pedidos;
@@ -383,7 +440,7 @@ let ListPedidosPage = class ListPedidosPage {
         this.router.navigate(['list-productos-servicios', { carritoIntended: 'list-pedidos' }]);
     }
     seleccionarPedidoWoocommerce(order) {
-        let o = new _models_woocommerce_order__WEBPACK_IMPORTED_MODULE_6__["WCOrder"]();
+        let o = new _models_woocommerce_order__WEBPACK_IMPORTED_MODULE_8__["WCOrder"]();
         o.asignarValores(order);
         this.navParametrosService.param = o;
         this.router.navigate(['details-pedido-woocommerce']);
@@ -397,17 +454,18 @@ let ListPedidosPage = class ListPedidosPage {
     }
 };
 ListPedidosPage.ctorParameters = () => [
-    { type: _Services_pedido_service__WEBPACK_IMPORTED_MODULE_11__["PedidoService"] },
+    { type: _Services_pedido_service__WEBPACK_IMPORTED_MODULE_13__["PedidoService"] },
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["AlertController"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["ModalController"] },
-    { type: _Services_loading_service__WEBPACK_IMPORTED_MODULE_10__["LoadingService"] },
-    { type: _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_8__["ComentariosService"] },
-    { type: _Services_authentication_service__WEBPACK_IMPORTED_MODULE_7__["AuthenticationService"] },
+    { type: _Services_loading_service__WEBPACK_IMPORTED_MODULE_12__["LoadingService"] },
+    { type: _Services_comentarios_service__WEBPACK_IMPORTED_MODULE_10__["ComentariosService"] },
+    { type: _Services_authentication_service__WEBPACK_IMPORTED_MODULE_9__["AuthenticationService"] },
     { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"] },
-    { type: _Services_global_navegacion_parametros_service__WEBPACK_IMPORTED_MODULE_9__["NavegacionParametrosService"] },
-    { type: _Services_pedidos_woocommerce_service__WEBPACK_IMPORTED_MODULE_12__["PedidosWoocommerceService"] },
-    { type: _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_13__["UsuariosService"] }
+    { type: _Services_global_navegacion_parametros_service__WEBPACK_IMPORTED_MODULE_11__["NavegacionParametrosService"] },
+    { type: _Services_pedidos_woocommerce_service__WEBPACK_IMPORTED_MODULE_14__["PedidosWoocommerceService"] },
+    { type: _Services_usuarios_service__WEBPACK_IMPORTED_MODULE_15__["UsuariosService"] },
+    { type: _Services_comercios_service__WEBPACK_IMPORTED_MODULE_17__["ComerciosService"] }
 ];
 Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonSearchbar"], { static: false })

@@ -25,6 +25,7 @@ import {
 } from 'ion2-calendar';
 import { ComerciosService } from '../Services/comercios.service';
 import { Comercio } from '../models/comercio';
+import { Rol } from '../models/rol';
 @Component({
   selector: 'app-list-pedidos',
   templateUrl: './list-pedidos.page.html',
@@ -47,7 +48,7 @@ export class ListPedidosPage implements OnInit {
   public pedidosWoocommerce = []
 
   public palabraFiltro = "";
-  public userRol = "";
+  public userRol:Rol;
   public fechaDesde = new Date();
   public fechaHasta = new Date();
   public estado = "";
@@ -102,7 +103,6 @@ export class ListPedidosPage implements OnInit {
     this.obsPedidos = this.pedidosService.listPedidos().subscribe((pedidos:any)=>{
       this.pedidosLocalesAll = pedidos; 
       this.buscando = false;
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
       this.buscar(); 
     })
 
@@ -200,7 +200,7 @@ export class ListPedidosPage implements OnInit {
       var encontrado = true;    
       
       //Por ahora solo el administrador puede ver los pedidos de woocommerce
-      if(this.userRol == "Administrador"){
+      if(this.userRol.rol == "Administrador"){
         encontrado = true;
       }
      
@@ -248,20 +248,20 @@ export class ListPedidosPage implements OnInit {
     
     for(let i=0;i< this.pedidosLocalesAll.length;i++){
       let encontrado = false
-      if(this.userRol == "Administrador"){
+      if(this.userRol.rol == "Administrador"){
         encontrado = true;
       }
       else{
-        if(this.authService.getActualUserId() == this.pedidosLocalesAll[i].personalId)
+        if(this.authService.getActualUserId() == this.pedidosLocalesAll[i].creadorId)
           encontrado = true;
       } 
-
+      
       if(encontrado){
         encontrado = false;
         if(this.pedidosLocalesAll[i].createdAt.toDate().getTime() > this.fechaDesde.getTime() && this.pedidosLocalesAll[i].createdAt.toDate().getTime() < this.fechaHasta.getTime())
           encontrado = true;
       }
-      
+       
       if(encontrado){  
         console.log(this.seccionActiva)
         if(this.seccionActiva == 0){
@@ -279,8 +279,8 @@ export class ListPedidosPage implements OnInit {
       keys: [
         "clienteNombre",
         "mesaNombre",
-        "personalEmail",
-        "personalNombre",
+        "creadorEmail",
+        "creadorNombre",
         "comanda.numero"
       ]
     };

@@ -57,8 +57,8 @@ export class EscPosService {
     }
      
 
-    if(pedido.personalEmail){
-      cmds += "\x1b\x61\x00\x1b\x21\x00 Pedido por: "+ pedido.personalEmail; //text to print
+    if(pedido.creadorEmail){
+      cmds += "\x1b\x61\x00\x1b\x21\x00 Pedido por: "+ pedido.creadorEmail; //text to print
       cmds += "\n"
     }
      
@@ -125,8 +125,8 @@ export class EscPosService {
     }
      
 
-    if(pedido.personalEmail){
-      cmds += "\x1b\x61\x00\x1b\x21\x00 Pedido por: "+ pedido.personalEmail; //text to print
+    if(pedido.creadorEmail){
+      cmds += "\x1b\x61\x00\x1b\x21\x00 Pedido por: "+ pedido.creadorEmail; //text to print
       cmds += "\n"
     }
      

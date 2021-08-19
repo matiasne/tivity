@@ -425,6 +425,22 @@ const routes: Routes = [
   {
     path: 'form-config-mercadopago',
     loadChildren: () => import('./form-config-mercadopago/form-config-mercadopago.module').then( m => m.FormConfigMercadopagoPageModule)
+  },
+  {
+    path: 'form-subscripcion',
+    loadChildren: () => import('./form-subscripcion/form-subscripcion.module').then( m => m.FormSubscripcionPageModule)
+  },
+  {
+    path: 'form-importar-catalogo-csv',
+    loadChildren: () => import('./form-importar-catalogo-csv/form-importar-catalogo-csv.module').then( m => m.FormImportarCatalogoCsvPageModule)
+  },
+  {
+    path: 'form-personal-permisos',
+    loadChildren: () => import('./form-personal-permisos/form-personal-permisos.module').then( m => m.FormPersonalPermisosPageModule)
+  },
+  {
+    path: 'select-personal',
+    loadChildren: () => import('./select-personal/select-personal.module').then( m => m.SelectPersonalPageModule)
   }
  
 ];

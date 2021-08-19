@@ -17,7 +17,6 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Crop } from '@ionic-native/crop/ngx'
-import { File } from '@ionic-native/file/ngx';
 
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -54,8 +53,16 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CalendarModule } from 'ion2-calendar';
 
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
-
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx'
 import { NFC, Ndef } from '@ionic-native/nfc/ngx';
+
+import { AppVersion } from '@ionic-native/app-version/ngx';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+
+import { PapaParseModule } from 'ngx-papaparse';
+import { File } from '@ionic-native/file/ngx';
+import { DirectivesModule } from './Directives/directives.module';
+import { Serial } from '@ionic-native/serial/ngx';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAenr8VfNta7u8NL5J4jpMtosnENy-Gcqc",
@@ -78,7 +85,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
 @NgModule({
   declarations: [
     AppComponent,
-    
+       
   ],
   entryComponents: [
     
@@ -86,13 +93,15 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   imports: [
     FormsModule,
     ComponentsModule,
+    DirectivesModule,
     ReactiveFormsModule,
     BrowserModule,
     NgxQRCodeModule, 
     HttpClientModule,
     ImageCropperModule,
     FullCalendarModule, 
-    CalendarModule,
+    CalendarModule,    
+    PapaParseModule,
     IonicModule.forRoot(),
     AppRoutingModule,  
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -114,11 +123,16 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     Camera,
     ImagePicker,
     BluetoothSerial,
+    FirebaseDynamicLinks,
     Deeplinks,
+    File,
+    Serial,
     NFC,
     Ndef,
     File,
     FCM,
+    AppVersion,
+    OpenNativeSettings,
     AngularFirestore, 
     BarcodeScanner,
     CallNumber,

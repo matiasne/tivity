@@ -3,6 +3,7 @@ import { CalendarOptions, EventAddArg, FullCalendarComponent, Calendar, EventInp
 import { ModalController } from '@ionic/angular';
 import { FormReservaPage } from '../form-reserva/form-reserva.page';
 import { Reserva } from '../models/reserva';
+import { Subscripcion } from '../models/subscripcion';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 import { ReservasService } from '../Services/reservas.service';
 
@@ -28,14 +29,28 @@ export class ListReservasPage implements OnInit {
   initialized = false;
 
   calendarOptions: CalendarOptions = {
-    initialView: 'timeGridDay',
+    initialView: 'dayGridMonth',
     slotDuration: '00:15:00',
     dayHeaderFormat:{ weekday: 'short' },
     dateClick: this.handleDateClick.bind(this), // bind is important!
    // events: this.events,
     height:900,  
-    eventClick: this.handleEventClick.bind(this)
+    eventClick: this.handleEventClick.bind(this),
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    },
+    weekends: true,
+    editable: true,
+    selectable: true,
+    selectMirror: true,
+    dayMaxEvents: true,
   };
+
+  public itemsAll:any[] = [];
+
+  public itemsView:Reserva[] =[];
 
   constructor(
     private reservasService:ReservasService,
@@ -52,36 +67,22 @@ export class ListReservasPage implements OnInit {
 
     this.reservasService.listReservas().subscribe((data:any)=>{
       console.log(data)
-      this.calendarApi.removeAllEvents()
-      data.forEach(element => {
-        let event = {
-          id:element.id,
-          title:"reserva",
-          start:element.desde,
-          end:element.hasta,
-          extendedProps:JSON.parse(JSON.stringify(element))
-          
-        }
-        console.log(event)
-        this.calendarApi.addEvent(event)
-        
-        this.events.push(event);
-      });
-      
-      
+      this.itemsAll = data;      
+      this.mostrar(this.itemsAll)
     })
+    
     //this.calendarApi.addEvent()
 
   }
 
   ngOnInit() {
-    
+   
   }
 
   handleEventClick(info){
     console.log('Event: ' + info.event.title);
     console.log(info.event.extendedProps);
-    let reserva = new Reserva("","")
+    let reserva = new Reserva()
     reserva.asignarValores(info.event.extendedProps)
     this.editarReserva(reserva)
   }
@@ -142,6 +143,25 @@ export class ListReservasPage implements OnInit {
     });
 
     await modal.present();
+  }
+
+  mostrar(arrayElementos){
+    console.log(arrayElementos)
+    this.itemsView = arrayElementos;
+    this.calendarApi.removeAllEvents()
+    this.itemsView.forEach(element => {
+        let event = {
+          id:element.id,
+          title:"reserva",
+          start:element.desde,
+          end:element.hasta,
+          extendedProps:JSON.parse(JSON.stringify(element))          
+        }
+        console.log(event)
+        this.calendarApi.addEvent(event)
+        
+        this.events.push(event);
+    })
   }
 
 }

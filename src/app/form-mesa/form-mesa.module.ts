@@ -9,10 +9,12 @@ import { FormMesaPageRoutingModule } from './form-mesa-routing.module';
 import { FormMesaPage } from './form-mesa.page';
 
 import { NgxQRCodeModule } from 'ngx-qrcode2';  //import this
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    DirectivesModule,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,

@@ -3,6 +3,7 @@ import { Descuento } from './descuento';
 import { Recargo } from './recargo';
 import { Localizacion } from './localizacion';
 import { ItemPedido } from './itemPedido';
+import { User } from './user';
 
 export enum EnumEstadoCobro {
     pendiente = 1, 
@@ -22,6 +23,11 @@ export class Pedido{
         demora:0,
         numero:0,
     }
+
+    public creadorId = "";
+    public creadorEmail="";
+    public creadorNombre="";
+
 
     public personalId = "";
     public personalEmail="";
@@ -84,6 +90,12 @@ export class Pedido{
     
 	constructor(){
         this.direccion = new Localizacion();
+    }
+
+    public setCreador(usuario:User){
+        this.creadorId = usuario.uid;
+        this.creadorEmail = usuario.email;
+        this.creadorNombre = usuario.displayName;
     }
 
     public asignarValores(init?: Partial<Pedido>) {
