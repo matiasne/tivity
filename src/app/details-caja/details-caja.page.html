@@ -38,7 +38,7 @@
     </ion-grid>    
   </ion-toolbar>
 
-  <ion-item class="form-select" *ngIf="comercio.config.movimientosCajas"> 
+  <ion-item class="form-select"> 
     <ion-label position="floating">Desde</ion-label>
     <ion-select multiple=false (ionChange)="onChangeAtras($event)">
       <ion-select-option  [value]="1" selected>Ayer</ion-select-option>

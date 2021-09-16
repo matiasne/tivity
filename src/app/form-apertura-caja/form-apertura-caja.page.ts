@@ -111,8 +111,6 @@ export class FormAperturaCajaPage implements OnInit {
     this.caja.totalDebito = Number(this.debito);
     this.caja.totalCredito = Number(this.credito);
 
-    this.actualizarMontosCaja()
-
     this.cajasServices.update(this.caja);
 
     this.navCtrl.back();
@@ -122,15 +120,7 @@ export class FormAperturaCajaPage implements OnInit {
     this.navCtrl.back();
   }
 
-  actualizarMontosCaja(){
   
-    this.caja.totalEfectivo = Number(this.efectivo);
-    this.caja.totalDebito = Number(this.debito);
-    this.caja.totalCredito = Number(this.credito);
-
-  const param1 = JSON.parse(JSON.stringify(this.caja));
-  this.cajasServices.update(param1);
-}
 
 }
 

@@ -1,0 +1,21 @@
+<ion-content class="ion-padding">
+  <app-list-reservas-manager 
+    [divisionFiltro]="divisionNombre"
+    [vistaLista] = "vistaLista"
+  ></app-list-reservas-manager>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" >     
+
+    <ion-fab-button  (click)="verLista()">
+      <ion-icon *ngIf="!vistaLista" name="list"></ion-icon>
+      <ion-icon *ngIf="vistaLista" name="calendar"></ion-icon>
+    </ion-fab-button><br>
+
+    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+      <ion-fab-button (click)="nuevaReserva()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </span>   
+  </ion-fab>
+
+</ion-content>

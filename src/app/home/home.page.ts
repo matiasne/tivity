@@ -6,22 +6,12 @@ import { Router } from '@angular/router';
 import { RolesService } from '../Services/roles.service';
 import { Subscription } from 'rxjs';
 import { LoadingService } from '../Services/loading.service';
-import { NotificacionesDesktopService } from '../Services/notificaciones-desktop.service';
-import { NotificacionesService } from '../Services/notificaciones.service';
-import { PresenceService } from '../Services/presence.service';
 import { UsuariosService } from '../Services/usuarios.service';
 import { ToastService } from '../Services/toast.service';
 import { FormComercioPage } from '../form-comercio/form-comercio.page';
-import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
-import { WoocommerceService } from '../Services/woocommerce/woocommerce.service';
-import { FotoService } from '../Services/fotos.service';
-import { Archivo } from '../models/foto';
-import { ImagesService } from '../Services/images.service';
 import { CambiarPlanPage } from '../cambiar-plan/cambiar-plan.page';
 import { EnumPlanes, User } from '../models/user';
-import { EscPosService } from '../Services/impresora/esc-pos.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
-import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
 
 
 @Component({
@@ -59,7 +49,7 @@ export class HomePage implements OnInit {
     private platform: Platform,
     private impresoraService:ImpresoraService
   ) { 
-     
+    this.comercios = []; 
     this.user = new User()
 
     this.platform.backButton.subscribeWithPriority(10, () => {

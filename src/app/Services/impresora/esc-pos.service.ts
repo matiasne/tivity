@@ -51,8 +51,8 @@ export class EscPosService {
     cmds += "\n";
     cmds += "\n";
 
-    if(pedido.mesaId){
-      cmds += "\x1b\x61\x00\x1b\x21\x00 Mesa: "+ pedido.mesaNombre; //text to print
+    if(pedido.divisionNombre){
+      cmds += "\x1b\x61\x00\x1b\x21\x00 Mesa: "+ pedido.divisionNombre; //text to print
       cmds += "\n";
     }
      
@@ -119,8 +119,8 @@ export class EscPosService {
     cmds += "\n";
     cmds += "\n";
 
-    if(pedido.mesaId){
-      cmds += "\x1b\x61\x00\x1b\x21\x00 Mesa: "+ pedido.mesaNombre; //text to print
+    if(pedido.divisionNombre){
+      cmds += "\x1b\x61\x00\x1b\x21\x00 Mesa: "+ pedido.divisionNombre; //text to print
       cmds += "\n";
     }
      
@@ -190,10 +190,10 @@ export class EscPosService {
     //center,bold,underline - close underline, close bold
       let cmds = "\x1b\x61\x01\x1b\x45\x01\x1b\x2d\x02\x1b\x21\x10\x1b\x21\x20"+this.comercio.nombre+"\x1b\x2d\x00\x1b\x45\x00";
       cmds += "\n";
-      if(pedido.afipFactura.emisorNroDoc != ""){
-        cmds += "\x1b\x61\x01\x1b\x45\x01\x1b\x2d\x02\x1b\x21\x10\x1b\x21\x20"+pedido.afipFactura.emisorRazonSocial+"\x1b\x2d\x00\x1b\x45\x00";
+      if(pedido.afipFactura.emisor.nroDoc != ""){
+        cmds += "\x1b\x61\x01\x1b\x45\x01\x1b\x2d\x02\x1b\x21\x10\x1b\x21\x20"+pedido.afipFactura.emisor.razonSocial+"\x1b\x2d\x00\x1b\x45\x00";
         cmds += "\n";
-        cmds += "\x1b\x21\x00"+pedido.afipFactura.emisorTipoDoc+" "+pedido.afipFactura.emisorNroDoc;
+        cmds += "\x1b\x21\x00"+pedido.afipFactura.emisor.tipoDoc+" "+pedido.afipFactura.emisor.nroDoc;
         cmds += "\n"; 
         cmds += "\x1b\x21\x00 Ingresos Brutos:"+pedido.afipFactura.ingresosBrutos+"\x1b\x2d\x00\x1b\x45\x00";
         cmds += "\n";
@@ -203,7 +203,7 @@ export class EscPosService {
           cmds += "\n";
         }
         if(this.comercio.direccion.floor_number){
-          cmds += "\x1b\x21\x00 "+this.comercio.direccion.floor_number+" "+this.comercio.direccion.street_number;
+          cmds += "\x1b\x21\x00 "+this.comercio.direccion.floor_number+" "+this.comercio.direccion.door_number;
           cmds += "\n";
         }      
         //normal text
@@ -242,14 +242,14 @@ export class EscPosService {
         cmds += "\n";
       }      
       
-      if(pedido.afipFactura.emisorNroDoc == "" && pedido.clienteNombre != ""){
+      if(pedido.afipFactura.emisor.nroDoc == "" && pedido.clienteNombre != ""){
         cmds += "\x1b\x61\x00\x1b\x21\x00Cliente: "+ pedido.clienteNombre; //text to print
         cmds += "\n";     
       }
       
-      if(pedido.mesaId){        
+      if(pedido.divisionNombre){        
         
-        cmds += "\x1b\x61\x00\x1b\x21\x00Mesa: "+ pedido.mesaNombre; //text to print   
+        cmds += "\x1b\x61\x00\x1b\x21\x00Mesa: "+ pedido.divisionNombre; //text to print   
         cmds += "\n";     
       }
 

@@ -17,42 +17,7 @@ declare let Mercadopago: any
 export class FormCardPaymentPage implements OnInit {
 
 
-  public card = [
-    {
-      state: 'ON',
-      logo: "assets/img/visa.png",
-      a: 1234,
-      b: 5522,
-      c: 8432,
-      d: 2264,
-      expires: '7/12',
-      bank: 'Bank of America'
-    },
-    {
-      state: 'OFF',
-      logo: "assets/img/american.png",
-      a: 1234,
-      b: 5321,
-      c: 8283,
-      d: 9271,
-      expires: '8/19',
-      bank: 'JPMorgan'
-    },
-    {
-      state: 'ON',
-      logo: "assets/img/mastercard.png",
-      a: 8685,
-      b: 2445,
-      c: 9143,
-      d: 7846,
-      expires: '11/23',
-      bank: 'CityBank'
-    }
-  ];
-
   public cardLogo = ""
-
-  public pedido:Pedido
 
   public tiposDocumentos= [];
   public tiposPagos = []
@@ -87,8 +52,7 @@ export class FormCardPaymentPage implements OnInit {
   ) {
 
     this.comercio = new Comercio()
-    this.pedido = new Pedido()
-
+    
     this.paymetnDataForm = new FormGroup({
       email:new FormControl(this.email),
       cardNumber: new FormControl(this.cardNumber, [
@@ -102,8 +66,7 @@ export class FormCardPaymentPage implements OnInit {
    }
 
   async ngOnInit() {
-    this.pedido.asignarValores(this.navParams.get('pedido'))
-    this.amount = this.pedido.montoPagoMercadoPago
+    this.amount = this.navParams.get('amount')
     Mercadopago.clearSession()
 
     this.comercio.asignarValores(this.comerciosService.getSelectedCommerceValue())
@@ -134,6 +97,13 @@ export class FormCardPaymentPage implements OnInit {
       }
       return;
     }
+
+    if(this.selectedInstallments == -1){
+      alert("Seleccione el número de cuotas");
+      return;
+    }
+
+    console.log(response)
 
     const data={
         issuer:this.issuerId,

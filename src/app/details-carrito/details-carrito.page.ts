@@ -1,37 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CarritoService } from '../Services/global/carrito.service';
 import { NavController, ModalController, AlertController } from '@ionic/angular';
-import { ListClientesPage } from '../list-clientes/list-clientes.page';
 import { Subscription } from 'rxjs';
 import { ComerciosService } from '../Services/comercios.service';
-import { CajasService } from '../Services/cajas.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CtaCorrientesService } from '../Services/cta-corrientes.service';
 import { LoadingService } from '../Services/loading.service';
 import { ToastService } from '../Services/toast.service';
 import { SelectClientePage } from '../select-cliente/select-cliente.page';
-import { SelectMesaPage } from '../select-mesa/select-mesa.page';
 import { FormClientePage } from '../form-cliente/form-cliente.page';
-import { MesasService } from '../Services/mesas.service';
 import { Mesa } from '../models/mesa';
 import { Cliente } from '../models/cliente';
 import { Comercio } from '../models/comercio';
 import { Pedido } from '../models/pedido';
-import { PedidoService } from '../Services/pedido.service';
 import { AuthenticationService } from '../Services/authentication.service';
-import { ComentariosService } from '../Services/comentarios.service';
-import { async } from 'rxjs/internal/scheduler/async';
-import { Comentario } from '../models/comentario';
 import { EnumTipoDescuento } from '../models/descuento';
-import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
-import { ComandaPage } from '../impresiones/comanda/comanda.page';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AnimationOptions } from '@ionic/angular/providers/nav-controller';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { ModalInputDireccionPage } from '../modal-input-direccion/modal-input-direccion.page';
 import { Localizacion } from '../models/localizacion';
-import { FormMesaPage } from '../form-mesa/form-mesa.page';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
+import { SelectDivisionPage } from '../select-division/select-division.page';
+import { Division, Subdivision } from '../models/subdivision';
+import { FormCobrarPedidoPage } from '../form-cobrar-pedido/form-cobrar-pedido.page';
 
 @Component({
   selector: 'app-details-carrito',
@@ -116,9 +105,7 @@ export class DetailsCarritoPage implements OnInit {
     }        
     
     this.crearPedido();       
-  }
-
- 
+  } 
 
   crearPedido(){
     this.imprimir()   
@@ -130,171 +117,30 @@ export class DetailsCarritoPage implements OnInit {
     this.impresoraService.impresionComanda(this.carrito);
   }
 
-  eliminarDescuento(i){
-    this.carritoService.eliminarDescuento(i);
-    this.toastServices.mensaje("Descuento eliminado!","");
+  cerrar(){
+    this.modalController.dismiss()
   }
 
-  eliminarRecargo(i){
-    this.carritoService.eliminarRecargo(i);
-    this.toastServices.mensaje("Recargo eliminado!","");
-  }
-
-  eliminarProducto(i){
-    this.carritoService.eliminarProducto(i); 
-    if(this.carrito.items.length == 0 && this.carrito.descuentos.length == 0 && this.carrito.recargos.length == 0){
-      this.navCtrl.back()
-    }
-    this.modalNotificacion.trash("Eliminado del pedido","El producto "+i.nombre+" ha sido eliminado del pedido") 
-  }
-
-  eliminarCliente(){
-    this.carritoService.setearCliente(new Cliente());
-    this.toastServices.mensaje("Cliente desasignado!","");
-  }
-
-  eliminarMesa(){
-    this.carritoService.setearMesa(new Mesa());
-    this.toastServices.mensaje("Mesa desasiganada!","");
-  }
-
-  
-
-  async seleccionarCliente(){
-    this.loadingService.presentLoading();
+  async cobrar(){
+    this.carrito.comanda.numero = await this.comerciosService.obtenerActualizarNumeroPedido()
     const modal = await this.modalController.create({
-      component: SelectClientePage,
-      cssClass:'modal-custom-wrapper',      
-    });
-    
-    modal.present().then(()=>{
-    
-
-    })
-
-    modal.onDidDismiss()
-    .then((retorno) => {
-      if(retorno.data){
-        if(retorno.data == "nuevo"){
-          this.abrirNuevoCliente();
-        }
-        if(retorno.data != "nuevo"){
-          this.toastServices.mensaje("Cliente Agregado!","");
-          this.carritoService.setearCliente(retorno.data.item);
-        }   
-      }
-           
-    });
-    return await modal.present();
-  }
-
-  async abrirNuevoCliente(){
-    const modal = await this.modalController.create({
-      component: FormClientePage,
-      cssClass:'modal-custom-wrapper',      
-    });    
-    modal.present().then(()=>{
-    })
-
-    modal.onDidDismiss()
-    .then((retorno) => {
-      if(retorno.data){    
-        this.carritoService.setearCliente(retorno.data.item);
-      }           
-    });
-    return await modal.present();
-  }
-
-  async seleccionarMesa(){
-    this.loadingService.presentLoading();
-    const modal = await this.modalController.create({
-      component: SelectMesaPage,
-      cssClass:'modal-custom-wrapper',      
-    });
-
-    modal.present().then(()=>{
-      
-    })
-
-    modal.onDidDismiss()
-    .then((retorno) => {
-      if(retorno.data == "nuevo"){
-        this.abrirNuevaMesa()
-      }
-      else{
-        this.carritoService.setearMesa(retorno.data.item);
-      }        
-    });
-    return await modal.present();
-  }
-
-  async abrirNuevaMesa(){
-    const modal = await this.modalController.create({
-      component: FormMesaPage,     
+      id:'form-cobrar',
+      component: FormCobrarPedidoPage,  
+      componentProps:{pedido:this.carrito,comercio:this.comercio},   
       cssClass:'modal-custom-wrapper' 
     });    
-    modal.present().then(()=>{
-    
-
-    })
 
     modal.onDidDismiss()
     .then((retorno) => {
-      console.log(retorno.data.item)
-      if(retorno.data){
-        this.carritoService.setearMesa(retorno.data.item);
+      if(retorno.data == "cobrado"){
+       
+        this.modalController.dismiss(null,null,'details-carrito') 
+       
+        
       }
      
     });
     return await modal.present();
-  }
-  
-  async preguntarVaciar(){
-    const alert = await this.alertController.create({
-      header: 'Está seguro que desea vaciar todo el carrito?',
-      message: '',
-      buttons: [
-        { 
-          text: 'No',
-          handler: (blah) => {
-            
-          }
-        }, {
-          text: 'Si',
-          handler: () => {           
-            this.carritoService.vaciar()   
-            this.modalNotificacion.trash("Vaciado","El carrito ahora se encuentra completamente vacío.")
-            this.atras()          
-          }
-        }
-      ]
-    });
-    await alert.present();   
-  }
-
-  async seleccionarUbicacion(){
-    const modal = await this.modalController.create({
-      component: ModalInputDireccionPage,
-      componentProps:{localizacion:this.carrito.direccion},
-      cssClass:'modal-map' 
-    });
-    modal.onDidDismiss()
-    .then((retorno) => {
-      
-      if(retorno.data){
-        this.carrito.direccion = retorno.data;
-      }
-      console.log(this.carrito)
-    });
-    modal.present()
-  }
-
-  eliminarDireccion(){
-    this.carrito.direccion = new Localizacion();
-  }
-
-  cerrar(){
-    this.modalController.dismiss()
   }
 
 }

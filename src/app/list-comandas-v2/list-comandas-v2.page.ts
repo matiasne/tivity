@@ -173,8 +173,8 @@ export class ListComandasV2Page implements OnInit {
               encontrado = true;
           }
 
-          if(item.mesaNombre){
-            retorno =  (item.mesaNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
+          if(item.divisionNombre){
+            retorno =  (item.divisionNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
             if(retorno)
               encontrado = true;
           }   

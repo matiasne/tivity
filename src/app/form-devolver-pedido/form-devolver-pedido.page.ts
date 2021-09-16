@@ -182,64 +182,58 @@ export class FormDevolverPedidoPage implements OnInit {
           }
                   
         })
-      }
-    
-        
-        
-      if(this.comercio.config.movimientosCajas){
-
-        
+      }        
           
-          this.metodoPagoSeleccionado.forEach(metodo =>{
+      this.metodoPagoSeleccionado.forEach(metodo =>{
 
-            let monto = 0;
-            if(metodo === "efectivo"){
-              monto = this.pedido.montoPagoEfectivo;
-            }
-            if(metodo === "debito"){
-              monto = this.pedido.montoPagoDebito;
-            }
-            if(metodo === "credito"){
-              monto = this.pedido.montoPagoCredito;
-            }
-            if(metodo === "mercadopago"){
-              monto = this.pedido.montoPagoMercadoPago;
-            }
+        let monto = 0;
+        if(metodo === "efectivo"){
+          monto = this.pedido.montoPagoEfectivo;
+        }
+        if(metodo === "debito"){
+          monto = this.pedido.montoPagoDebito;
+        }
+        if(metodo === "credito"){
+          monto = this.pedido.montoPagoCredito;
+        }
+        if(metodo === "mercadopago"){
+          monto = this.pedido.montoPagoMercadoPago;
+        }
 
-            if(metodo != "ctaCorriente"){
-              var pago = new MovimientoCaja(
-                this.firestore.createId(),
-                this.enumTipoMovimientoCaja.devolucion,
-                this.pedido.clienteId,
-                this.cajaSeleccionada.id,
-                metodo,
-                - monto,
-                "Reembolso de pedido",
-                this.authenticationService.getUID(), 
-                this.authenticationService.getNombre());      
-              
-    
-              this.movimientosService.setearPath(this.cajaSeleccionada.id)   
-              this.movimientosService.add(pago).then(data=>{
-                console.log(data)
-              });
-            }
-            
-          })
+        if(metodo != "ctaCorriente"){
+          var pago = new MovimientoCaja(
+            this.firestore.createId(),
+            this.enumTipoMovimientoCaja.devolucion,
+            this.pedido.clienteId,
+            this.cajaSeleccionada.id,
+            metodo,
+            - monto,
+            "Reembolso de pedido",
+            this.authenticationService.getUID(), 
+            this.authenticationService.getNombre());      
           
-        if(this.metodoPagoSeleccionado.includes("ctaCorriente")){     
 
-            this.movimientosService.agregarMovimientoEnCtaCorriente(
-              this.ctaCorrienteSelecccionadaId,
-              this.pedido.clienteId,
-              "",
-              "",
-              "",
-              this.pedido.montoPagoCtaCorriente,
-              "Devolucion de productos"
-            )
-        }           
-      }  
+          this.movimientosService.setearPath(this.cajaSeleccionada.id)   
+          this.movimientosService.add(pago).then(data=>{
+            console.log(data)
+          });
+        }
+        
+      })
+      
+    if(this.metodoPagoSeleccionado.includes("ctaCorriente")){     
+
+        this.movimientosService.agregarMovimientoEnCtaCorriente(
+          this.ctaCorrienteSelecccionadaId,
+          this.pedido.clienteId,
+          "",
+          "",
+          "",
+          this.pedido.montoPagoCtaCorriente,
+          "Devolucion de productos"
+        )
+    }           
+      
       
       this.pedido.statusCobro = this.cEstado.reembolsado;
       this.pedido.metodoDevolucion = this.metodoPagoSeleccionado; 

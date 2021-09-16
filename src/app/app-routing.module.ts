@@ -180,16 +180,8 @@ const routes: Routes = [
     loadChildren: () => import('./form-producto-grupo-opciones/form-producto-grupo-opciones.module').then( m => m.FormProductoGrupoOpcionesPageModule)
   },
   {
-    path: 'form-mesa',
-    loadChildren: () => import('./form-mesa/form-mesa.module').then( m => m.FormMesaPageModule)
-  },
-  {
     path: 'list-empleados',
     loadChildren: () => import('./list-empleados/list-empleados.module').then( m => m.ListEmpleadosPageModule)
-  },
-  {
-    path: 'list-mesas',
-    loadChildren: () => import('./list-mesas/list-mesas.module').then( m => m.ListMesasPageModule)
   },
   {
     path: 'form-comercio-configuracion',
@@ -266,14 +258,6 @@ const routes: Routes = [
   {
     path: 'list-pedidos',
     loadChildren: () => import('./list-pedidos/list-pedidos.module').then( m => m.ListPedidosPageModule)
-  },
-  {
-    path: 'select-mesa',
-    loadChildren: () => import('./select-mesa/select-mesa.module').then( m => m.SelectMesaPageModule)
-  },
-  {
-    path: 'details-mesa',
-    loadChildren: () => import('./details-mesa/details-mesa.module').then( m => m.DetailsMesaPageModule)
   },
   {
     path: 'form-cocina',
@@ -441,8 +425,78 @@ const routes: Routes = [
   {
     path: 'select-personal',
     loadChildren: () => import('./select-personal/select-personal.module').then( m => m.SelectPersonalPageModule)
-  }
- 
+  },
+  {
+    path: 'form-card-token',
+    loadChildren: () => import('./form-card-token/form-card-token.module').then( m => m.FormCardTokenPageModule)
+  },
+  {
+    path: 'a-con-resp-inscripto',
+    loadChildren: () => import('./impresiones/facturas/a-con-resp-inscripto/a-con-resp-inscripto.module').then( m => m.AConRespInscriptoPageModule)
+  },
+  {
+    path: 'a-con-resp-no-inscripto',
+    loadChildren: () => import('./impresiones/facturas/a-con-resp-no-inscripto/a-con-resp-no-inscripto.module').then( m => m.AConRespNoInscriptoPageModule)
+  },
+  {
+    path: 'b-con-consumidor-final',
+    loadChildren: () => import('./impresiones/facturas/b-con-consumidor-final/b-con-consumidor-final.module').then( m => m.BConConsumidorFinalPageModule)
+  },
+  {
+    path: 'c-con-consumidor-final',
+    loadChildren: () => import('./impresiones/facturas/c-con-consumidor-final/c-con-consumidor-final.module').then( m => m.CConConsumidorFinalPageModule)
+  },
+  {
+    path: 'ticket-factura',
+    loadChildren: () => import('./impresiones/facturas/ticket-factura/ticket-factura.module').then( m => m.TicketFacturaPageModule)
+  },
+  {
+    path: 'form-estado-reserva',
+    loadChildren: () => import('./form-estado-reserva/form-estado-reserva.module').then( m => m.FormEstadoReservaPageModule)
+  },
+  {
+    path: 'list-estados-reserva',
+    loadChildren: () => import('./list-estados-reserva/list-estados-reserva.module').then( m => m.ListEstadosReservaPageModule)
+  },
+  {
+    path: 'list-reservas-calendario',
+    loadChildren: () => import('./list-reservas-calendario/list-reservas-calendario.module').then( m => m.ListReservasCalendarioPageModule)
+  },
+  {
+    path: 'form-subdivision',
+    loadChildren: () => import('./form-subdivision/form-subdivision.module').then( m => m.FormSubdivisionPageModule)
+  },
+  {
+    path: 'form-division',
+    loadChildren: () => import('./form-division/form-division.module').then( m => m.FormDivisionPageModule)
+  },
+  {
+    path: 'select-division',
+    loadChildren: () => import('./select-division/select-division.module').then( m => m.SelectDivisionPageModule)
+  },
+  {
+    path: 'details-division',
+    loadChildren: () => import('./details-division/details-division.module').then( m => m.DetailsDivisionPageModule)
+    
+  },
+  {
+    path: 'details-division/:id',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./details-division/details-division.module').then( m => m.DetailsDivisionPageModule)
+      }
+    ]
+  },
+  {
+    path: 'details-cliente/:id',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./details-cliente/details-cliente.module').then( m => m.DetailsClientePageModule)
+      }
+    ]
+  },
 ];
 
 @NgModule({

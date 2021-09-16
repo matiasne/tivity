@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Serial } from '@ionic-native/serial/ngx';
 import { Platform } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
+import { ToastService } from './toast.service';
 
 declare global { //Esto solo funciona para chrome forzamos que identifique navigator.usb así la compilación no tira error, luego existe en el navegador
   interface Navigator {
@@ -18,73 +20,67 @@ declare global { //Esto solo funciona para chrome forzamos que identifique navig
 })
 export class EscanerCodigoBarraService {
 
+  public escaneado = new BehaviorSubject <any>("")
+  public dispConectado:any
   constructor(
-    private serial: Serial,
-    private platform: Platform
+    private toastService:ToastService
     ) {
 
     
 
    }
 
-   public async init(){
+   public async seleccionarDispositivoUSB(){
     
       let device:any = await navigator.usb.requestDevice({
         filters: [] 
       })
-
       console.log(device)
+      localStorage.setItem('QR_USBproductId',device.productId)
+      this.conectar(device)   
+   }
 
-      navigator.usb.getDevices().then(devices => {
-        console.log(devices)
-        if(devices.length == 0) {
-          navigator.usb.requestDevice({ filters: [] })
-          .then(selectedDevice => {
-              device = selectedDevice;
-              return device.open(); // Begin a session.
-            })
-          .then(() => device.selectConfiguration(1)) // Select configuration #1 for the device.
-          .then(() => device.claimInterface(2)) // Request exclusive control over interface #2.
-          .then(() => device.controlTransferOut({
-              requestType: 'class',
-              recipient: 'interface',
-              request: 0x22,
-              value: 0x01,
-              index: 0x02})) // Ready to receive data
-          .then(() => device.transferIn(5, 64)) // Waiting for 64 bytes of data from endpoint #5.
-          .then(result => {
-            const decoder = new TextDecoder();
-            console.log('Received: ' + decoder.decode(result.data));
-          })
-          .catch(error => { console.error(error); });
+   conectarDirectamenteUSB(){
+    navigator.usb.getDevices().then(devices => {
+      devices.forEach(element => {
+        if(element.productId == Number(localStorage.getItem('QR_USBproductId'))){
+          console.log(element)
+          this.conectar(element)
         }
-      })
+      });
+    })
+   }
 
-     
-    
+   conectar(device){
+    this.dispConectado = device;
+    device.open().then(() => device.selectConfiguration(1)) // Select configuration #1 for the device.
+        .then(() => device.claimInterface(2)) // Request exclusive control over interface #2.
+        .then(() => device.controlTransferOut({
+            requestType: 'class',
+            recipient: 'interface',
+            request: 0x22,
+            value: 0x01,
+            index: 0x02})) // Ready to receive data
+        .then(() => device.transferIn(5, 64)) // Waiting for 64 bytes of data from endpoint #5.
+        .then(result => {
+          const decoder = new TextDecoder();
+          console.log('Received: ' + decoder.decode(result.data));
+          this.toastService.mensajeVerde("Escaneado: "+result.data,"")
+          this.escaneado.next(result.data);
+        })
+        .catch(error => { console.error(error); });
+      
     
    }
 
-   onGetDevices(ports) {
-    for (var i=0; i<ports.length; i++) {
-      console.log(ports[i].path);
-    }
+   desvincularUSB(){
+    localStorage.removeItem('QR_USBproductId')
+   }
+
+   observeEscanerUSB(){
+    return this.escaneado.asObservable();
   }
 
-   public connectionHandle(){
-
-   }
-
-   public transferInfo(){
-
-   }
-
-   public onTransferCallback(event) {
-    if (event && event.resultCode === 0 && event.data) {
-      console.log("got " + event.data.byteLength + " bytes");
-      console.log(event.data)
-    }
- };
  
 
    

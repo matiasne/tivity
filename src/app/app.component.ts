@@ -1,35 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthenticationService } from './Services/authentication.service';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { ComerciosService } from './Services/comercios.service';
-import { NotificacionesDesktopService } from './Services/notificaciones-desktop.service';
 import { NotifificacionesAppService } from './Services/notifificaciones-app.service';
 import { Comercio } from './models/comercio';
 import { ToastService } from './Services/toast.service';
-import { MesasService } from './Services/mesas.service';
-import * as firebase from 'firebase';
 import { PresenceService } from './Services/presence.service';
 import { UsuariosService } from './Services/usuarios.service';
-import { Network } from '@ionic-native/network/ngx';
-import { PedidoService } from './Services/pedido.service';
-import { Printer } from '@ionic-native/printer/ngx';
 import { ImpresoraService } from './Services/impresora/impresora.service';
 import { RolesService } from './Services/roles.service';
-import { Environment } from '@ionic-native/google-maps';
-import { AfipServiceService } from './Services/afip/afip-service.service';
 import { BluetoothService } from './Services/bluetooth.service';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
-import { HomePage } from './home/home.page';
-import { NFC, Ndef } from '@ionic-native/nfc/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
-import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-import { EscanerCodigoBarraService } from './Services/escaner-codigo-barra.service';
+import { SelectDivisionPage } from './select-division/select-division.page';
 
 @Component({
   selector: 'app-root',
@@ -122,7 +111,8 @@ export class AppComponent implements OnInit {
   public onlineOffline: boolean = navigator.onLine;
   public rolActual = ""; 
 
-  public connectionStatus = "offline"
+  public connectionStatus = "offline";
+
 
   constructor(
     private platform: Platform,
@@ -140,16 +130,12 @@ export class AppComponent implements OnInit {
     private usuarioService:UsuariosService,
     private bluetoothService:BluetoothService,
     private rolesService:RolesService,
-    private afipService:AfipServiceService,
     private impresoraService:ImpresoraService,
     private deeplinks: Deeplinks,
-    private nfc: NFC, 
-    private ndef: Ndef,
     private alertController:AlertController,
     private appVersion: AppVersion,
     private openNativeSettings: OpenNativeSettings,
-    private firebaseDynamicLinks: FirebaseDynamicLinks,
-    private escanerCodigoBarraService:EscanerCodigoBarraService
+    private modalCtrl: ModalController,
   ) {
     this.comercioSeleccionado = new Comercio();
     
@@ -268,7 +254,7 @@ export class AppComponent implements OnInit {
             console.log("Logueado!"+uid)
             this.splashScreen.hide();
 
-            this.impresoraService.conectarImpresora()
+            this.impresoraService.conectarImpresoraBT()
 
             this.fcm.subscribeToTopic('gestion');
         
@@ -355,6 +341,22 @@ export class AppComponent implements OnInit {
 tagListenerSuccess(tagEvent) {
   console.log(tagEvent.type);
   console.log("Ceci est un tag : " + tagEvent)  
+}
+
+  async selectDivision(){
+    let modal = await this.modalCtrl.create({
+      component: SelectDivisionPage,
+    });  
+    modal.onDidDismiss()
+      .then((retorno) => {
+        if(retorno.data){
+          console.log(retorno.data.nombre);
+          this.router.navigate(['/details-division/'+retorno.data.nombre])
+        }
+                
+    });
+    
+    return await modal.present()
 }
 
 }

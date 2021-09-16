@@ -9,19 +9,19 @@
 
 <ion-content class="ion-padding">
 
-  <app-search-filter-input
-    [arrayAll]="itemsAll" 
-    [parametros]="['clienteNombre','items.nombre,mesaNombre,']"
-    [placeholder]="'Buscar por cliente'"
-    (resultado)="mostrar($event)"
-  >
-  </app-search-filter-input>
+  <app-list-reservas-manager [vistaLista] = "vistaLista"></app-list-reservas-manager>
 
-  <full-calendar #fullcalendar deepChangeDetection="true" [options]="calendarOptions"></full-calendar>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *appCheckUsuarioPermisos="{feature:'reservas',permiso:'Editor'}" >
-    <ion-fab-button (click)="nuevaReserva()">
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed"  >
+
+    <ion-fab-button  (click)="verLista()">
+      <ion-icon *ngIf="!vistaLista" name="list"></ion-icon>
+      <ion-icon *ngIf="vistaLista" name="calendar"></ion-icon>
+    </ion-fab-button><br>
+
+    <ion-fab-button (click)="nuevaReserva()" *appCheckUsuarioPermisos="{feature:'reservas',permiso:'Editor'}">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
+  
 </ion-content>

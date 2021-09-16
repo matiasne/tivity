@@ -9,6 +9,7 @@ import { FormClientePage } from '../form-cliente/form-cliente.page';
 import { CambiarPlanPage } from '../cambiar-plan/cambiar-plan.page';
 import { ComerciosService } from '../Services/comercios.service';
 import { Comercio } from '../models/comercio';
+import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 
 @Component({
   selector: 'app-list-clientes',
@@ -39,7 +40,8 @@ export class ListClientesPage implements OnInit {
     private route: ActivatedRoute,
     public clientesService:ClientesService,
     public modalCtrl: ModalController,
-    public comercioService:ComerciosService
+    public comercioService:ComerciosService,
+    private navParametrosService:NavegacionParametrosService
   ) { 
     this.comercio = new Comercio()
     this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue())
@@ -148,7 +150,10 @@ export class ListClientesPage implements OnInit {
   }
 
   seleccionar(item){
-    this.router.navigate(['details-cliente',{"id":item.id}]);
+    let cliente  = new Cliente();
+    cliente.asignarValores(item)
+    this.navParametrosService.param = cliente; 
+    this.router.navigate(['details-cliente']);
   }
   
   async nuevo(){

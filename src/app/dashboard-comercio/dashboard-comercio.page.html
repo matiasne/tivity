@@ -16,6 +16,8 @@
 
   <ion-button  *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Visible'}" class="button-rounded" size="large" (click)="irServiciosProductos()">Venta</ion-button>
   <ion-button  *appCheckUsuarioPermisos="{feature:'cajas',permiso:'Visible'}" class="button-rounded" size="large" (click)="irEgresoCaja()">Egreso</ion-button>   
+  <ion-button class="button-rounded" color="light" (click)="selectUSB()">Seleccionar USB</ion-button>
   <ion-button class="button-rounded" color="light" (click)="connectUSB()">Conectar USB</ion-button>
   <ion-button class="button-rounded" color="light" [href]="link">Marketplace</ion-button>
+  <ion-button class="button-rounded" color="light" (click)="mostrarFactura()"></ion-button>
 </ion-content>  

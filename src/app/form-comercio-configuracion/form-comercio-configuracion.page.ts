@@ -46,13 +46,14 @@ export class FormComercioConfiguracionPage implements OnInit {
   } 
 
   ionViewDidEnter(){
-    let obs = this.authService.observeRol().subscribe(data=>{
+    this.authService.observeRol().subscribe(data=>{
       this.rolActual = data;
       console.log(this.rolActual)
       //Aca setea todos los shows
-      obs.unsubscribe();
+      
     })
   }
+
 
   async editarComercio(){
     // this.seleccionar(item);
@@ -111,8 +112,8 @@ export class FormComercioConfiguracionPage implements OnInit {
     this.router.navigate(['list-horarios']);
   }
 
-  openEditMesas(){
-    this.router.navigate(['list-mesas']);
+  openEditSubdivisiones(){
+    this.router.navigate(['form-subdivision']);
   }
 
   openEditCocinas(){

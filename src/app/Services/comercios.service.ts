@@ -110,7 +110,7 @@ export class ComerciosService extends BaseService {
   }
 
   async obtenerActualizarNumeroPedido(){
-
+/*
     var docRef =  this.afs.firestore.collection("comercios").doc(this.commerceSubject.value.id);
 
     let doc = await  this.afs.firestore.runTransaction(t => t.get(docRef));
@@ -134,7 +134,9 @@ export class ComerciosService extends BaseService {
 
     await doc.ref.update({ countPedidoDia: countPedidoDia, ultimoPedidoFecha:fecha });
 
-    return countPedidoDia;
+    return countPedidoDia;*/
+
+    return 0;
 
   }
 

@@ -167,33 +167,32 @@
       
     </ion-item-sliding>
 
-    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
-      <ion-button class="button-rounded" color="light" *ngIf="!pedido.mesaId && comercio.config.mesas" (click)="seleccionarMesa()" ><ion-icon name="add"></ion-icon> Mesa</ion-button>
-    </span>
+    <ion-button class="button-rounded" color="light" *ngIf="!pedido.divisionNombre" (click)="seleccionarDivision()" ><ion-icon name="add"></ion-icon> {{comercio.subdivisiones.nombre}}</ion-button>
     
-    <ion-item-sliding class="item-card" *ngIf="pedido.mesaId && comercio.config.mesas">
+    
+    <ion-item-sliding class="item-card" *ngIf="pedido.divisionNombre">
       <ion-item>
         <ion-avatar slot="start">
           <ion-icon name="grid-outline"></ion-icon>
         </ion-avatar>
         <ion-label>
-          <h2>{{pedido.mesaNombre}}</h2>
+          <h2>{{pedido.divisionNombre}}</h2>
         </ion-label>      
       </ion-item>
 
       <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
         <ion-item-options side="end" *ngIf="pedido.statusCobro == cEstado.pendiente">
-          <ion-item-option color="danger" (click)="eliminarMesa()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          <ion-item-option color="danger" (click)="eliminarDivision()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
         </ion-item-options>
       </span>
       
     </ion-item-sliding>
 
     <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
-      <ion-button *ngIf="!pedido.direccion.street_name" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
+      <ion-button *ngIf="!pedido.direccion.country" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
     </span>
     
-    <ion-item-sliding class="item-card" *ngIf="pedido.direccion.street_name">  
+    <ion-item-sliding class="item-card" *ngIf="pedido.direccion.country">  
       <ion-item>
         <ion-avatar slot="start">
           <ion-icon name="location-outline"></ion-icon>
@@ -232,7 +231,8 @@
   <ion-toolbar>   
     <ion-button *ngIf="pedido.statusCobro == cEstado.suspendido" class="button-rounded"  color="primary" (click)="reanudar()">Reanudar</ion-button>
     <ion-button *ngIf="pedido.statusCobro == cEstado.cobrado" class="button-rounded"  color="danger" (click)="devolverPedido()">Reembolsar</ion-button>
-    <ion-button slot="start" *ngIf="!comercio.config.cobrarDirectamente && pedido.statusCobro == cEstado.pendiente" class="button-rounded"  color="danger" (click)="suspender()">Suspender</ion-button>
+    
+    <ion-button *ngIf="!isUpdating" slot="start" class="button-rounded"  color="primary" (click)="guardar()">Guardar</ion-button>
     <ion-button slot="end" *ngIf="pedido.statusCobro != cEstado.cobrado && pedido.statusCobro == cEstado.pendiente" class="button-rounded"  color="success" (click)="cobrar()">Cobrar: ${{pedido.total}}</ion-button>
   </ion-toolbar> 
 </ion-footer>

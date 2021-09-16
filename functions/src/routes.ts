@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response, Router } from 'express';
 import { AfipController} from './controllers/afip'
 import { MercadoPagoController } from './controllers/mercaopago';
-import { isAfipAuth,  } from './middleware/isAfipAuth';
+import { isAfipAuth  } from './middleware/isAfipAuth';
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{  
@@ -20,6 +20,18 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{
 
   app.post('/mercadopago/marketplaceOK', (req: Request, res: Response) => {
     return mercadoPagoController.marketplaceOK(req,res,db);
+  });
+
+  app.post('/mercadopago/subcripcionPlanA', (req: Request, res: Response) => {
+    return mercadoPagoController.subcripcionPlanA(req,res,db);
+  });
+
+  app.post('/mercadopago/subcripcionPlanB', (req: Request, res: Response) => {
+    return mercadoPagoController.subcripcionPlanB(req,res,db);
+  });
+
+  app.post('/mercadopago/cancelarPlan', (req: Request, res: Response) => {
+    return mercadoPagoController.cancelarPlan(req,res,db);
   });
 
   app.post('/afip/prueba', (req: Request, res: Response) => {
@@ -91,6 +103,10 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore)=>{
     return afipController.taxTypes(req,res,db);
   });
 
+  app.post('/afip/consultarPadron',isAfipAuth, (req: Request, res: Response) => {
+    return afipController.consultarPadron(req,res,db);
+  });
+  
   app.post('/NuevoPedido', (req: Request, res: Response) => {
     return afipController.nuevoPedido(req,res,db);
     

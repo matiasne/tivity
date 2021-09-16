@@ -4,7 +4,7 @@
   'tiempo-restante-3': restantesPorcentaje < 20,
   'tiempo-restante-4': pedido.comanda.estado != pEstado.tomado
 }">  
-  <div *ngIf="pedido.mesaNombre" class="encabezado-card-mesa ion-padding">
+  <div *ngIf="pedido.divisionNombre" class="encabezado-card-mesa ion-padding">
     <ion-row> 
       <ion-col size="6" center text-center>            
         <ion-icon name="person"></ion-icon> {{pedido.creadorEmail}}
@@ -20,7 +20,7 @@
     </ion-row>
   </div> 
   
-  <div *ngIf="!pedido.mesaNombre" class="encabezado-card-general">     
+  <div *ngIf="!pedido.divisionNombre" class="encabezado-card-general">     
     <ion-row> 
       <ion-col size="6" center text-center>            
         <ion-icon name="person"></ion-icon> {{pedido.creadorEmail}}
@@ -40,7 +40,7 @@
     <span *ngIf="pedido.statusCobro == cEstado.cobrado"> <b style="color: green;"> Cobrado</b></span>
     <span *ngIf="pedido.statusCobro == cEstado.reembolsado"> <b style="color: green;"> Reembolsado</b></span>
     
-    <span *ngIf="pedido.mesaId">Mesa: {{pedido.mesaNombre}}</span>
+    <span *ngIf="pedido.mesaId">Mesa: {{pedido.divisionNombre}}</span>
     <span *ngIf="pedido.clienteId">Cliente: {{pedido.clienteNombre}}</span> 
     <span *ngIf="pedido.comanda.demora" (click)="open()"> <ion-icon name="alarm-outline"></ion-icon> Tiempo restante: {{minutosRestantes}} min.</span>
   </div>

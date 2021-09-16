@@ -17,6 +17,7 @@ import { Comercio } from '../models/comercio';
 import { ComerciosService } from '../Services/comercios.service';
 import { BeneficiosService } from '../Services/beneficios.service';
 import { SelectBeneficioPage } from '../select-beneficio/select-beneficio.page';
+import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 declare var google: any;
 
 @Component({
@@ -60,7 +61,8 @@ export class DetailsClientePage implements OnInit {
     private comentarioService:ComentariosService,
     private clientesEstadosService:ClientesEstadosService,
     private comerciosService:ComerciosService,
-    private beneficiosService:BeneficiosService
+    private beneficiosService:BeneficiosService,
+    private navParametrosService:NavegacionParametrosService
   ) { 
 
     this.cliente = new Cliente()
@@ -73,14 +75,13 @@ export class DetailsClientePage implements OnInit {
 
   ngOnInit() {
 
-    this.subsCliente = this.clientesServices.get(this.route.snapshot.params.id).subscribe((resp:any)=>{
-     
-      this.cliente.asignarValores(resp);
-      console.log(this.cliente); 
-      
-      
+    console.log(this.navParametrosService.param)
+ 
+    if(this.navParametrosService.param instanceof Cliente){
+console.log("!!!!!!!!!!!!!!!!!")
+      this.cliente.asignarValores(this.navParametrosService.param)
 
-      this.comentarioService.setearPath("clientes",this.route.snapshot.params.id);
+      this.comentarioService.setearPath("clientes",this.cliente.id);
 
       this.comentarioService.list().subscribe(data =>{
         this.comentarios = data;
@@ -88,22 +89,23 @@ export class DetailsClientePage implements OnInit {
           console.log(item)
         })        
       })
-
-    });
-
-    this.clientesEstadosService.list().subscribe((data) => {
-      this.estadosClientes = data;
-    });
-
-    this.beneficiosService.getByCliente(this.route.snapshot.params.id).subscribe(data=>{
-      this.beneficios = data;
-    }) 
-
-    this.ctasCorreintesService.list().subscribe(cuentas =>{
-      this.ctasCorrientes = cuentas;
-
-      console.log(this.ctasCorrientes)
-    })
+  
+  
+      this.clientesEstadosService.list().subscribe((data) => {
+        this.estadosClientes = data;
+      });
+  
+      this.beneficiosService.getByCliente(this.cliente.id).subscribe(data=>{
+        this.beneficios = data;
+      }) 
+  
+      this.ctasCorreintesService.list().subscribe(cuentas =>{
+        this.ctasCorrientes = cuentas;
+  
+        console.log(this.ctasCorrientes)
+      })
+    }
+    
   }
 
   async openAddEstado(){
@@ -194,7 +196,7 @@ export class DetailsClientePage implements OnInit {
   }
 
   editar(){
-    this.router.navigate(['form-cliente',{id:this.route.snapshot.params.id}]);
+    this.router.navigate(['form-cliente',{id:this.cliente.id}]);
   }
 
   cobrar(pagare){
@@ -238,7 +240,7 @@ export class DetailsClientePage implements OnInit {
     const modal = await this.modalController.create({
       component: FormComentarioPage,
       componentProps:{
-        comentableId:this.route.snapshot.params.id,
+        comentableId:this.cliente.id,
         comentableTipo:"clientes"
       }      
     }); 

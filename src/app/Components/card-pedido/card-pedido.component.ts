@@ -42,10 +42,10 @@ export class CardPedidoComponent implements OnInit, OnDestroy {
   }
 
   setVencimiento(){ 
-    this.vencimiento = this.item.createdAt.toDate()
+    this.vencimiento = this.item.fechaTomado
     if(this.item.comanda){
       if(this.item.comanda.demora > 0){
-        this.vencimiento.setMinutes(this.item.createdAt.toDate().getMinutes() + this.item.comanda.demora);
+        this.vencimiento.setMinutes(this.item.fechaTomado.getMinutes() + this.item.comanda.demora);
 
         let fechaHoy = new Date()
         this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))

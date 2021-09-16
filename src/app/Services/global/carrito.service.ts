@@ -6,7 +6,6 @@ import { Descuento, EnumTipoDescuento } from 'src/app/models/descuento';
 import { EnumTipoRecargo, Recargo } from 'src/app/models/recargo';
 import { PedidoService } from '../pedido.service';
 import { Pedido } from 'src/app/models/pedido';
-import { Mesa } from 'src/app/models/mesa';
 import { Cliente } from 'src/app/models/cliente';
 import { ModalNotificacionService } from '../modal-notificacion.service';
 import { ComentariosService } from '../comentarios.service';
@@ -15,6 +14,7 @@ import { Comentario } from 'src/app/models/comentario';
 import { ImpresoraService } from '../impresora/impresora.service';
 import { ComerciosService } from '../comercios.service';
 import { ItemPedido } from 'src/app/models/itemPedido';
+import { Division, Subdivision } from 'src/app/models/subdivision';
 
 @Injectable({
   providedIn: 'root'
@@ -108,9 +108,8 @@ export class CarritoService {
     this.actualCarritoSubject.next(this.carrito); 
   }
 
-  setearMesa(mesa:Mesa){
-    this.carrito.mesaId = mesa.id;
-    this.carrito.mesaNombre = mesa.nombre
+  setearDivision(division:Division){
+    this.carrito.divisionNombre = division.nombre
     this.actualCarritoSubject.next(this.carrito);
   }
 

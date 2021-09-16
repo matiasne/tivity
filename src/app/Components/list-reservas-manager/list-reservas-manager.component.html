@@ -1,0 +1,28 @@
+<app-search-filter-input
+[arrayAll]="itemsAll" 
+[parametros]="['clienteNombre','divisionNombre,']"
+[placeholder]="'Buscar por cliente'"
+(resultado)="mostrar($event)"
+>
+</app-search-filter-input>
+<ion-button *ngIf="vistaLista" fill="clear" color="primary" (click)="abrirSelectorFechas()"><ion-icon name="calendar-outline"></ion-icon></ion-button>
+
+<span *ngIf="vistaLista">
+
+  <ion-list lines="none" >     
+    <span *ngFor="let reserva of itemsView">
+      <ion-item-sliding  class="item-card">
+        <app-card-reserva [item]="reserva" (click)="editar(reserva)"></app-card-reserva>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="eliminar(reserva)"><ion-icon name="trash" ></ion-icon>Suspender</ion-item-option>
+        </ion-item-options> 
+      </ion-item-sliding>  
+    </span>         
+  </ion-list>
+
+</span>
+
+<full-calendar  *ngIf="!vistaLista" #fullcalendar deepChangeDetection="true" [options]="calendarOptions"></full-calendar>
+
+
+

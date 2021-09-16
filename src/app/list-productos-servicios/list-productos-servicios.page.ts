@@ -31,6 +31,7 @@ import { DetailsCarritoPage } from '../details-carrito/details-carrito.page';
 import Fuse from 'fuse.js'
 import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
+import { EscanerCodigoBarraService } from '../Services/escaner-codigo-barra.service';
 
 @Component({
   selector: 'app-list-productos-servicios',
@@ -96,6 +97,8 @@ export class ListProductosServiciosPage implements OnInit {
   public impresoraStatus = false;
 
   public flagCobrando = false;
+  
+  public devWidth = 0;
 
   constructor(
     public loadingController: LoadingController,
@@ -122,12 +125,15 @@ export class ListProductosServiciosPage implements OnInit {
     private usuariosServices:UsuariosService,
     private notificacionesAppService:NotifificacionesAppService,
     private pedidosService:PedidoService,
-    private impresoraService:ImpresoraService
+    private escanerCodigoBarraService:EscanerCodigoBarraService
     
   ) { 
     
+    this.devWidth = this.platform.width();
     
-    
+    this.escanerCodigoBarraService.observeEscanerUSB().subscribe(data=>{
+      this.buscarCodigo(data)
+    })
 
 
     console.log(this.ionSearchbar)
@@ -259,7 +265,7 @@ export class ListProductosServiciosPage implements OnInit {
       this.toastServices.mensaje("Se seleccionó el producto: "+this.itemsProductos[0].nombre,"");
     }
     
-    this.changeRef.detectChanges()  
+     
 
   }
 
@@ -452,9 +458,7 @@ export class ListProductosServiciosPage implements OnInit {
 
   async siguiente(){
     
-    if(this.comercio.config.cobrarDirectamente)
-      this.cobrarDirectamente()
-    else
+ 
       this.verCarrito(); 
   }
 
@@ -462,6 +466,7 @@ export class ListProductosServiciosPage implements OnInit {
    // this.router.navigate(['details-carrito',{carritoIntended:this.route.snapshot.params.carritoIntended}])  
    this.flagCobrando = true; 
    const modal = await this.modalController.create({
+     id:'details-carrito',
       component: DetailsCarritoPage,
       componentProps:{}      
     });    
@@ -485,42 +490,32 @@ export class ListProductosServiciosPage implements OnInit {
 
     
   }
-
+/*
   async cobrarDirectamente(){
     this.flagCobrando = true;
     
     let pedido = new Pedido()  
     pedido.setCreador(this.authenticationService.getUser())
-    pedido.asignarValores(this.carrito)
-
-    
+    pedido.asignarValores(this.carrito)    
     pedido.direccion = JSON.parse(JSON.stringify(pedido.direccion));
    
-    this.pedidosService.add(pedido).then(async data=>{
-      let editarPedido = new Pedido();
-      editarPedido.setCreador(this.authenticationService.getUser())
-      editarPedido.asignarValores(data);
-
-      this.navParametrosService.param = editarPedido;
-      const modal = await this.modalController.create({
-        component: DetailsPedidoPage,
-        id:'detail-pedido'      
-      });
+    const modal = await this.modalController.create({
+      component: DetailsPedidoPage,
+      componentProps:{
+        pedido:pedido,
+      },
+      id:'detail-pedido'      
+    });
+    
+    modal.present().then(data=>{
       
-      modal.present().then(data=>{
-       
-      });    
+    });    
 
-      modal.onDidDismiss().then(data=>{
-        this.flagCobrando = false;
-      })
+    modal.onDidDismiss().then(data=>{
+      this.flagCobrando = false;
     })
-    
-    
-    
-    
-
-  }
+  //  })
+  }*/
 
   async imprimirComanda(pedido){
     const modal = await this.modalController.create({
@@ -584,6 +579,7 @@ export class ListProductosServiciosPage implements OnInit {
     
   }
 
+   
 
   verImpresora(){
     this.router.navigate(['form-impresora-config'])

@@ -22,3 +22,23 @@ ion-slide{
     margin: auto;
     margin-left: -30px;
 }
+
+
+
+
+@keyframes FadeRight {
+    0% {
+      opacity: 0;
+      left: 200px;
+    }
+    100% {
+      opacity: 1;
+      left: 0px;
+    }
+  }
+  
+  .FadeRight {
+    animation-name: FadeRight;
+    animation-duration: 1s;
+  }
+  

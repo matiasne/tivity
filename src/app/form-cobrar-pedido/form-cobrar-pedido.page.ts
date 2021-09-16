@@ -26,6 +26,7 @@ import { ProductosService } from '../Services/productos.service';
 import { ToastService } from '../Services/toast.service';
 import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
 import { MercadopagoService } from '../Services/mercadopago.service';
+import { FormCardTokenPage } from '../form-card-token/form-card-token.page';
 
 @Component({
   selector: 'app-form-cobrar-pedido', 
@@ -169,9 +170,9 @@ export class FormCobrarPedidoPage implements OnInit {
     if(this.metodoPagoSeleccionado.includes('mercadopago')){
       let modal = await this.modalController.create({
         id:'modal-mp',
-        component: FormCardPaymentPage,
+        component: FormCardTokenPage,
         componentProps: {
-          pedido:this.pedido,
+          amount:this.pedido.montoPagoMercadoPago, 
         }
       });
 
@@ -179,7 +180,7 @@ export class FormCobrarPedidoPage implements OnInit {
         .then((retorno) => {
           if(retorno.data){
             this.loadingService.presentLoadingText("Cargando Pago")
-            this.mercadoPagoService.procesarPago({...retorno.data,pedidoId:this.pedido.id}).then(data=>{
+            this.mercadoPagoService.procesarPago({...retorno.data,pedidoId:this.pedido.id,comercioId:this.comercio.id}).then(data=>{
               console.log(data)
               this.loadingService.dismissLoading()
               const response:any = data
@@ -188,8 +189,7 @@ export class FormCobrarPedidoPage implements OnInit {
                   this.cobrar()        
               }
               else{
-                  this.alertRechazado()
-                  this.presentAlert("El pago no pudo realizarse, por favor verifique los datos de la tarjeta")
+                  this.alertRechazado()                
               }
             },err=>{
               console.log(err)
@@ -291,7 +291,7 @@ async alertRechazado(){
     
         
         
-        if(this.comercio.config.movimientosCajas){        
+              
             
           this.metodoPagoSeleccionado.forEach(metodo =>{
             let monto = 0;
@@ -335,7 +335,7 @@ async alertRechazado(){
            
 
           }
-        }
+        
       }         
 
       this.carritoService.vaciar()    

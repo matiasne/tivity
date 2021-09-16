@@ -3,6 +3,7 @@ import { ItemPedido } from "./itemPedido";
 import { Descuento } from "./descuento";
 import { Recargo } from "./recargo";
 import { User } from "./user";
+import { Cliente } from "./cliente";
 
 export enum EstadoReserva{
     cargada = 1,
@@ -12,6 +13,8 @@ export enum EstadoReserva{
 
 export class Reserva{
     public id ="";
+    public createdAt:any;
+
     public desde:any;
     public hasta:any;
 
@@ -26,16 +29,23 @@ export class Reserva{
     public clienteId ="";
     public clienteNombre="";
     public clienteEmail = "";
-
+    public clienteDocTipo = ""
+    public clienteDoc = ""
+    public clientePersonaJuridica = ""
+    public clienteDireccion = ""
+    
     public mesaId ="";
-    public mesaNombre="";
+    public divisionNombre="";
     public direccion:Localizacion;
 
     public descuentos:Descuento[] =[];
     public recargos:Recargo[]=[];
     public items:ItemPedido[] = [];
 
-    public estado = EstadoReserva.cargada;
+    public estado ={
+        nombre:"",
+        color:"",
+    };
 
     public countMensajes = 0;
     
@@ -53,5 +63,15 @@ export class Reserva{
 
     public asignarValores(init?: Partial<Reserva>) {
         Object.assign(this, init);
+    }
+
+    public asignarCliente(cliente:Cliente) {
+        this.clienteEmail = cliente.email
+        this.clienteId = cliente.id;
+        this.clienteNombre = cliente.nombre
+        this.clienteDocTipo = cliente.documentoTipo
+        this.clienteDoc = cliente.documento
+        this.clientePersonaJuridica = cliente.personaJuridica
+        this.clienteDireccion = JSON.parse(JSON.stringify(cliente.direccion))
     }
 }

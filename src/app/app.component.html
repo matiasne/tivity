@@ -37,15 +37,25 @@
               </span>
             </span>
             
-            <span *appCheckUsuarioPermisos="{feature:'mesas',permiso:'Visible'}">
+            <!--span *appCheckUsuarioPermisos="{feature:'mesas',permiso:'Visible'}">
               <span *ngIf="rolActual == 'Administrador' || rolActual=='Cajero'">
                 <ion-item *appCheckComercioConfig="'mesas'" [routerLink]="['/list-mesas']" lines="none" detail="false">
                   <ion-icon slot="start" name="grid-outline"></ion-icon>
                   <ion-label>Mesas</ion-label>               
                 </ion-item>
               </span>
-            </span>
-             
+            </span-->
+            
+           <span *ngIf="rolActual == 'Administrador'">
+            <ion-item *ngIf="comercioSeleccionado.subdivisiones.items.length > 0" (click)="selectDivision()" lines="none" detail="false">
+              <ion-icon slot="start" name="grid-outline"></ion-icon>
+              <ion-label>{{comercioSeleccionado.subdivisiones.nombre}}</ion-label>               
+            </ion-item>
+           </span>
+          
+         
+
+
             <span *appCheckUsuarioPermisos="{feature:'comandas',permiso:'Visible'}">
               <span *ngIf="rolActual == 'Administrador' || rolActual=='Cocinero'">
                 <ion-item *appCheckComercioConfig="'comandas'" [routerLink]="['/list-comandas-v2']" lines="none" detail="false">

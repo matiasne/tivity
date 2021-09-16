@@ -45,7 +45,6 @@ export class FormCierreCajaPage implements OnInit {
     this.fecha = new Date();
     this.caja = new Caja();
 
-    let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId');
     this.movSub = this.cajasServices.get(this.route.snapshot.params.cajaId).subscribe(data =>{
       this.caja.asignarValores(data)
     })
@@ -84,9 +83,6 @@ export class FormCierreCajaPage implements OnInit {
       return;
     }
 
-    this.caja.estado = "cerrada";
-
-    this.actualizarMontosCaja()
 
     this.movimientosService.setearPath(this.caja.id)
 
@@ -104,7 +100,7 @@ export class FormCierreCajaPage implements OnInit {
       this.enumTipoMovimientoCaja.cierre,
       "",
       "debito", 
-      -this.extraccionEfectivo,
+      -this.extraccionDebito,
       "Cierre De Caja Débito",
       )
     
@@ -113,11 +109,13 @@ export class FormCierreCajaPage implements OnInit {
       this.enumTipoMovimientoCaja.cierre,
       "",
       "credito", 
-      -this.extraccionEfectivo,
+      -this.extraccionCredito,
       "Cierre De Caja Crédito",
       )
 
-
+      this.cajasService.setMerge(this.caja.id,{estado:"cerrada"}).then(data=>{
+        console.log("caja cerrada")
+      });
 
     
     this.navCtrl.back();
@@ -126,7 +124,7 @@ export class FormCierreCajaPage implements OnInit {
   cancelar(){
     this.navCtrl.back();
   }
-
+/*
   actualizarMontosCaja(){
       this.caja.totalEfectivo = Number(this.caja.totalEfectivo)- Number(this.extraccionEfectivo);
    
@@ -137,6 +135,6 @@ export class FormCierreCajaPage implements OnInit {
 
     const param1 = JSON.parse(JSON.stringify(this.caja));
     this.cajasService.update(param1);
-  }
+  }*/
 
 }

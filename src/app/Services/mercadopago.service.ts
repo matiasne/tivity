@@ -28,8 +28,35 @@ export class MercadopagoService {
     };           
 
     let body = data
+
+    console.log(body)
     
     return this.http.post(environment.mercadoPagoUrl+"/procesarPago",body,options).toPromise()
+  }
+
+
+  async subscripcionPlanAPago(data){
+    let httpHeaders = new HttpHeaders({});      
+
+    let options = {
+      headers: httpHeaders
+    };           
+
+    let body = data
+    
+    return this.http.post(environment.mercadoPagoUrl+"/subcripcionPlanA",body,options).toPromise()
+  }
+
+  async subscripcionPlanBPago(data){
+    let httpHeaders = new HttpHeaders({});      
+
+    let options = {
+      headers: httpHeaders
+    };           
+
+    let body = data
+    
+    return this.http.post(environment.mercadoPagoUrl+"/subcripcionPlanB",body,options).toPromise()
   }
 
   obtenerTiposDocumentos(){

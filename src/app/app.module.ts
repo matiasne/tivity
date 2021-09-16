@@ -64,6 +64,8 @@ import { File } from '@ionic-native/file/ngx';
 import { DirectivesModule } from './Directives/directives.module';
 import { Serial } from '@ionic-native/serial/ngx';
 
+import { ColorPickerModule } from 'ngx-color-picker';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAenr8VfNta7u8NL5J4jpMtosnENy-Gcqc",
   authDomain: "comercios-admin-socialup.firebaseapp.com",
@@ -97,6 +99,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     ReactiveFormsModule,
     BrowserModule,
     NgxQRCodeModule, 
+    ColorPickerModule,
     HttpClientModule,
     ImageCropperModule,
     FullCalendarModule, 

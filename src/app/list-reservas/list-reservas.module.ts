@@ -16,7 +16,6 @@ import { DirectivesModule } from '../Directives/directives.module';
     CommonModule,
     ComponentsModule,
     DirectivesModule,
-    FullCalendarModule,
     FormsModule,
     IonicModule,
     ListReservasPageRoutingModule

@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title  size="small">{{comercio.subdivisiones.nombre}}</ion-title>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+ 
+  <span *ngIf="comercio.subdivisiones.items.length > 0">       
+    <ion-item class="item-card" *ngFor="let division of comercio.subdivisiones.items;let i=index" (click)="seleccionar(i)">       
+      <ion-label>
+        <b>{{division.nombre}}</b>         
+      </ion-label> 
+    </ion-item>        
+  </span> 
+</ion-content>

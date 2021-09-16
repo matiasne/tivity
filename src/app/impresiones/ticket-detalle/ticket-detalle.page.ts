@@ -80,9 +80,9 @@ export class TicketDetallePage implements OnInit {
     let largoDeLinea = 38
     let text = this.comercio.nombre+"\n"
     text += "Gracias por tu visita!\n"
-    if(this.pedido.mesaId){        
+    if(this.pedido.divisionNombre){        
       text += "\n"
-      text += "Mesa: "+ this.pedido.mesaNombre; //text to print        
+      text += "Mesa: "+ this.pedido.divisionNombre; //text to print        
     }
 
     this.pedido.items.forEach(producto => {       

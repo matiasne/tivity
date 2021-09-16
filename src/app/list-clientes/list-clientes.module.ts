@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { ListClientesPageRoutingModule } from './list-clientes-routing.module';
 
 import { ListClientesPage } from './list-clientes.page';
+import { DirectivesModule } from '../Directives/directives.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    DirectivesModule,
     FormsModule,
     IonicModule,
     ListClientesPageRoutingModule

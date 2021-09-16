@@ -148,8 +148,13 @@ export class AfipController {
       if(!req.body.key){
         res.status(400).send({message:"Falta key"});
         return null;
+      }    
+      
+      if(!req.body.fechaInicioActividades){
+        res.status(400).send({message:"Falta fechaInicioActividades"});
+        return null;
       }     
-    
+      
       let data = {
         comercioId:req.body.comercioId,
         razonSocial:req.body.razonSocial,
@@ -158,6 +163,7 @@ export class AfipController {
         personaJuridica:req.body.personaJuridica,        
         ingresosBrutos:req.body.ingresosBrutos,
         ptoVenta:req.body.ptoVenta,
+        fechaInicioActividades:req.body.fechaInicioActividades,
         password:"",
         pem:req.body.pem,
         key:req.body.key    
@@ -182,7 +188,8 @@ export class AfipController {
           tipoDoc:req.body.tipoDoc,
           nroDoc:req.body.nroDoc,
           comercioId:req.body.comercioId,
-          ptoVenta:req.body.ptoVenta
+          ptoVenta:req.body.ptoVenta,
+          fechaInicioActividades:req.body.fechaInicioActividades
         }, "claveSecretaDelToken"); 
         
         let afip ={
@@ -224,7 +231,9 @@ export class AfipController {
                   tipoDoc:doc.data().tipoDoc,
                   nroDoc:doc.data().nroDoc,
                   comercioId:doc.data().comercioId,
-                  ptoVenta:doc.data().ptoVenta
+                  ptoVenta:doc.data().ptoVenta,
+                  fechaInicioActividades:doc.data().fechaInicioActividades
+                  
                 }, "claveSecretaDelToken");     
                 return res.status(200).send({token:token});
               }
@@ -371,7 +380,8 @@ export class AfipController {
 
             const afip:any = await this.initAfip(req,db)    
             let puntoDeVenta = req.user.ptoVenta;      
-            const voucherDate = parseInt(req.body.CbteFch.replace(/-/g, ''))          
+            const voucherDate = parseInt(req.body.CbteFch.replace(/-/g, ''))   
+            
                               
             const voucher = await this.createVoucherFromPedido(afip,pedido,voucherDate,voucherTipo,puntoDeVenta)
                
@@ -381,19 +391,30 @@ export class AfipController {
               let fechaEmision = new Date()
               let datos = {
                 afipFactura:{
-                  emisorRazonSocial:req.user.razonSocial,
-                  emisorTipoDoc:req.user.tipoDoc,
-                  emisorNroDoc:req.user.nroDoc,
-                  emisorPersonaJuridica:req.user.personaJuridica,
-                  ptoVenta:req.user.ptoVenta,
-                  ingresosBrutos:req.user.ingresosBrutos,
+                  emisor:{
+                    razonSocial:req.user.razonSocial,
+                    tipoDoc:req.user.tipoDoc,
+                    nroDoc:req.user.nroDoc,
+                    personaJuridica:req.user.personaJuridica,
+                    ptoVenta:req.user.ptoVenta,
+                    fechaInicioActividades:req.user.fechaInicioActividades,
+                    ingresosBrutos:req.user.ingresosBrutos,
+                  },       
+                  receptor:{
+                    nombre:pedido.clienteNombre,
+                    tipoDoc:pedido.clienteDocTipo,
+                    numDuc:pedido.clienteDoc,
+                    direccion:pedido.clienteDireccion,
+                    personaJuridica:pedido.clientePersonaJuridica
+                  },                  
                   CbteLetra:CbteLetra,
                   CbteTipo:voucherTipo,
                   CAE:respuesta['CAE'],
                   CAEFchVto:respuesta['CAEFchVto'],
                   voucherNumber:voucher.CbteHasta,
                   fechaEmision:fechaEmision
-                }}
+                }
+              }
               
               var writeOperation = await pedidoRef.set(datos,{merge:true}) //lo seteamos desde el back para asegurarnos que se guarden los datos
               console.log(writeOperation)
@@ -408,9 +429,7 @@ export class AfipController {
               console.log(err)
               this.guardarArchivoTA(req.user.comercioId,req.user.nroDoc,db)
               return res.status(500).send({message:err.message});
-            }
-
-            
+            }  
   
           }
           else{
@@ -718,9 +737,14 @@ export class AfipController {
     async taxTypes(req:any,res:any,db:FirebaseFirestore.Firestore){
       const afip:any = await this.initAfip(req,db)
       const taxTypes = await afip.ElectronicBilling.getTaxTypes();
-      return res.status(200).send({taxTypes :taxTypes});  
-          
+      return res.status(200).send({taxTypes :taxTypes});           
     }
+
+    async consultarPadron(req:any,res:any,db:FirebaseFirestore.Firestore){
+      const afip:any = await this.initAfip(req,db)
+      const taxpayerDetails = await afip.RegisterScopeThirteen.getTaxpayerDetails(req.body.cuit);
+      return res.status(200).send({taxTypes :taxpayerDetails});            
+    }    
 
     nuevoPedido(req:any,res:any,db:FirebaseFirestore.Firestore){
 

@@ -4,6 +4,7 @@ import { Recargo } from './recargo';
 import { Localizacion } from './localizacion';
 import { ItemPedido } from './itemPedido';
 import { User } from './user';
+import { Cliente } from './cliente';
 
 export enum EnumEstadoCobro {
     pendiente = 1, 
@@ -39,9 +40,8 @@ export class Pedido{
     public clienteDocTipo="";
     public clienteDoc="";
     public clientePersonaJuridica ="";
-    
-    public mesaId = "";
-    public mesaNombre = "";
+    public clienteDireccion="";
+    public divisionNombre = "";
   
     public on = false;
  
@@ -73,11 +73,25 @@ export class Pedido{
     public primerMensaje ="";
     public countMensajes = 0;
 
+    public fechaTomado:Date;
+
     public afipFactura = {
-        emisorRazonSocial:"",
-        emisorTipoDoc:"",
-        emisorNroDoc:"",
-        emisorPersonaJuridica:"",      
+        emisor:{
+            razonSocial:"",
+            tipoDoc:"",
+            nroDoc:"",
+            personaJuridica:"",
+            ptoVenta:"",
+            fechaInicioActividades:"",
+            ingresosBrutos:"",
+        },       
+            receptor:{
+            nombre:"",
+            tipoDoc:"",
+            numDuc:"",
+            direccion:"",
+            personaJuridica:""
+        },       
         ptoVenta:"",
         CbteLetra:"",
         CbteTipo:"",
@@ -100,6 +114,16 @@ export class Pedido{
 
     public asignarValores(init?: Partial<Pedido>) {
         Object.assign(this, init);
+    }
+
+    public asignarCliente(cliente:Cliente) {
+        this.clienteEmail = cliente.email
+        this.clienteId = cliente.id;
+        this.clienteNombre = cliente.nombre
+        this.clienteDocTipo = cliente.documentoTipo
+        this.clienteDoc = cliente.documento
+        this.clientePersonaJuridica = cliente.personaJuridica
+        this.clienteDireccion = JSON.parse(JSON.stringify(cliente.direccion))
     }
 
     

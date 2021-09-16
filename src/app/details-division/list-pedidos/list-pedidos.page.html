@@ -1,0 +1,14 @@
+<ion-content  class="ion-padding">
+  <app-list-pedidos-manager
+    [divisionFiltro]="divisionNombre"
+  ></app-list-pedidos-manager>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" >     
+    <span *appCheckUsuarioPermisos="{feature:'pedidos',permiso:'Editor'}">
+      <ion-fab-button (click)="nuevoPedido()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </span>   
+  </ion-fab>
+  
+</ion-content>

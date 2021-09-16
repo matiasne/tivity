@@ -9,6 +9,10 @@
 
 <ion-content class="ion-padding">
 
+   
+
+      
+
   <ion-button class="button-rounded" color="light"  *ngIf="!reserva.personalEmail" (click)="seleccionarPersonal()"><ion-icon name="person"></ion-icon> Personal</ion-button>    
   <ion-item-sliding class="item-card" *ngIf="reserva.personalEmail">    
     <ion-item>
@@ -25,6 +29,19 @@
       </ion-item-options>
     </span>    
   </ion-item-sliding>
+
+    <ion-item (click)="openSeleccionarEstado()">
+      
+      <div slot="start" [ngStyle]="{ 'background-color': reserva.estado.color, 'width': '50px', 'height': '50px'}"></div>      
+      
+      <ion-label>
+        <h2 *ngIf="reserva.estado.nombre">{{reserva.estado.nombre}}</h2>
+        <h2 *ngIf="!reserva.estado.nombre">Seleccione un estado</h2>
+      </ion-label>  
+    </ion-item>
+   
+  
+  
 
   <ion-item>
     <ion-label position="floating">Desde</ion-label>
@@ -55,30 +72,30 @@
     
   </ion-item-sliding>
 
-    <ion-button class="button-rounded" color="light" *ngIf="!reserva.mesaId && comercio.config.mesas" (click)="seleccionarMesa()" ><ion-icon name="add"></ion-icon> Mesa</ion-button>
-    <ion-item-sliding class="item-card" *ngIf="reserva.mesaId && comercio.config.mesas">
+    <ion-button *ngIf="!reserva.divisionNombre" class="button-rounded" color="light" (click)="seleccionarDivision()" ><ion-icon name="add"></ion-icon> {{comercio.subdivisiones.nombre}}</ion-button>
+    <ion-item-sliding *ngIf="reserva.divisionNombre" class="item-card">
       <ion-item>
         <ion-avatar slot="start">
           <ion-icon name="grid-outline"></ion-icon>
         </ion-avatar>
         <ion-label>
-          <h2>{{reserva.mesaNombre}}</h2>
+          <h2>{{reserva.divisionNombre}}</h2>
         </ion-label>      
       </ion-item>
 
       <span *appCheckUsuarioPermisos="{feature:'reservas',permiso:'Editor'}">
         <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="eliminarMesa()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
+          <ion-item-option color="danger" (click)="eliminarDivision()"><ion-icon name="trash" ></ion-icon> Eliminar</ion-item-option>
         </ion-item-options>
       </span>
      
     </ion-item-sliding>
 
     <span *appCheckUsuarioPermisos="{feature:'reservas',permiso:'Editor'}">
-      <ion-button *ngIf="!reserva.direccion.street_name" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
+      <ion-button *ngIf="!reserva.direccion.country" (click)="seleccionarUbicacion()" class="button-rounded" color="light"><ion-icon name="add"></ion-icon><ion-icon name="location-outline"></ion-icon>Dirección</ion-button>
     </span>
     
-    <ion-item-sliding class="item-card" *ngIf="reserva.direccion.street_name">  
+    <ion-item-sliding class="item-card" *ngIf="reserva.direccion.country">  
       <ion-item>
         <ion-avatar slot="start">
           <ion-icon name="location-outline"></ion-icon>
@@ -167,7 +184,7 @@
       
       
       <span *appCheckUsuarioPermisos="{feature:'reservas',permiso:'Editor'}">
-        <ion-button class="button-rounded" color="danger" (click)="eliminar()"><ion-icon name="trash"></ion-icon> Eliminar</ion-button>
+        <ion-button *ngIf="isUpdating == true" class="button-rounded" color="danger" (click)="eliminar()"><ion-icon name="trash"></ion-icon> Eliminar</ion-button>
       </span>
      
 

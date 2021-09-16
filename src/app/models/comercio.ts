@@ -23,6 +23,13 @@ export class Comercio {
 
     public countPedidoDia = 0;
     public ultimoPedidoFecha:any;
+
+    public subdivisiones ={
+        nombre:"", //Ejemplo consultorios
+        items:[{
+            nombre:""
+        }]
+    }
     
     public config  = {
         productos:true,
@@ -31,11 +38,9 @@ export class Comercio {
         cocinas:true,
         reservas:true,
         personal:true,
-        mesas:true,
-        impresion:false,
+        subdivisiones:true,
         clientes:true,
         woocommerce:true,
-        cobrarDirectamente: false,
         movimientosCajas:true,
         ctasCorrientes:true,
         stock:true,

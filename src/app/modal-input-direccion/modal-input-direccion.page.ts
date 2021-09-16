@@ -208,9 +208,9 @@ export class ModalInputDireccionPage implements OnInit {
         }
     }
 
-    setTimeout(function () {
+   /* setTimeout(function () {
       document.getElementById('pac-input').click();
-    }, 2500);
+    }, 2500);*/
  
       
   }

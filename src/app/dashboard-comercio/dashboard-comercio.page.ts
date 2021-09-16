@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CajasService } from '../Services/cajas.service';
-import { MesasService } from '../Services/mesas.service';
 import { Comercio } from '../models/comercio';
 import { CarritoService } from '../Services/global/carrito.service';
-import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { ComerciosService } from '../Services/comercios.service';
-import { LoadingService } from '../Services/loading.service';
-import { ImpresoraService } from '../Services/impresora/impresora.service';
-import { ModalController } from '@ionic/angular';
-import { FormCardPaymentPage } from '../form-card-payment/form-card-payment.page';
 import { EscanerCodigoBarraService } from '../Services/escaner-codigo-barra.service';
+import { ModalController } from '@ionic/angular';
+import { ComandaPage } from '../impresiones/comanda/comanda.page';
+import { AConRespInscriptoPage } from '../impresiones/facturas/a-con-resp-inscripto/a-con-resp-inscripto.page';
 
 @Component({
   selector: 'app-dashboard-comercio',
@@ -26,11 +22,8 @@ export class DashboardComercioPage implements OnInit {
     public router:Router,
     private carritoService:CarritoService,
     private comerciosService:ComerciosService,
-    private afipService:AfipServiceService,
-    private loadingService:LoadingService,
-    private impresoraService:ImpresoraService,
-    private modalCtrl:ModalController,
-    private escanerCodigoBarraService:EscanerCodigoBarraService
+    private escanerCodigoBarraService:EscanerCodigoBarraService,
+    private modalController:ModalController,
   ) { 
     this.comercio = new Comercio()
   }
@@ -41,13 +34,8 @@ export class DashboardComercioPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    
-    if(this.comercio.id == "" ){
-      this.loadingService.presentLoading()
-    }
-
+  
     this.comerciosService.getSelectedCommerce().subscribe(data=>{
-      this.loadingService.dismissLoading();
       this.comercio = new Comercio();
       this.comercio.asignarValores(data)
       this.link = "https://auth.mercadopago.com.ar/authorization?client_id=6782463642048642&response_type=code&platform_id=mp&state=id="+this.comercio.id+"&redirect_uri=https://us-central1-tivity-socialup.cloudfunctions.net/api/mercadopago/marketplaceAuth"
@@ -91,9 +79,18 @@ export class DashboardComercioPage implements OnInit {
     this.router.navigate(['form-egreso-caja']);
   }
 
-  async connectUSB(){
-    
-    this.escanerCodigoBarraService.init()
+  async selectUSB(){    
+    this.escanerCodigoBarraService.seleccionarDispositivoUSB()
   }
 
+  async connectUSB(){
+    this.escanerCodigoBarraService.conectarDirectamenteUSB()
+  }
+
+  async mostrarFactura(){
+    const modal = await this.modalController.create({
+      component: AConRespInscriptoPage    
+    });    
+    return await modal.present();
+  }
 }

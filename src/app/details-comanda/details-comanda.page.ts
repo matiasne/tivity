@@ -3,18 +3,14 @@ import { AlertController, ModalController, NavController, NavParams } from '@ion
 import { ChatPage } from '../chat/chat.page';
 import { Comercio } from '../models/comercio';
 import { Mesa } from '../models/mesa';
-import { EnumTipoMovimientoCaja, MovimientoCaja } from '../models/movimientoCaja';
-import { EnumEstadoCobro, Pedido } from '../models/pedido';
+import { EnumTipoMovimientoCaja } from '../models/movimientoCaja';
+import { Pedido } from '../models/pedido';
 import { EnumEstadoCocina } from 'src/app/models/item';
-import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { CajasService } from '../Services/cajas.service';
 import { ComentariosService } from '../Services/comentarios.service';
 import { ComerciosService } from '../Services/comercios.service';
-import { CarritoService } from '../Services/global/carrito.service';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
-import { MesasService } from '../Services/mesas.service';
-import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { PedidoService } from '../Services/pedido.service';
 
 @Component({
@@ -40,12 +36,7 @@ export class DetailsComandaPage implements OnInit {
     private pedidosService:PedidoService,
     private impresoraService:ImpresoraService,
     private comentariosService:ComentariosService,
-    private alertController:AlertController,
-    private mesasServices:MesasService,
     private navParamService:NavegacionParametrosService,
-    private carritoService:CarritoService,
-    private modalNotificacion:ModalNotificacionService,
-    private afipService:AfipServiceService
   ) {
 
     this.comercio = new Comercio()
@@ -60,11 +51,6 @@ export class DetailsComandaPage implements OnInit {
       this.pedido = new Pedido()
     }      
 
-    if(this.pedido.mesaId){
-      this.mesasServices.get(this.pedido.mesaId).subscribe(resp=>{
-        this.mesa = resp
-      })
-    }
 
     if(this.pedido.id){
       this.comentariosService.setearPath("pedidos",this.pedido.id);   
@@ -113,6 +99,7 @@ export class DetailsComandaPage implements OnInit {
   }
 
   demora(min){
+    this.pedido.fechaTomado = new Date()
     this.pedido.comanda.demora = min
     this.actualizarPedido()
     this.modalController.dismiss()

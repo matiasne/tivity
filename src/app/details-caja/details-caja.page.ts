@@ -63,14 +63,14 @@ export class DetailsCajaPage implements OnInit {
     this.fechaDesde.setDate(this.fechaDesde.getDate() - 1);
 
     this.comercio = this.comercioService.getSelectedCommerceValue()
-    if(this.comercio.config.movimientosCajas){
-      this.movimientosService.setearPath(this.caja.id)
-      this.movimientosService.getMovimientosCaja(this.caja.id,this.fechaDesde).subscribe(data =>{
-      
-        this.items = data;
-        console.log(this.items)     
-      }); 
-    }
+    
+    this.movimientosService.setearPath(this.caja.id)
+    this.movimientosService.getMovimientosCaja(this.caja.id,this.fechaDesde).subscribe(data =>{
+    
+      this.items = data;
+      console.log(this.items)     
+    }); 
+    
 
   }
 
@@ -170,11 +170,12 @@ export class DetailsCajaPage implements OnInit {
         let editarPedido = new Pedido();
         editarPedido.asignarValores(data);
         
-        this.navParametrosService.param = editarPedido;
-      // this.router.navigate(['details-pedido'])
 
         const modal = await this.modalController.create({
           component: DetailsPedidoPage,
+          componentProps:{
+            pedido:editarPedido
+          },
           id:'detail-pedido'      
         });
         modal.onDidDismiss()

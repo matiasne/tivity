@@ -159,15 +159,31 @@ export class MovimientosService extends BaseService {
 
   eliminarMovimientoCaja(caja:Caja,data:MovimientoCaja){  
 
-    this.afs.collection('comercios/'+this.comercioId+'/cajas/'+data.cajaId+'/movimientos').doc(data.id).delete();
-      
-    this.actualizarTotalCaja(data.cajaId,data.metodoPago, - data.monto);
+    var batch = this.afs.firestore.batch();
 
+    var movimientoPagoRef:any = this.getRefMovimientoCaja(data.cajaId,data.id)        
+    batch.delete(movimientoPagoRef)
+
+    var cajaRef:any = this.cajasService.getRef(data.cajaId)
+    if(data.metodoPago == "efectivo"){
+      batch.update(cajaRef, "totalEfectivo", firebase.firestore.FieldValue.increment(-data.monto));
+    }
+    if(data.metodoPago == "debito"){
+      batch.update(cajaRef, "totalDebito", firebase.firestore.FieldValue.increment(-data.monto));
+    }
+    if(data.metodoPago == "credito"){
+      batch.update(cajaRef, "totalCredito", firebase.firestore.FieldValue.increment(-data.monto));
+    }      
+
+    batch.commit().then(() => {
+      console.log("batch commit")
+    });
+    /*
     if(data.movimientoCtaCorrienteId != ""){  
       console.log("Eliminando Deposito también "+data.ctaCorrienteId+" "+data.movimientoCtaCorrienteId)
       this.actualizarTotalCtaCorriente(data.ctaCorrienteId,data.monto);       
       this.afs.collection('comercios/'+this.comercioId+'/ctascorrientes/'+data.ctaCorrienteId+'/movimientos').doc(data.movimientoCtaCorrienteId).delete();
-    }
+    }*/
 
 
   }

@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, ModalController, NavController, NavParams } from '@ionic/angular';
 import { ChatPage } from '../chat/chat.page';
 import { FormClientePage } from '../form-cliente/form-cliente.page';
 import { FormCobrarPedidoPage } from '../form-cobrar-pedido/form-cobrar-pedido.page';
 import { FormConfiguracionAfipPage } from '../form-configuracion-afip/form-configuracion-afip.page';
 import { FormDevolverPedidoPage } from '../form-devolver-pedido/form-devolver-pedido.page';
-import { FormMesaPage } from '../form-mesa/form-mesa.page';
 import { ModalInputDireccionPage } from '../modal-input-direccion/modal-input-direccion.page';
 import { Caja } from '../models/caja';
 import { Comercio } from '../models/comercio';
@@ -18,7 +17,6 @@ import { EnumEstadoCocina } from 'src/app/models/item';
 import { Item } from '../models/item';
 import { Recargo } from '../models/recargo';
 import { SelectClientePage } from '../select-cliente/select-cliente.page';
-import { SelectMesaPage } from '../select-mesa/select-mesa.page';
 import { SelectProductPage } from '../select-product/select-product.page';
 import { AfipServiceService } from '../Services/afip/afip-service.service';
 import { CajasService } from '../Services/cajas.service';
@@ -27,12 +25,14 @@ import { ComerciosService } from '../Services/comercios.service';
 import { CarritoService } from '../Services/global/carrito.service';
 import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 import { ImpresoraService } from '../Services/impresora/impresora.service';
-import { MesasService } from '../Services/mesas.service';
 import { ModalNotificacionService } from '../Services/modal-notificacion.service';
 import { PedidoService } from '../Services/pedido.service';
 import { ActivatedRoute } from '@angular/router';
 import { ItemPedido } from '../models/itemPedido';
 import { UsuariosService } from '../Services/usuarios.service';
+import { SelectDivisionPage } from '../select-division/select-division.page';
+import { Division } from '../models/subdivision';
+import { Cliente } from '../models/cliente';
 
 @Component({
   selector: 'app-details-pedido',
@@ -41,19 +41,20 @@ import { UsuariosService } from '../Services/usuarios.service';
 })
 export class DetailsPedidoPage implements OnInit {
 
-  private enumTipoMovimientoCaja = EnumTipoMovimientoCaja
   public pedido:Pedido;
+
+  private enumTipoMovimientoCaja = EnumTipoMovimientoCaja
   public comercio:Comercio;
   
   public cajas = []
   public cajaSeleccionadaIndex=0;
   public cajaSeleccionada:Caja;
+  public division:Division;
+  public cliente:Cliente;
   public metodoPagoSeleccionado =[];
   public cantidadMetodos=0;
 
   public ctasCorrientes =[];
-  mesa:Mesa
-
   public metodoTexto =""; 
   public ctaCorrienteSelecccionada:any;
   public ctaCorrienteSelecccionadaId ="";
@@ -65,8 +66,9 @@ export class DetailsPedidoPage implements OnInit {
   public cEstado = EnumEstadoCobro
   public enumTipo = EnumTipoDescuento
 
-  public afipQR = "";
+  public afipQR = ""; 
 
+  public isUpdating = false;
   
   constructor(
     public comerciosService:ComerciosService,
@@ -76,39 +78,25 @@ export class DetailsPedidoPage implements OnInit {
     private impresoraService:ImpresoraService,
     private comentariosService:ComentariosService,
     private alertController:AlertController,
-    private mesasServices:MesasService,
     private navParamService:NavegacionParametrosService,
     private carritoService:CarritoService,
     private modalNotificacion:ModalNotificacionService,
     private afipService:AfipServiceService,
     private route: ActivatedRoute,
-    private usuariosService:UsuariosService
+    private navParams:NavParams
   ) { 
 
-    this.comercio = new Comercio()
-    this.mesa = new Mesa();
     this.pedido = new Pedido()
+    this.pedido.asignarValores(this.navParams.get('pedido'))
+
+    console.log()
+
+    this.comercio = new Comercio()
     this.comercio.asignarValores(this.comerciosService.getSelectedCommerceValue());
 
-    if(this.navParamService.param instanceof Pedido){   //si es un solo pedido 
-      this.pedido.asignarValores(this.navParamService.param);
-      console.log(this.pedido)
-      this.getTotal();
+    if(this.pedido.id != ""){        
+      this.isUpdating = true;
     }  
-    else if(this.route.snapshot.params.id){
-      this.pedidosService.get(this.route.snapshot.params.id).subscribe(data=>{
-        this.pedido = data;
-      })
-    }
-    else{
-      this.pedido = new Pedido()
-    }      
-
-    if(this.pedido.mesaId){
-      this.mesasServices.get(this.pedido.mesaId).subscribe(resp=>{
-        this.mesa = resp
-      })
-    }
 
     if(this.pedido.id){
       this.comentariosService.setearPath("pedidos",this.pedido.id);   
@@ -121,7 +109,6 @@ export class DetailsPedidoPage implements OnInit {
     if(this.pedido.afipFactura.voucherNumber){
       this.afipQR = this.afipService.getURLforQR(this.pedido)
     }
-
   }
 
   ngOnInit() { 
@@ -129,7 +116,7 @@ export class DetailsPedidoPage implements OnInit {
   }
 
   ionViewDidEnter(){    
-      
+    this.getTotal();
   }
 
   eliminarDescuento(i){
@@ -149,6 +136,7 @@ export class DetailsPedidoPage implements OnInit {
     this.pedido.clienteDocTipo = ""
     this.pedido.clienteDoc = ""
     this.pedido.clientePersonaJuridica = ""
+    this.pedido.clienteDireccion = ""
     this.actualizarPedido()
   }
 
@@ -203,12 +191,7 @@ export class DetailsPedidoPage implements OnInit {
         }
         if(retorno.data != "nuevo"){
           let cliente = retorno.data.item;
-          this.pedido.clienteEmail = cliente.email
-          this.pedido.clienteId = cliente.id;
-          this.pedido.clienteNombre = cliente.nombre
-          this.pedido.clienteDocTipo = cliente.documentoTipo
-          this.pedido.clienteDoc = cliente.documento
-          this.pedido.clientePersonaJuridica = cliente.personaJuridica
+          this.pedido.asignarCliente(cliente)
           this.actualizarPedido()
         }   
       }
@@ -237,15 +220,16 @@ export class DetailsPedidoPage implements OnInit {
         this.pedido.clienteDocTipo = cliente.documentoTipo
         this.pedido.clienteDoc = cliente.documento
         this.pedido.clientePersonaJuridica = cliente.personaJuridica
+        this.pedido.clienteDireccion = JSON.parse(JSON.stringify(cliente.direccion))
         this.actualizarPedido()
       }           
     });
     return await modal.present();
   }
 
-  async seleccionarMesa(){
+  async seleccionarDivision(){
     const modal = await this.modalController.create({
-      component: SelectMesaPage,     
+      component: SelectDivisionPage,     
       cssClass:'modal-custom-wrapper'
     });
 
@@ -260,9 +244,8 @@ export class DetailsPedidoPage implements OnInit {
 
         }
         else{
-          this.mesa = retorno.data.item;
-          this.pedido.mesaId = this.mesa.id;
-          this.pedido.mesaNombre = this.mesa.nombre
+          this.division = retorno.data;
+          this.pedido.divisionNombre = retorno.data.nombre
           this.actualizarPedido()
         }
        
@@ -271,33 +254,10 @@ export class DetailsPedidoPage implements OnInit {
     return await modal.present();
   }
 
-  async abrirNuevaMesa(){
-    const modal = await this.modalController.create({
-      component: FormMesaPage,     
-      cssClass:'modal-custom-wrapper' 
-    });    
-    modal.present().then(()=>{
-    
-
-    })
-
-    modal.onDidDismiss()
-    .then((retorno) => {
-      if(retorno.data){
-        this.mesa = retorno.data.item;
-        this.pedido.mesaId = this.mesa.id;
-        this.pedido.mesaNombre = this.mesa.nombre
-        this.actualizarPedido()   
-      }
-     
-    });
-    return await modal.present();
-  }
   
-  eliminarMesa(){
-    this.mesa = new Mesa();
-    this.pedido.mesaId = "";
-    this.pedido.mesaNombre ="";
+  eliminarDivision(){
+    this.division = new Division();
+    this.pedido.divisionNombre ="";
     this.actualizarPedido()
   }
 
@@ -320,11 +280,6 @@ export class DetailsPedidoPage implements OnInit {
     });
     return await modal.present();
   }
-
-
-  
-
-
   
   async suspender(){
     const alert = await this.alertController.create({
@@ -397,6 +352,14 @@ export class DetailsPedidoPage implements OnInit {
     });
     return await modal.present();
   }
+
+  guardar(){
+    this.pedido.direccion = JSON.parse(JSON.stringify(this.pedido.direccion));
+    this.pedidosService.add(this.pedido).then(data=>{
+      console.log("Pedido guardado")
+    })
+    this.modalController.dismiss();
+  }
   
 
   async agregarItem(){
@@ -445,7 +408,7 @@ export class DetailsPedidoPage implements OnInit {
   }
 
   actualizarPedido(){
-    if(this.pedido.id){
+    if(this.pedido.id && this.isUpdating){
       this.pedido.direccion = JSON.parse(JSON.stringify(this.pedido.direccion));
       this.pedidosService.update(this.pedido).then(data=>{
         console.log(data)
@@ -552,9 +515,12 @@ export class DetailsPedidoPage implements OnInit {
 
   }
 
+ 
+}
+
   
 
-}
+
   
   
 

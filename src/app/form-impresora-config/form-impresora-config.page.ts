@@ -16,8 +16,9 @@ import { ImpresoraService } from '../Services/impresora/impresora.service';
 export class FormImpresoraConfigPage implements OnInit {
 
   public impresora:BluettothImpresora
+  public impresoraUSB:any
+  public impresionBandeja = false; 
   public cocinas = [];
-  public comercio:Comercio
 
   constructor(
     private modalCtrl:ModalController,
@@ -25,17 +26,10 @@ export class FormImpresoraConfigPage implements OnInit {
     private comercioService:ComerciosService
   ) { 
     this.impresora = new BluettothImpresora()   
-    this.impresora = this.impresoraService.getImpresora()
+    this.impresora = this.impresoraService.getImpresoraBT()
+    this.impresionBandeja = this.impresoraService.getImpresoraBandeja()
     console.log(this.impresora)
-    this.comercio = new Comercio();
-    this.comercioService.getSelectedCommerce().subscribe(data=>{
-      // let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId'); 
-      if(data){ 
-       
-       this.comercio.asignarValores(data)
-      }
-      
-     })
+    
   }
 
   ngOnInit() {
@@ -51,7 +45,7 @@ export class FormImpresoraConfigPage implements OnInit {
     .then((retorno) => {
       if(retorno.data){
         this.impresora.asignarValores(retorno.data)
-        this.impresoraService.guardarImpresora(retorno.data);
+        this.impresoraService.guardarImpresoraBT(retorno.data);
       }
                
     });
@@ -74,7 +68,7 @@ export class FormImpresoraConfigPage implements OnInit {
           modal.onDidDismiss()
           .then((retorno) => {
             this.impresora.asignarValores(retorno.data)
-            this.impresoraService.guardarImpresora(retorno.data);
+            this.impresoraService.guardarImpresoraBT(retorno.data);
           });
           return await modal.present();             
         }             
@@ -82,18 +76,31 @@ export class FormImpresoraConfigPage implements OnInit {
     return await modal.present();
   }
 
+  async agregarImpresoraUSB(){
+    await this.impresoraService.seleccionarDispositivoUSB()
+    this.impresoraUSB = this.impresoraService.dispositivoUSBConectado;
+  }
+
+  eliminarImpresoraUSB(){
+    this.impresoraService.desvincularUSB();
+    this.impresoraUSB =undefined;
+  }
+
+
+
+
   
   conectar(){
     this.impresoraService.impresionPrueba("usuario prueba")
   }
 
-  update(){    
-    this.comercioService.update(this.comercio);
+  updateBandeja(){    
+    this.impresoraService.setImpresoraBandeja(this.impresionBandeja)
   }
 
   eliminar(){
     this.impresora = new BluettothImpresora()   
-    this.impresoraService.eliminarImpresora()
+    this.impresoraService.eliminarImpresoraBT()
   }
 
 
