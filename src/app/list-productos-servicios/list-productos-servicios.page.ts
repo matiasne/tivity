@@ -191,6 +191,7 @@ export class ListProductosServiciosPage implements OnInit {
 
     this.carritoSubs = this.carritoService.getActualCarritoSubs().subscribe(data=>{
       this.carrito = data;
+      this.validarEnCarrito()
     });
 
     this.pedidosService.listSolicitados().subscribe((pedidos:any)=>{
@@ -225,7 +226,7 @@ export class ListProductosServiciosPage implements OnInit {
     //this.marcarEnCarrito();
   //  this.wordpressService.obtainToken()
     console.log(this.carrito.items)
-    this.validarEnCarrito()
+    
   }
 
   ionViewWillEnter(){
@@ -301,11 +302,7 @@ export class ListProductosServiciosPage implements OnInit {
           producto.producto = true;
           producto.enCarrito = 0;      
       }); 
-      this.itemsProductos = this.itemsAllProductos
-      
-      
-
-      
+      this.itemsProductos = this.itemsAllProductos     
     });  
   }
 
@@ -330,9 +327,7 @@ export class ListProductosServiciosPage implements OnInit {
         }
       ]
     });
-    await alert.present();   
-
-    
+    await alert.present();    
   }
 
   onDrag(event,producto){
@@ -364,6 +359,7 @@ export class ListProductosServiciosPage implements OnInit {
      
       this.dragAgregar = false
       producto.precioTotal = producto.precio
+      producto.cantidad = 1;
       this.carritoService.agregarItem(producto);
       this.dragEvent.close().then(data=>{
            
@@ -472,7 +468,7 @@ export class ListProductosServiciosPage implements OnInit {
     });    
 
     modal.onDidDismiss().then((retorno) => {
-      this.validarEnCarrito()
+    
       if(this.route.snapshot.params.carritoIntended)
         this.router.navigate([this.route.snapshot.params.carritoIntended]);
       if(retorno.data == "vacio"){
@@ -583,5 +579,9 @@ export class ListProductosServiciosPage implements OnInit {
 
   verImpresora(){
     this.router.navigate(['form-impresora-config'])
+  }
+
+  getTotal(){
+    return this.pedidosService.getTotal(this.carrito)
   }
 }

@@ -47,7 +47,7 @@
             </span-->
             
            <span *ngIf="rolActual == 'Administrador'">
-            <ion-item *ngIf="comercioSeleccionado.subdivisiones.items.length > 0" (click)="selectDivision()" lines="none" detail="false">
+            <ion-item *ngIf="comercioSeleccionado.config.subdivisiones" (click)="selectDivision()" lines="none" detail="false">
               <ion-icon slot="start" name="grid-outline"></ion-icon>
               <ion-label>{{comercioSeleccionado.subdivisiones.nombre}}</ion-label>               
             </ion-item>

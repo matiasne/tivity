@@ -15,7 +15,7 @@ export class CardItemComponent implements OnInit {
   @Input() showImage = true;
   @Input() showStock = true; 
   @Input() showOpcionesSeleccionadas = true;
-  @Input() showEnCarrito = true;
+  @Input() showEnCarrito = false;
   @Output() select = new EventEmitter<any>();
     
   constructor() { 

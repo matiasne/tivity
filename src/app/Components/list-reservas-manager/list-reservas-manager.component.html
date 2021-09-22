@@ -7,8 +7,7 @@
 </app-search-filter-input>
 <ion-button *ngIf="vistaLista" fill="clear" color="primary" (click)="abrirSelectorFechas()"><ion-icon name="calendar-outline"></ion-icon></ion-button>
 
-<span *ngIf="vistaLista">
-
+<span [hidden]="!vistaLista">
   <ion-list lines="none" >     
     <span *ngFor="let reserva of itemsView">
       <ion-item-sliding  class="item-card">
@@ -22,7 +21,7 @@
 
 </span>
 
-<full-calendar  *ngIf="!vistaLista" #fullcalendar deepChangeDetection="true" [options]="calendarOptions"></full-calendar>
+<full-calendar [hidden]="vistaLista" #fullcalendar deepChangeDetection="true" [options]="calendarOptions"></full-calendar>
 
 
 

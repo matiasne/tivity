@@ -33,9 +33,11 @@
       
     <span *ngIf="showStock">stock: {{item.stock}}</span>
     
-    <span *ngIf="showEnCarrito">
-      <ion-badge color="success" *ngIf="item.enCarrito && item.valorPor">En Carrito: {{item.enCarrito * item.valorPor}} {{item.unidad}}</ion-badge> 
-      <ion-badge color="success" *ngIf="item.enCarrito && !item.valorPor">En carrito: {{item.enCarrito}} {{item.unidad}}</ion-badge>      
-    </span>
+    
   </ion-label>  
+ 
 </ion-item>
+<div *ngIf="!item.enCarrito" class="espacio"></div>   
+<div class="advertencia" *ngIf="item.enCarrito && item.valorPor">En Carrito: {{item.enCarrito * item.valorPor}} {{item.unidad}}</div> 
+<div class="advertencia" *ngIf="item.enCarrito && !item.valorPor">En carrito: {{item.enCarrito}} {{item.unidad}}</div>   
+  

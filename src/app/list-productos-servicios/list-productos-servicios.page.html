@@ -75,7 +75,7 @@
                 <ion-virtual-scroll [items]="itemsProductos">
                 <ion-col size="12" size-xs="12" size-sm="6" size-md="4" size-lg="3" *virtualItem="let producto">           
       
-                  <ion-item-sliding class="item-card fivePhasesFadeOut FadeIn" (ionDrag)="onDrag($event,producto)"> 
+                  <ion-item-sliding  [ngClass]="{'en-carrito': producto.enCarrito}" (ionDrag)="onDrag($event,producto)"> 
                     <app-card-item 
                       [item]="producto"
                       [multiplicador]="1" 
@@ -102,23 +102,7 @@
       
         
         <!-- fab placed to the bottom end -->
-        <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
-      
-          
-          <!--ion-fab-button  color="success" (click)="focusBuscar()">
-            <ion-icon name="search"></ion-icon>
-          </ion-fab-button><br-->
-      
-          <span *ngIf="isMobile">
-            <ion-fab-button   color="success" (click)="lectorDeCodigo()">
-              <ion-icon name="barcode"></ion-icon>
-            </ion-fab-button><br>
-          </span>
-          
-          <ion-fab-button (click)="nuevoProducto()" *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Editor'}">
-            <ion-icon name="add"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
+        
       
         <div *ngIf="buscandoProductos" class="mensaje FadeOut FadeIn">
           <img src="../../assets/img/buscando.fw.png" alt="">
@@ -161,7 +145,24 @@
       (ionChange)="buscar($event)">
     </ion-searchbar-->
     
-   
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
+         
+      <span *ngIf="carrito.on">
+        <ion-fab-button   color="danger" (click)="vaciarCarrito()">
+          <ion-icon name="trash"></ion-icon>
+        </ion-fab-button><br>
+      </span>
+
+      <span *ngIf="isMobile">
+        <ion-fab-button   color="success" (click)="lectorDeCodigo()">
+          <ion-icon name="barcode"></ion-icon>
+        </ion-fab-button><br>
+      </span>
+      
+      <ion-fab-button (click)="nuevoProducto()" *appCheckUsuarioPermisos="{feature:'catalogo',permiso:'Editor'}">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
 </ion-content>
 
@@ -184,7 +185,7 @@
           <ion-button  class="button-rounded"  color="primary" (click)="continuar()">Guardar Pedido</ion-button>
         </ion-col>
         <ion-col size="3">
-          <ion-button  class="button-rounded"  color="success" (click)="cobrar()">Cobrar</ion-button>
+          <ion-button  class="button-rounded"  color="success" (click)="cobrar()">Cobrar {{getTotal() | currency}}</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>  

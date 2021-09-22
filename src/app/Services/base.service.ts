@@ -157,7 +157,7 @@ export class BaseService {
     
             let time = new Date();
             const promise = new Promise((resolve, reject) => {
-                this.collection.doc(id).set({...item, createdAt: time},{merge:true}).then(ref => {
+                this.collection.doc(id).set({...item, updatedAt: time},{merge:true}).then(ref => {
                     const newItem = {
                         id: item.id,
                         /* workaround until spread works with generic types */
@@ -190,8 +190,9 @@ export class BaseService {
     }
 
     public updateValues(id,data){
+        let time = new Date();
         const promise = new Promise((resolve, reject) => {
-            return this.collection.doc(id).update(data).then((resp) => {
+            return this.collection.doc(id).update({...data, updatedAt:time}).then((resp) => {
                 resolve({
                     ...(resp as any)
                 });

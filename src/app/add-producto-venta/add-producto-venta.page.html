@@ -13,7 +13,7 @@
     [multiplicador]="itemPedido.cantidad"
     ></app-card-item-pedido>        
   </div>  
-  <ion-item class="form-card item-producto-cantidad" lines="none">
+  <ion-item class="item-producto-cantidad" lines="none">
     <ion-button class="button-block" slot="start" (click)="restarCantidad()"><ion-icon name="remove"></ion-icon></ion-button>
     <b>
       <span *ngIf="itemPedido.valorPor && (itemPedido.valorPor * itemPedido.cantidad)==1 && itemPedido.unidad == 'unidades'">

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, ModalController, NavParams } from '@ionic/angular';
+import * as firebase from 'firebase';
 import { ChatPage } from '../chat/chat.page';
 import { FormClientePage } from '../form-cliente/form-cliente.page';
 import { FormEstadoReservaPage } from '../form-estado-reserva/form-estado-reserva.page';
@@ -59,11 +60,11 @@ export class FormReservaPage implements OnInit {
     
     
     
-    console.log(this.reserva)
-      
+    console.log(this.navParams.get('fechaInicio'))
+
     
-    if(this.navParams.get('fechaInicio'))
-      this.reserva.desde = this.navParams.get('fechaInicio')
+    
+      
   }
 
   ngOnInit() {
@@ -266,6 +267,8 @@ export class FormReservaPage implements OnInit {
 
 
   guardar(){
+    
+   
     this.reserva.setCreador(this.authenticationService.getUser())
     this.reserva.direccion = JSON.parse(JSON.stringify(this.reserva.direccion));
     this.modalController.dismiss(this.reserva)

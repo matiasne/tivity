@@ -51,7 +51,7 @@ export class CarritoService {
     this.carrito.items.push(p);
     this.carrito.on = true;    
 
-    this.modalNotificacion.success("Agregado",itemCarrito.cantidad+' '+itemCarrito.unidad+' de '+itemCarrito.nombre)
+    //this.modalNotificacion.success("Agregado",itemCarrito.cantidad+' '+itemCarrito.unidad+' de '+itemCarrito.nombre)
     this.actualCarritoSubject.next(this.carrito);    
   }
 

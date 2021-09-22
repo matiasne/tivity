@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CalendarOptions, EventAddArg, FullCalendarComponent, Calendar, EventInput } from '@fullcalendar/angular'; // useful for typechecking
 import { ModalController } from '@ionic/angular';
@@ -16,7 +16,7 @@ import { ReservasService } from '../../Services/reservas.service';
   templateUrl: './list-reservas-manager.component.html',
   styleUrls: ['./list-reservas-manager.component.scss'],
 })
-export class ListReservasManagerComponent implements AfterViewInit {
+export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
 
   //Filtros externos
   @Input() clienteIdFiltro= "";
@@ -31,7 +31,6 @@ export class ListReservasManagerComponent implements AfterViewInit {
 
   events:any[] = [];
 
-  initialized = false;
  
   @Input() vistaLista = false;
 
@@ -63,7 +62,9 @@ export class ListReservasManagerComponent implements AfterViewInit {
 
   public itemsView:Reserva[] =[];
 
-  public obsReserva:any 
+  public obsReserva:any;
+
+  public initCalendar = true;
 
   constructor(
     private reservasService:ReservasService,
@@ -75,15 +76,15 @@ export class ListReservasManagerComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
+    if(this.initCalendar){
+      this.initCalendar = false
       this.calendarApi = this.calendarComponent.getApi();
-      if (this.calendarApi && !this.initialized) {
-        this.initialized = true;
-      }
-      this.calendarApi.gotoDate(new Date())
+      
+    //  this.calendarApi.gotoDate(new Date())
+    }
+     
       
       this.obsReserva = this.reservasService.listReservas().subscribe((data:any)=>{
-        console.log(data)
-        
         this.itemsAll = data;      
         this.mostrar(this.itemsAll)
       })
@@ -91,6 +92,11 @@ export class ListReservasManagerComponent implements AfterViewInit {
       this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue())
     
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log("!!!!change")
+    this.mostrar(this.itemsAll)        
+  } 
 
   editar(reserva){
     this.editarReserva(reserva)
@@ -106,7 +112,7 @@ export class ListReservasManagerComponent implements AfterViewInit {
   }
   
   handleDateClick(arg) {
-    this.nuevaReserva(arg.dateStr)  
+    this.nuevaReserva(arg.date)  
   }
 
 
@@ -130,6 +136,7 @@ export class ListReservasManagerComponent implements AfterViewInit {
     .then((retorno) => { 
 
       if(retorno.data){   
+       
       this.reservasService.update(retorno.data).then(data=>{
         console.log("Reserva guardada")
       })
@@ -145,9 +152,16 @@ export class ListReservasManagerComponent implements AfterViewInit {
 
   async nuevaReserva(fechaInicio = null){
     
-
     let res = new Reserva();
-    res.desde = fechaInicio;
+
+    if(fechaInicio){
+
+      console.log(fechaInicio)
+      let dateInicio = new Date(fechaInicio)  //Pot problemas con la hora que no viene en el calendario
+      console.log(dateInicio)
+      res.desde = dateInicio.toISOString();
+    }
+
 
     if(this.divisionFiltro != ""){
       res.divisionNombre = this.divisionFiltro
@@ -157,10 +171,10 @@ export class ListReservasManagerComponent implements AfterViewInit {
       res.asignarCliente(this.navParametrosService.param)
     }
     console.log(res)
-   const modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: FormReservaPage,
       componentProps:{
-        reserva: res
+        reserva: res,
      },     
       cssClass:'modal-custom-wrapper',
 
@@ -173,6 +187,7 @@ export class ListReservasManagerComponent implements AfterViewInit {
       if(retorno.data){   
       this.reservasService.add(retorno.data).then(data=>{
         console.log("Reserva guardada")
+        this.updateCalendar()
       })
       }else{
 
@@ -184,45 +199,59 @@ export class ListReservasManagerComponent implements AfterViewInit {
 
 
   mostrar(arrayElementos){
+   
     console.log(arrayElementos.length);    
     this.itemsView = []  
     for(let i = 0; i < arrayElementos.length; i++){
 
-      console.log(i)
+        
         let encontrado = true;
         
-        if(this.divisionFiltro){   
+        if(encontrado  && this.divisionFiltro){   
           encontrado = false;
           let retorno =  (arrayElementos[i].divisionNombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(this.divisionFiltro.toLowerCase()) > -1);
           encontrado = retorno;          
         }
        
 
-        if(this.clienteIdFiltro){  
+        if(encontrado && this.clienteIdFiltro){  
           encontrado = false; 
           if(arrayElementos[i].clienteId === this.clienteIdFiltro){
             encontrado = true;
           }
-          else
-            encontrado = false;
         }
-      
-        if(encontrado){
+        console.log(encontrado)
+        if(encontrado && this.vistaLista){
           encontrado = false;
           let desdeReserva = new Date(arrayElementos[i].desde).getTime();
-          console.log(desdeReserva);
           if(desdeReserva > this.fechaDesde.getTime() && desdeReserva < this.fechaHasta.getTime())
             encontrado = true;
         }
 
         if(encontrado){
+          
+          
+          
           this.itemsView.push(arrayElementos[i])
+
+
         }
     }
 
-    console.log(this.itemsView)
-    this.calendarApi.removeAllEvents()
-    this.itemsView.forEach(element => {
+    this.updateCalendar();
+
+    
+  }
+
+  borrarDatosComponente() { // debe ser llamado por la página que contiene el componente
+    this.obsReserva.unsubscribe()
+  }
+
+  updateCalendar(){
+    if(this.calendarApi){
+      this.calendarApi.removeAllEvents()
+      this.calendarApi.gotoDate(new Date())
+      this.itemsView.forEach(element => {
         let event = {
           id:element.id,
           title:"reserva",
@@ -231,17 +260,12 @@ export class ListReservasManagerComponent implements AfterViewInit {
           color:element.estado.color,
           extendedProps:JSON.parse(JSON.stringify(element))          
         }
-        console.log(event)
         this.calendarApi.addEvent(event)
         
         this.events.push(event);
-    })
-
+      })
+    }
     
-  }
-
-  borrarDatosComponente() { // debe ser llamado por la página que contiene el componente
-    this.obsReserva.unsubscribe()
   }
 
  
@@ -257,7 +281,6 @@ export class ListReservasManagerComponent implements AfterViewInit {
     const options: CalendarModalOptions = {
       title: '',
       from:comienzo,
-      to:new Date(),
       pickMode: 'range'
     };
  

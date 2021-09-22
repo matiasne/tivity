@@ -51,7 +51,12 @@ export class PedidoService extends BaseService{
   }     
 
   listPedidos(){
-    return this.afs.collection(this.path, ref => ref.orderBy('createdAt',"desc").limit(50)).snapshotChanges()
+
+    let fechaDiasMemoria = new Date();
+    console.log(this.memoriaDias)
+    fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+
+    return this.afs.collection(this.path, ref => ref.where('createdAt', '>=', fechaDiasMemoria).orderBy('createdAt',"desc")).snapshotChanges()
     .pipe(
         map(changes => {
             return changes.map(a => {   
@@ -59,7 +64,7 @@ export class PedidoService extends BaseService{
                 data.id = a.payload.doc.id;
                 data.fromCache = a.payload.doc.metadata.fromCache;                     
 
-                if(this.memoriaDias > 0){
+            /*    if(this.memoriaDias > 0){
                 //================= borra lo anterior a la fecha configurada de almacenamiento
                   var batch = this.afs.firestore.batch();
 
@@ -77,7 +82,7 @@ export class PedidoService extends BaseService{
                   if(borrar){
                     batch.commit()
                   }
-                }
+                }*/
 
                 return data;
             });
@@ -101,27 +106,8 @@ export class PedidoService extends BaseService{
                     data.id = a.payload.doc.id;
                     data.fromCache = a.payload.doc.metadata.fromCache;                     
 
-                    if(this.memoriaDias > 0){
-                    //================= borra lo anterior a la fecha configurada de almacenamiento
-                      var batch = this.afs.firestore.batch();
-
-                      let fechaDiasMemoria = new Date();
-                      console.log(this.memoriaDias)
-                      fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
-
-                      let borrar = false;
-                      console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
-                      if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
-                        borrar = true
-                        var pedidoRef:any = this.getRef(data.id)
-                        batch.delete(pedidoRef)
-                        console.log("borrando pedido id: "+data.id)
-                      }
-
-                      if(borrar){
-                        batch.commit()
-                      }
-                    }
+                    
+                    
 
                     return data;
                 });

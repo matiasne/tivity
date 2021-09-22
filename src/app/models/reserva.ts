@@ -14,6 +14,7 @@ export enum EstadoReserva{
 export class Reserva{
     public id ="";
     public createdAt:any;
+    public updatedAt:any;
 
     public desde:any;
     public hasta:any;
