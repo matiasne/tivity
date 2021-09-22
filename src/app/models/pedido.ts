@@ -73,7 +73,7 @@ export class Pedido{
     public primerMensaje ="";
     public countMensajes = 0;
 
-    public fechaTomado:Date;
+    public fechaTomado:any;
 
     public afipFactura = {
         emisor:{

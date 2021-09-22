@@ -42,38 +42,42 @@ export class CardPedidoComponent implements OnInit, OnDestroy {
   }
 
   setVencimiento(){ 
-    this.vencimiento = this.item.fechaTomado
-    if(this.item.comanda){
-      if(this.item.comanda.demora > 0){
-        this.vencimiento.setMinutes(this.item.fechaTomado.getMinutes() + this.item.comanda.demora);
-
-        let fechaHoy = new Date()
-        this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
-
-        if(this.minutosRestantes < 0){
-          this.minutosRestantes = 0;
-        }
-        
-        this.restantesPorcentaje = (this.minutosRestantes/this.item.comanda.demora)*100        
-        console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
-
-        if(this.minutosRestantes > 0){
-          this.interval = setInterval(()=>{       
-            
-            let fechaHoy = new Date()
-            this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))      
-            
-            
-
-            this.restantesPorcentaje = (this.minutosRestantes/this.item.comanda.demora)*100
-
-            console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+    if(this.item.fechaTomado){
+      this.vencimiento = this.item.fechaTomado.toDate()
+      console.log(this.item)
+      if(this.item.comanda){
+        if(this.item.comanda.demora > 0){
+          this.vencimiento.setMinutes(this.item.fechaTomado.toDate().getMinutes() + this.item.comanda.demora);
+  
+          let fechaHoy = new Date()
+          this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+  
+          if(this.minutosRestantes < 0){
+            this.minutosRestantes = 0;
+          }
           
-        },60000)
+          this.restantesPorcentaje = (this.minutosRestantes/this.item.comanda.demora)*100        
+          console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+  
+          if(this.minutosRestantes > 0){
+            this.interval = setInterval(()=>{       
+              
+              let fechaHoy = new Date()
+              this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))      
+              
+              
+  
+              this.restantesPorcentaje = (this.minutosRestantes/this.item.comanda.demora)*100
+  
+              console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+            
+          },60000)
+          }
+          
         }
-        
       }
     }
+    
     
     
   }

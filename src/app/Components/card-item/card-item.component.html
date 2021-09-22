@@ -26,18 +26,17 @@
      
       <b>{{item.precio * 1 | currency}} </b>    <br> 
       
-            
+          
      
     </p>
-
+   
       
-    <span *ngIf="showStock">stock: {{item.stock}}</span>
-    
+    <span class="stock" *ngIf="showStock">stock: {{item.stock}}</span>
+    <div class="advertencia" *ngIf="item.enCarrito && item.valorPor">En Carrito: {{item.enCarrito * item.valorPor}} {{item.unidad}}</div> 
+    <div class="advertencia" *ngIf="item.enCarrito && !item.valorPor">En carrito: {{item.enCarrito}} {{item.unidad}}</div>   
     
   </ion-label>  
  
 </ion-item>
-<div *ngIf="!item.enCarrito" class="espacio"></div>   
-<div class="advertencia" *ngIf="item.enCarrito && item.valorPor">En Carrito: {{item.enCarrito * item.valorPor}} {{item.unidad}}</div> 
-<div class="advertencia" *ngIf="item.enCarrito && !item.valorPor">En carrito: {{item.enCarrito}} {{item.unidad}}</div>   
+  
   

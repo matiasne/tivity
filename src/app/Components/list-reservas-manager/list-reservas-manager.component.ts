@@ -95,6 +95,9 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     console.log("!!!!change")
+    if(!this.vistaLista && !this.initCalendar){
+      this.calendarApi.gotoDate(new Date())
+    }
     this.mostrar(this.itemsAll)        
   } 
 

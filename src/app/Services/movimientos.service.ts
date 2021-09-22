@@ -58,28 +58,28 @@ export class MovimientosService extends BaseService {
 
                     //================= borra lo anterior a la fecha configurada de almacenamiento
                    
-                    console.log(this.memoriaDias)
-                    if(this.memoriaDias > 0){
+                    // console.log(this.memoriaDias)
+                    // if(this.memoriaDias > 0){
 
-                      var batch = this.afs.firestore.batch();
+                    //   var batch = this.afs.firestore.batch();
 
-                      let fechaDiasMemoria = new Date();
+                    //   let fechaDiasMemoria = new Date();
                       
-                      fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+                    //   fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
   
-                      let borrar = false;
-                      console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
-                      if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
-                        borrar = true
-                        var pedidoRef:any = this.getRef(data.id)
-                        batch.delete(pedidoRef)
-                        console.log("borrando pedido id: "+data.id)
-                      }
+                    //   let borrar = false;
+                    //   console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+                    //   if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
+                    //     borrar = true
+                    //     var pedidoRef:any = this.getRef(data.id)
+                    //     batch.delete(pedidoRef)
+                    //     console.log("borrando pedido id: "+data.id)
+                    //   }
   
-                      if(borrar){
-                        batch.commit()
-                      }
-                    }
+                    //   if(borrar){
+                    //     batch.commit()
+                    //   }
+                    // }
                     
 
                     return data;
@@ -124,28 +124,28 @@ export class MovimientosService extends BaseService {
 
               //================= borra lo anterior a la fecha configurada de almacenamiento
              
-              console.log(this.memoriaDias)
-              if(this.memoriaDias > 0){
+              // console.log(this.memoriaDias)
+              // if(this.memoriaDias > 0){
 
-                var batch = this.afs.firestore.batch();
+              //   var batch = this.afs.firestore.batch();
 
-                let fechaDiasMemoria = new Date();
+              //   let fechaDiasMemoria = new Date();
                 
-                fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+              //   fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
 
-                let borrar = false;
-                console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
-                if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
-                  borrar = true
-                  var pedidoRef:any = this.getRef(data.id)
-                  batch.delete(pedidoRef)
-                  console.log("borrando pedido id: "+data.id)
-                }
+              //   let borrar = false;
+              //   console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+              //   if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
+              //     borrar = true
+              //     var pedidoRef:any = this.getRef(data.id)
+              //     batch.delete(pedidoRef)
+              //     console.log("borrando pedido id: "+data.id)
+              //   }
 
-                if(borrar){
-                  batch.commit()
-                }
-              }
+              //   if(borrar){
+              //     batch.commit()
+              //   }
+              // }
               
 
               return data;
@@ -229,28 +229,28 @@ export class MovimientosService extends BaseService {
   
                 //================= borra lo anterior a la fecha configurada de almacenamiento
                
-                console.log(this.memoriaDias)
-                if(this.memoriaDias > 0){
+                // console.log(this.memoriaDias)
+                // if(this.memoriaDias > 0){
   
-                  var batch = this.afs.firestore.batch();
+                //   var batch = this.afs.firestore.batch();
   
-                  let fechaDiasMemoria = new Date();
+                //   let fechaDiasMemoria = new Date();
                   
-                  fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
+                //   fechaDiasMemoria.setDate(fechaDiasMemoria.getDate() - Number(this.memoriaDias));
   
-                  let borrar = false;
-                  console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
-                  if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
-                    borrar = true
-                    var pedidoRef:any = this.getRef(data.id)
-                    batch.delete(pedidoRef)
-                    console.log("borrando pedido id: "+data.id)
-                  }
+                //   let borrar = false;
+                //   console.log(data.createdAt.toDate()+" "+fechaDiasMemoria)
+                //   if(data.createdAt.toDate().getTime() < fechaDiasMemoria.getTime()){
+                //     borrar = true
+                //     var pedidoRef:any = this.getRef(data.id)
+                //     batch.delete(pedidoRef)
+                //     console.log("borrando pedido id: "+data.id)
+                //   }
   
-                  if(borrar){
-                    batch.commit()
-                  }
-                }
+                //   if(borrar){
+                //     batch.commit()
+                //   }
+                // }
                 
   
                 return data;

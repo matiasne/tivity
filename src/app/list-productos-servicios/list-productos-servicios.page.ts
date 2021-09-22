@@ -32,6 +32,7 @@ import Fuse from 'fuse.js'
 import { ImpresoraService } from '../Services/impresora/impresora.service';
 import { DetailsPedidoPage } from '../details-pedido/details-pedido.page';
 import { EscanerCodigoBarraService } from '../Services/escaner-codigo-barra.service';
+import { FormCobrarPedidoPage } from '../form-cobrar-pedido/form-cobrar-pedido.page';
 
 @Component({
   selector: 'app-list-productos-servicios',
@@ -125,7 +126,8 @@ export class ListProductosServiciosPage implements OnInit {
     private usuariosServices:UsuariosService,
     private notificacionesAppService:NotifificacionesAppService,
     private pedidosService:PedidoService,
-    private escanerCodigoBarraService:EscanerCodigoBarraService
+    private escanerCodigoBarraService:EscanerCodigoBarraService,
+    private impresoraService:ImpresoraService
     
   ) { 
     
@@ -583,5 +585,49 @@ export class ListProductosServiciosPage implements OnInit {
 
   getTotal(){
     return this.pedidosService.getTotal(this.carrito)
+  }
+
+  continuar(){ 
+
+    if(this.carrito.items.length == 0){
+      this.toastServices.alert("Debes ingresar al menos un producto o servicio","");      
+      return;
+    }        
+    
+    this.crearPedido();       
+  } 
+
+  crearPedido(){
+    this.imprimir()   
+    this.carritoService.crearPedido()
+    this.modalController.dismiss("vacio")
+  }  
+
+  
+  imprimir(){
+    this.impresoraService.impresionComanda(this.carrito);
+  }
+
+
+  async cobrar(){
+    this.carrito.comanda.numero = await this.comerciosService.obtenerActualizarNumeroPedido()
+    const modal = await this.modalController.create({
+      id:'form-cobrar',
+      component: FormCobrarPedidoPage,  
+      componentProps:{pedido:this.carrito,comercio:this.comercio},   
+      cssClass:'modal-custom-wrapper' 
+    });    
+
+    modal.onDidDismiss()
+    .then((retorno) => {
+      if(retorno.data == "cobrado"){
+       
+        this.modalController.dismiss(null,null,'details-carrito') 
+       
+        
+      }
+     
+    });
+    return await modal.present();
   }
 }
