@@ -13,7 +13,7 @@ const routes: Routes = [
         loadChildren: () => import('./list-reservas-cliente/list-reservas-cliente.module').then( m => m.ListReservasClientePageModule)
       },
       {
-        path: 'list-reservas-cliente/:id',
+        path: 'list-reservas-cliente',
         children: [
           {
             path: '',
@@ -26,7 +26,7 @@ const routes: Routes = [
         loadChildren: () => import('./list-pedidos-cliente/list-pedidos-cliente.module').then( m => m.ListPedidosClientePageModule)
       },
       {
-        path: 'list-pedidos-cliente/:id',
+        path: 'list-pedidos-cliente',
         children: [
           {
             path: '',
@@ -39,7 +39,7 @@ const routes: Routes = [
         loadChildren: () => import('./info-contacto/info-contacto.module').then( m => m.InfoContactoPageModule)
       },
       {
-        path: 'info-contacto/:id',
+        path: 'info-contacto',
         children: [
           {
             path: '',
@@ -48,8 +48,8 @@ const routes: Routes = [
         ]
       },
       {
-        path: ':id',
-        redirectTo: '/details-cliente/:id/list-pedidos-cliente/:id',
+        path: '',
+        redirectTo: '/details-cliente/list-pedidos-cliente',
         pathMatch: 'full'
       }
     ]

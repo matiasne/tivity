@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>  
-    <ion-title  size="small">{{divisionNombre}}</ion-title>    
+    <ion-title  size="small">{{division.nombre}}</ion-title>    
   </ion-toolbar>
 </ion-header> 
 
@@ -11,17 +11,17 @@
   <ion-tabs>
 
     <ion-tab-bar slot="top">
-      <ion-tab-button tab="list-pedidos/{{divisionNombre}}">
+      <ion-tab-button tab="list-pedidos">
         <ion-icon name="document-outline"></ion-icon>
         <ion-label>Pedidos</ion-label>
       </ion-tab-button>
   
-      <ion-tab-button tab="list-reservas/{{divisionNombre}}">
+      <ion-tab-button tab="list-reservas">
         <ion-icon name="calendar-outline"></ion-icon>
         <ion-label>Reservas</ion-label>
       </ion-tab-button>
   
-      <ion-tab-button tab="form-configuracion/{{divisionNombre}}">
+      <ion-tab-button tab="form-configuracion">
         <ion-icon name="settings-outline"></ion-icon>
         <ion-label>Configuración</ion-label>
       </ion-tab-button>

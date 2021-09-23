@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { SelectDivisionPageRoutingModule } from './select-division-routing.module';
 
 import { SelectDivisionPage } from './select-division.page';
+import { ComponentsModule } from '../Components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     SelectDivisionPageRoutingModule

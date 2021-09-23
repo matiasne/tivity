@@ -32,11 +32,11 @@
    
       
     <span class="stock" *ngIf="showStock">stock: {{item.stock}}</span>
-    <div class="advertencia" *ngIf="item.enCarrito && item.valorPor">En Carrito: {{item.enCarrito * item.valorPor}} {{item.unidad}}</div> 
-    <div class="advertencia" *ngIf="item.enCarrito && !item.valorPor">En carrito: {{item.enCarrito}} {{item.unidad}}</div>   
+      
     
-  </ion-label>  
- 
+  </ion-label> 
+  <ion-badge  *ngIf="item.enCarrito && item.valorPor">{{item.enCarrito * item.valorPor}} {{item.unidad}}</ion-badge> 
+  <ion-badge  *ngIf="item.enCarrito && !item.valorPor">{{item.enCarrito}} {{item.unidad}}</ion-badge>  
 </ion-item>
   
   

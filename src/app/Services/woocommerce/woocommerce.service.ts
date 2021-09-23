@@ -52,68 +52,73 @@ export class WoocommerceService {
     return this.progresoReceived.asObservable();
   }
 
-  test(){
+  async test(){
+    
     let httpHeaders = new HttpHeaders({
        'Access-Control-Allow-Origin':'*',
        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
        'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
        'Content-Type' : 'application/json',
-       'Authorization' : 'Bearer '+this.wordpressService.getToken()
+      //  'Authorization' : 'Bearer '+this.wordpressService.getToken()
      });      
      let options = {
        headers: httpHeaders
      };     
      
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
-    this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+"system_status?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+     let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+     console.log(woocommerce)
+    this.apiUrl = woocommerce.url+this.woocommercePart+"system_status?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
     return this.http.get(this.apiUrl,options); 
   }
 
   
-  getAll(){
+  async getAll(){
     let httpHeaders = new HttpHeaders({
     //   'Access-Control-Allow-Origin':'*',
     //   'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
     //   'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
        'Content-Type' : 'application/json',
-       'Authorization' : 'Bearer '+this.wordpressService.getToken()
+      //  'Authorization' : 'Bearer '+this.wordpressService.getToken()
      });      
      let options = {
        headers: httpHeaders
      };     
      console.log("test")
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
-    this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+    let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+    console.log(woocommerce)
+    this.apiUrl = woocommerce.url+this.woocommercePart+this.tipoItem+"?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
     return this.http.get(this.apiUrl,options).toPromise(); 
   }
 
-  getOne(id){
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
-    this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"/"+id+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+  async getOne(id){
+    let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+    console.log(woocommerce)
+    this.apiUrl = woocommerce.url+this.woocommercePart+this.tipoItem+"/"+id+"?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
 
     let httpHeaders = new HttpHeaders({
     //  'Access-Control-Allow-Origin':'*',
     //  'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
     //  'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
       'Content-Type' : 'application/json',
-      'Authorization' : 'Bearer '+this.wordpressService.getToken()
+      // 'Authorization' : 'Bearer '+this.wordpressService.getToken()
     });      
     let options = {
       headers: httpHeaders
     };  
-    return this.http.get(this.apiUrl,options); 
+    return this.http.get(this.apiUrl,options).toPromise(); 
   }
 
-  postOne(data){    
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
-    this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+  async postOne(data){    
+    let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+    console.log(woocommerce)
+    this.apiUrl = woocommerce.url+this.woocommercePart+this.tipoItem+"?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
 
     let httpHeaders = new HttpHeaders({
      // 'Access-Control-Allow-Origin':'*',
     //  'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
     //  'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
       'Content-Type' : 'application/json',
-      'Authorization' : 'Bearer '+this.wordpressService.getToken()
+      // 'Authorization' : 'Bearer '+this.wordpressService.getToken()
     });      
     let options = {
       headers: httpHeaders
@@ -122,16 +127,17 @@ export class WoocommerceService {
     return this.http.post(this.apiUrl,data,options); 
   }
 
-  updateOne(id, data){
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
-    this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"/"+id+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+  async updateOne(id, data){
+    let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+    console.log(woocommerce)
+    this.apiUrl = woocommerce.url+this.woocommercePart+this.tipoItem+"/"+id+"?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
 
     let httpHeaders = new HttpHeaders({
       // 'Access-Control-Allow-Origin':'*',
      //  'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
      //  'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
        'Content-Type' : 'application/json',
-       'Authorization' : 'Bearer '+this.wordpressService.getToken()
+      //  'Authorization' : 'Bearer '+this.wordpressService.getToken()
      });      
      let options = {
        headers: httpHeaders
@@ -139,33 +145,35 @@ export class WoocommerceService {
     return this.http.put(this.apiUrl,data,options); 
   }
 
-  deleteOne(id){
+  async deleteOne(id){
 
     let httpHeaders = new HttpHeaders({
       // 'Access-Control-Allow-Origin':'*',
      //  'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
      //  'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
        'Content-Type' : 'application/json',
-       'Authorization' : 'Bearer '+this.wordpressService.getToken()
+      //  'Authorization' : 'Bearer '+this.wordpressService.getToken()
      });      
      let options = {
        headers: httpHeaders
      };     
 
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
-    this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"/"+id+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+     let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+     console.log(woocommerce)
+    this.apiUrl = woocommerce.url+this.woocommercePart+this.tipoItem+"/"+id+"?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
 
     return this.http.delete(this.apiUrl,options); 
   }
 
-  updateStock(item:Item){
+  async updateStock(item:Item){
 
     if(item.woocommerce.id){
       let data = {
         stock: item.stock
       }  
-      this.comercio = this.comerciosService.getSelectedCommerceValue()
-      this.apiUrl = this.comercio.woocommerce.url+this.woocommercePart+this.tipoItem+"/"+item.id+"?consumer_key="+this.comercio.woocommerce.consumerKey+"&consumer_secret="+this.comercio.woocommerce.consumerSecret
+      let woocommerce:any =  await this.comerciosService.getWoocommerceValue().toPromise()
+      console.log(woocommerce)
+      this.apiUrl = woocommerce.url+this.woocommercePart+this.tipoItem+"/"+item.id+"?consumer_key="+woocommerce.consumerKey+"&consumer_secret="+woocommerce.consumerSecret
 
       let httpHeaders = new HttpHeaders({
         'Content-Type' : 'application/json'
@@ -179,7 +187,7 @@ export class WoocommerceService {
   }
 
   convertWCtoFirebase(productoWC){
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
+
 
     let prod = new Item()
     prod.nombre = productoWC.name
@@ -198,7 +206,7 @@ export class WoocommerceService {
 
   async convertFirebasetoWC(item:Item){
 
-    this.comercio = this.comerciosService.getSelectedCommerceValue()
+   
 
     let wcProducto = new WCProduct();   
     wcProducto.name = item.nombre;
@@ -261,7 +269,7 @@ export class WoocommerceService {
 
       try{
         const data = JSON.parse(JSON.stringify(wcProducto));
-        let resp:any = await this.postOne(data).toPromise()
+        let resp:any = await this.postOne(data)
         this.incrementarRespuesta();
 
         p.woocommerce ={
@@ -288,13 +296,13 @@ export class WoocommerceService {
       console.log("actualizando id:"+producto.woocommerce.id)
 
       try{
-        await this.getOne(producto.woocommerce.id).toPromise()
+        await this.getOne(producto.woocommerce.id)
         let wcProducto = await this.convertFirebasetoWC(producto);
         wcProducto.id = producto.woocommerce.id
       
         
         try{
-          await this.updateOne(wcProducto.id,wcProducto).toPromise()
+          await this.updateOne(wcProducto.id,wcProducto)
           console.log("Porducto actualizado en woocommerce");
           producto.woocommerce.lastUpdate = new Date();
 
@@ -357,7 +365,7 @@ export class WoocommerceService {
     
               try{
                 console.log(prod.nombre)
-                let productos = await this.getOne(p.woocommerce.id).toPromise()
+                let productos = await this.getOne(p.woocommerce.id)
 
                 
 

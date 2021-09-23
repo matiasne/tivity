@@ -226,7 +226,7 @@ export class ListProductosServiciosPage implements OnInit {
     //this.buscar(undefined);
     console.log("DidEnter")
     //this.marcarEnCarrito();
-  //  this.wordpressService.obtainToken()
+    
     console.log(this.carrito.items)
     
   }

@@ -52,38 +52,41 @@ export class CardComandaV2Component implements OnInit, OnDestroy {
   }
 
   setVencimiento(){ 
-    this.vencimiento = this.pedido.fechaTomado.toDate()
-    if(this.pedido.comanda){
-      if(this.pedido.comanda.demora > 0){
-        this.vencimiento.setMinutes(this.pedido.fechaTomado.toDate().getMinutes() + this.pedido.comanda.demora);
-
-        let fechaHoy = new Date()
-        this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
-
-        if(this.minutosRestantes < 0){
-          this.minutosRestantes = 0;
-        }
-        
-        this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100        
-        console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
-        if(this.minutosRestantes > 0){
-          this.interval = setInterval(()=>{
-            
+    if (this.pedido.fechaTomado){
+      this.vencimiento = this.pedido.fechaTomado.toDate()
+      if(this.pedido.comanda){
+        if(this.pedido.comanda.demora > 0){
+          this.vencimiento.setMinutes(this.pedido.fechaTomado.toDate().getMinutes() + this.pedido.comanda.demora);
+  
+          let fechaHoy = new Date()
+          this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+  
+          if(this.minutosRestantes < 0){
+            this.minutosRestantes = 0;
+          }
+          
+          this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100        
+          console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
+          if(this.minutosRestantes > 0){
+            this.interval = setInterval(()=>{
               
-              let fechaHoy = new Date()
-              this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+                
+                let fechaHoy = new Date()
+                this.minutosRestantes = Math.round((this.vencimiento.getTime() - fechaHoy.getTime()) / (1000 * 60))
+                
+                
+                
+  
+                this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100
+  
+                console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
               
-              
-              
-
-              this.restantesPorcentaje = (this.minutosRestantes/this.pedido.comanda.demora)*100
-
-              console.log(this.minutosRestantes+" %"+this.restantesPorcentaje)
-            
-          },60000)
+            },60000)
+          }
         }
       }
     }
+    
     
     
   }

@@ -8,9 +8,16 @@
 </ion-header>
 
 <ion-content class="ion-padding">
- 
+  <app-search-filter-input
+  [arrayAll]="comercio.subdivisiones.items" 
+  [parametros]="['nombre']"
+  [placeholder]="''"
+  (resultado)="mostrar($event)"
+  >
+  </app-search-filter-input>
+
   <span *ngIf="comercio.subdivisiones.items.length > 0">       
-    <ion-item class="item-card" *ngFor="let division of comercio.subdivisiones.items;let i=index" (click)="seleccionar(i)">       
+    <ion-item class="item-card" *ngFor="let division of viewItems;let i=index" (click)="seleccionar(i)">       
       <ion-label>
         <b>{{division.nombre}}</b>         
       </ion-label> 

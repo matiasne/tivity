@@ -11,7 +11,7 @@ import { ComerciosService } from '../Services/comercios.service';
 export class SelectDivisionPage implements OnInit {
 
   public comercio: Comercio;
-
+  public viewItems = []
   constructor(
     private comercioService:ComerciosService,
     public modalCtrl: ModalController,
@@ -19,10 +19,14 @@ export class SelectDivisionPage implements OnInit {
 
     this.comercio = new Comercio();
     this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue());
-
+    this.viewItems = this.comercio.subdivisiones.items
    }
 
   ngOnInit() {
+  }
+
+  mostrar(arrayElementos){
+    this.viewItems = arrayElementos;
   }
 
   seleccionar(i){

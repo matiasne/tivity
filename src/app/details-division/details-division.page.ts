@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
+import { Division } from '../models/subdivision';
+import { NavegacionParametrosService } from '../Services/global/navegacion-parametros.service';
 
 @Component({
   selector: 'app-details-division',
@@ -8,12 +10,14 @@ import { ActivatedRoute, Route } from '@angular/router';
 })
 export class DetailsDivisionPage implements OnInit {
 
- public divisionNombre:string
+ public division:Division
   constructor(
-    private route:ActivatedRoute
-  ) { 
-    this.divisionNombre = this.route.snapshot.params.id;
-    console.log(this.divisionNombre)
+    private navParametrosService:NavegacionParametrosService
+  ) {  
+    this.division = new Division();
+    if(this.navParametrosService.param instanceof Division){
+      this.division = this.navParametrosService.param
+    }
   }
 
   ngOnInit() {

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ComerciosService } from '../comercios.service';
 
 @Injectable({
@@ -11,63 +12,62 @@ export class WordpressService {
   private siteURL:string  = 'http://laparrilladegerardo.com.ar'
   private woocommercePart:string = '/wp-json/wp/v2/';
   private tipoItem:string = "";
+  public token = new BehaviorSubject <any>("");
+ 
 
   constructor( 
     public http:HttpClient,
     private comercioService:ComerciosService 
-  ) { }
+  ) { 
+    if(localStorage.getItem('wordpress_token'))
+      this.token.next(localStorage.getItem('wordpress_token'))
+  }
 
   setPart(part:string){
     this.tipoItem = part;
     this.apiUrl = this.siteURL+this.woocommercePart+this.tipoItem;
   }
 
-  async login(){   
-    return new Promise((resolve,reject) =>{
-      this.comercioService.getWoocommerceValue(this.comercioService.getSelectedCommerceValue().id).subscribe(values=>{
-        let data = {
-          username:values.user,
-          password:values.password
-        }
-    
-        let httpHeaders = new HttpHeaders({
-          'Content-Type' : 'application/json'
-        });     
-        let options = {
-          headers: httpHeaders
-        };       
-    
-        this.apiUrl = values.url+"/wp-json/jwt-auth/v1/token"  
-        try{
-          let response = this.http.post(this.apiUrl,data,options).toPromise();
-          resolve(response);
-        }  
-        catch(err){
-          reject(err)
-        }       
-        
-      },err=>{
-        reject(err)
-      })
-    })
-   
-   
-
+  check(){
+    //Aca debe ver si hay token, si no hay intentar obtener,
+    //si hay intentar conectar
+    //si no conecta intentar obtener
   }
 
-  async obtainToken(){    
-    try{
-      let resp:any = await this.login()
-      localStorage.setItem('wordpress_token',resp.token)  
-    }
-    catch(err){
-      localStorage.setItem('wordpress_token',"") 
-    }
-      
+  async login(user,pass,url){   
+    return new Promise((resolve,reject) =>{
+
+      let data = {
+        username:user,
+        password:pass
+      }
+  
+      let httpHeaders = new HttpHeaders({
+        'Content-Type' : 'application/json'
+      });     
+      let options = {
+        headers: httpHeaders
+      };  
+
+      this.apiUrl = url+"/wp-json/jwt-auth/v1/token"  
+      try{
+        let response:any = this.http.post(this.apiUrl,data,options).toPromise();
+        this.token.next(response)
+        localStorage.setItem('wordpress_token',response.token) 
+      }  
+      catch(err){
+        reject(err)
+      }     
+    })  
+  }
+
+
+  obsToken(){
+    return this.token.asObservable()
   }
 
   getToken(){
-    return localStorage.getItem('wordpress_token');
+    return this.token.value
   }
 
   getAll(){
@@ -120,8 +120,6 @@ export class WordpressService {
 
   deleteOne(id){
     this.apiUrl = this.siteURL+this.woocommercePart+this.tipoItem+"/"+id;
-
-
     console.log(this.apiUrl)
     return this.http.delete(this.apiUrl); 
   }

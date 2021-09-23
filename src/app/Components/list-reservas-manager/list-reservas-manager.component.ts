@@ -25,8 +25,7 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
   public fechaDesde = new Date();
   public fechaHasta = new Date();
 
-  @ViewChild("fullcalendar", { static: false })
-  calendarComponent: FullCalendarComponent;
+  @ViewChild("fullcalendar", { static: false }) calendarComponent: FullCalendarComponent;
   calendarApi: Calendar;
 
   events:any[] = [];
@@ -39,21 +38,29 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     slotDuration: '00:15:00',
+    locale: 'es',
     dayHeaderFormat:{ weekday: 'short' },
     dateClick: this.handleDateClick.bind(this), // bind is important!
    // events: this.events,
     height:900,  
     eventClick: this.handleEventClick.bind(this),
     headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      left: 'title',
+      center: '',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,prev,next today'
     },
     weekends: true,
     editable: true,
     selectable: true,
     selectMirror: true,
     dayMaxEvents: true,
+    buttonText:{
+      today:    'Hoy',
+      month:    'Meses',
+      week:     'Semanas',
+      day:      'días',
+      list:     'lista'
+    }
   };
 
 
@@ -80,7 +87,6 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
       this.initCalendar = false
       this.calendarApi = this.calendarComponent.getApi();
       
-    //  this.calendarApi.gotoDate(new Date())
     }
      
       
@@ -96,7 +102,7 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     console.log("!!!!change")
     if(!this.vistaLista && !this.initCalendar){
-      this.calendarApi.gotoDate(new Date())
+      this.calendarApi.next();
     }
     this.mostrar(this.itemsAll)        
   } 
@@ -115,7 +121,15 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
   }
   
   handleDateClick(arg) {
-    this.nuevaReserva(arg.date)  
+    console.log(arg)
+    
+    if(arg.view.type == 'dayGridMonth'){
+      this.calendarApi.changeView('timeGridDay');
+      this.calendarApi.gotoDate(arg.date)
+    }
+    
+    if(arg.view.type == 'timeGridDay')
+      this.nuevaReserva(arg.date)  
   }
 
 
@@ -253,7 +267,6 @@ export class ListReservasManagerComponent implements AfterViewInit , OnChanges {
   updateCalendar(){
     if(this.calendarApi){
       this.calendarApi.removeAllEvents()
-      this.calendarApi.gotoDate(new Date())
       this.itemsView.forEach(element => {
         let event = {
           id:element.id,

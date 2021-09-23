@@ -26,13 +26,9 @@ export class ListHorariosPage implements OnInit {
   }
 
   ngOnInit() {
-
-    let comercio_seleccionadoId = localStorage.getItem('comercio_seleccionadoId');
-    this.horariosSubs = this.comercioService.get(comercio_seleccionadoId).subscribe(snap=>{                 
-      this.comercio.asignarValores(snap.payload.data());
-      this.comercio.id = snap.payload.id;
-      this.buscando = false;
-    });  
+             
+    this.comercio.asignarValores(this.comercioService.getSelectedCommerceValue());
+     
     
   }
 
@@ -51,7 +47,7 @@ export class ListHorariosPage implements OnInit {
     modal.onDidDismiss()
     .then((retorno) => {
       if(retorno.data)
-        this.comercio.horarios.push(retorno.data);     
+        this.comercio.horarios.push(JSON.parse(JSON.stringify(retorno.data)));     
         this.comercioService.update(this.comercio);   
     });
     return await modal.present();

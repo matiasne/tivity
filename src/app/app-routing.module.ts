@@ -480,22 +480,9 @@ const routes: Routes = [
     
   },
   {
-    path: 'details-division/:id',
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('./details-division/details-division.module').then( m => m.DetailsDivisionPageModule)
-      }
-    ]
-  },
-  {
-    path: 'details-cliente/:id',
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('./details-cliente/details-cliente.module').then( m => m.DetailsClientePageModule)
-      }
-    ]
+    path: 'details-cliente',
+    loadChildren: () => import('./details-cliente/details-cliente.module').then( m => m.DetailsClientePageModule)
+    
   },
 ];
 

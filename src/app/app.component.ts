@@ -19,6 +19,8 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
 import { SelectDivisionPage } from './select-division/select-division.page';
+import { NavegacionParametrosService } from './Services/global/navegacion-parametros.service';
+import { Division } from './models/subdivision';
 
 @Component({
   selector: 'app-root',
@@ -136,6 +138,7 @@ export class AppComponent implements OnInit {
     private appVersion: AppVersion,
     private openNativeSettings: OpenNativeSettings,
     private modalCtrl: ModalController,
+    private navParametrosService:NavegacionParametrosService,
   ) {
     this.comercioSeleccionado = new Comercio();
     
@@ -344,14 +347,17 @@ tagListenerSuccess(tagEvent) {
 }
 
   async selectDivision(){
+    
     let modal = await this.modalCtrl.create({
       component: SelectDivisionPage,
     });  
     modal.onDidDismiss()
       .then((retorno) => {
         if(retorno.data){
-          console.log(retorno.data.nombre);
-          this.router.navigate(['/details-division/'+retorno.data.nombre])
+          let division = new Division();
+          division.asignarValores(retorno.data)
+          this.navParametrosService.param = division;
+          this.router.navigate(['/details-division'])
         }
                 
     });

@@ -78,7 +78,7 @@ export class DetailsClientePage implements OnInit {
     console.log(this.navParametrosService.param)
  
     if(this.navParametrosService.param instanceof Cliente){
-console.log("!!!!!!!!!!!!!!!!!")
+      console.log("!!!!!!!!!!!!!!!!!")
       this.cliente.asignarValores(this.navParametrosService.param)
 
       this.comentarioService.setearPath("clientes",this.cliente.id);

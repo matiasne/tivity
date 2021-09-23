@@ -80,8 +80,8 @@ export class ComerciosService extends BaseService {
   }  
 
   
-  getWoocommerceValue(id){
-    this.woocommerceSyncPath = this.path+'/'+id+'/woocommerceSincData'
+  getWoocommerceValue(){
+    this.woocommerceSyncPath = this.path+'/'+this.commerceSubject.value.id+'/woocommerceSincData'
     return this.afs.collection(this.woocommerceSyncPath).doc("1").get()
     .pipe(
         map(doc => {
@@ -96,14 +96,14 @@ export class ComerciosService extends BaseService {
     ); 
   }
 
-  updateWoocommerceValues(id,values){
-    this.woocommerceSyncPath = this.path+'/'+id+'/woocommerceSincData'
+  updateWoocommerceValues(values){
+    this.woocommerceSyncPath = this.path+'/'+this.commerceSubject.value.id+'/woocommerceSincData'
     return this.afs.collection(this.woocommerceSyncPath).doc("1").set(values)
   }
 
   
-  deleteWoocommerceValues(id){
-    this.woocommerceSyncPath = this.path+'/'+id+'/woocommerceSincData'
+  deleteWoocommerceValues(){
+    this.woocommerceSyncPath = this.path+'/'+this.commerceSubject.value.id+'/woocommerceSincData'
     this.afs.collection(this.woocommerceSyncPath).doc("1").delete().then(data=>{
       console.log("Actualizados los valores de woocommerce")
     })

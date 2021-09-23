@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { ListPedidosManagerComponent } from 'src/app/Components/list-pedidos-manager/list-pedidos-manager.component';
 import { DetailsPedidoPage } from 'src/app/details-pedido/details-pedido.page';
 import { Pedido } from 'src/app/models/pedido';
+import { Division } from 'src/app/models/subdivision';
 import { NavegacionParametrosService } from 'src/app/Services/global/navegacion-parametros.service';
 
 @Component({
@@ -13,15 +14,20 @@ import { NavegacionParametrosService } from 'src/app/Services/global/navegacion-
 })
 export class ListPedidosPage implements OnInit {
   @ViewChild(ListPedidosManagerComponent) listPedidoManagerChild:ListPedidosManagerComponent;
-  public divisionNombre:string
+  public division:Division
   constructor(
     public modalController:ModalController,
-    private route:ActivatedRoute
-    ) { }
+    private navParametrosService:NavegacionParametrosService,
+    ) { 
+      this.division = new Division();
+      if(this.navParametrosService.param instanceof Division){
+        console.log("!!!!!!!!!!!!!!!!!!!")
+        this.division.asignarValores(this.navParametrosService.param)
+      }
+    }
  
   ngOnInit() {
-    console.log(this.route.snapshot.params.nombre)
-    this.divisionNombre = this.route.snapshot.params.nombre;
+    
   }
 
   ionViewDidLeave(){
@@ -31,7 +37,7 @@ export class ListPedidosPage implements OnInit {
   async nuevoPedido(){
     
     let pedido = new Pedido();
-    pedido.divisionNombre = this.divisionNombre
+    pedido.divisionNombre = this.division.nombre
     const modal = await this.modalController.create({
       component: DetailsPedidoPage,
       componentProps:{
